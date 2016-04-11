@@ -14,44 +14,22 @@ class RgbaColor extends RgbColor implements RgbaColorInterface
         $this->alpha = $alpha;
     }
 
-    public function getRgb()
-    {
-        // TODO: Implement getRgb() method.
-    }
-
     public function getRgba()
     {
-        // TODO: Implement getRgba() method.
-    }
 
-    public function getCmyk()
-    {
-        // TODO: Implement getCmyk() method.
-    }
-
-    public function getCmyka()
-    {
-        // TODO: Implement getCmyka() method.
-    }
-
-    public function getHsl()
-    {
-        // TODO: Implement getHsl() method.
+        return new RgbaColor($this->red, $this->green, $this->blue, $this->alpha);
     }
 
     public function getHsla()
     {
-        // TODO: Implement getHsla() method.
-    }
 
-    public function getHsv()
-    {
-        // TODO: Implement getHsv() method.
+        return $this->getHsl()->withAlphaSupport()->withAlpha($this->alpha);
     }
 
     public function getHsva()
     {
-        // TODO: Implement getHsva() method.
+
+        return $this->getHsv()->withAlphaSupport()->withAlpha($this->alpha);
     }
 
     public function __toString()

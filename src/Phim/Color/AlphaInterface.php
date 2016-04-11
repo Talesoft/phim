@@ -15,6 +15,4 @@ interface AlphaInterface
      * @return $this
      */
     public function withAlpha($alpha);
-
-    public function withoutAlphaSupport();
 }

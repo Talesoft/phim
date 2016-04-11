@@ -27,7 +27,7 @@ trait RgbColorTrait
 
         $color = clone $this;
         $color->red = $red;
-        return $this;
+        return $color;
     }
 
     /**
@@ -48,7 +48,7 @@ trait RgbColorTrait
 
         $color = clone $this;
         $color->green = $green;
-        return $this;
+        return $color;
     }
 
     /**
@@ -69,6 +69,6 @@ trait RgbColorTrait
 
         $color = clone $this;
         $color->blue = $blue;
-        return $this;
+        return $color;
     }
 }

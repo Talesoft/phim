@@ -26,6 +26,6 @@ trait HsvColorTrait
 
         $color = clone $this;
         $color->value = $value;
-        return $this;
+        return $color;
     }
 }

@@ -14,44 +14,22 @@ class HsvaColor extends HsvColor implements HsvaColorInterface
         $this->alpha = $alpha;
     }
 
-    public function getRgb()
-    {
-        // TODO: Implement getRgb() method.
-    }
-
     public function getRgba()
     {
-        // TODO: Implement getRgba() method.
-    }
 
-    public function getCmyk()
-    {
-        // TODO: Implement getCmyk() method.
-    }
-
-    public function getCmyka()
-    {
-        // TODO: Implement getCmyka() method.
-    }
-
-    public function getHsl()
-    {
-        // TODO: Implement getHsl() method.
+        return $this->getRgb()->withAlphaSupport()->withAlpha($this->alpha);
     }
 
     public function getHsla()
     {
-        // TODO: Implement getHsla() method.
-    }
 
-    public function getHsv()
-    {
-        // TODO: Implement getHsv() method.
+        return $this->getHsv()->withAlphaSupport()->withAlpha($this->alpha);
     }
 
     public function getHsva()
     {
-        // TODO: Implement getHsva() method.
+
+        return new HslaColor($this->hue, $this->saturation, $this->value, $this->alpha);
     }
 
     public function __toString()

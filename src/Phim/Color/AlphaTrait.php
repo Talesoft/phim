@@ -25,6 +25,6 @@ trait AlphaTrait
 
         $color = clone $this;
         $color->alpha = $alpha;
-        return $this;
+        return $color;
     }
 }

@@ -26,7 +26,7 @@ trait HsColorTrait
 
         $color = clone $this;
         $color->hue = $hue;
-        return $this;
+        return $color;
     }
 
     /**
@@ -47,6 +47,6 @@ trait HsColorTrait
 
         $color = clone $this;
         $color->saturation = $saturation;
-        return $this;
+        return $color;
     }
 }

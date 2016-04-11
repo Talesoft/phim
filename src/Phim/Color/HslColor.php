@@ -20,66 +20,91 @@ class HslColor extends HsColorBase implements HslColorInterface
         return new HslaColor($this->hue, $this->saturation, $this->lightness, 1);
     }
 
+    public function withoutAlphaSupport()
+    {
+
+        return new HslColor($this->hue, $this->saturation, $this->lightness);
+    }
+
+    private function getRgbFromHue($p, $q, $t)
+    {
+
+        //Normalize
+        if ($t < 0)
+            $t += 1;
+        else if ($t > 1)
+            $t -= 1;
+
+        if ($t < 1/6)
+            return $p + ($q - $p) * 6 * $t;
+
+        if ($t < 1/2)
+            return $q;
+
+        if ($t < 2/3)
+            return $p + ($q - $p) * (2/3 - $t) * 6;
+
+        return $p;
+    }
+
     public function getRgb()
     {
 
-        $h = $this->hue;
+        $r = $g = $b = 0;
+
+        $h = $this->hue / 360;
         $s = $this->saturation;
         $l = $this->lightness;
-        $rgb = [0, 0, 0];
 
         if ($s === 0)
-            return new RgbColor($l * 255, $l * 255, $l * 255);
+            $r = $g = $b = $l;
+        else {
 
-        $chroma = (1 - abs(2 * $l - 1)) * $s;
-        $hue = (($h / 360) * 6);
-        $x = $chroma * (1 - abs((fmod($hue, 2)) - 1)); // Note: fmod because % (modulo) returns int value!!
-        $m = $l - round($chroma / 2, 10); // Bugfix for strange float behaviour (e.g. $l=0.17 and $s=1)
+            $q = $l < 0.5 ? $l * (1 + $s) : $l + $s - $l * $s;
+            $p = 2 * $l - $q;
 
-        if ($hue >= 0 && $hue < 1) $rgb = [($chroma + $m), ($x + $m), $m];
-        else if ($hue >= 1 && $hue < 2) $rgb = [($x + $m), ($chroma + $m), $m];
-        else if ($hue >= 2 && $hue < 3) $rgb = [$m, ($chroma + $m), ($x + $m)];
-        else if ($hue >= 3 && $hue < 4) $rgb = [$m, ($x + $m), ($chroma + $m)];
-        else if ($hue >= 4 && $hue < 5) $rgb = [($x + $m), $m, ($chroma + $m)];
-        else if ($hue >= 5 && $hue < 6) $rgb = [($chroma + $m), $m, ($x + $m)];
+            $r = $this->getRgbFromHue($p, $q, $h + 1/3);
+            $g = $this->getRgbFromHue($p, $q, $h);
+            $b = $this->getRgbFromHue($p, $q, $h - 1/3);
+        }
 
-        list($r, $g, $b) = $rgb;
         return new RgbColor($r * 255, $g * 255, $b * 255);
     }
 
     public function getRgba()
     {
-        // TODO: Implement getRgba() method.
-    }
 
-    public function getCmyk()
-    {
-        // TODO: Implement getCmyk() method.
-    }
-
-    public function getCmyka()
-    {
-        // TODO: Implement getCmyka() method.
+        return $this->getRgb()->withAlphaSupport();
     }
 
     public function getHsl()
     {
-        // TODO: Implement getHsl() method.
+
+        return new HslColor($this->hue, $this->saturation, $this->lightness);
     }
 
     public function getHsla()
     {
-        // TODO: Implement getHsla() method.
+
+        return $this->withAlphaSupport();
     }
 
     public function getHsv()
     {
-        // TODO: Implement getHsv() method.
+        $l = $this->lightness;
+        $s = $this->saturation * ($l < .5 ? $l : 1 - $l);
+
+        return new HsvColor(
+            $this->hue,
+            2 * $s / ($l + $s),
+            $l + $s
+        );
     }
 
     public function getHsva()
     {
-        // TODO: Implement getHsva() method.
+
+        return $this->getHsv()->withAlphaSupport();
     }
 
     public function __toString()

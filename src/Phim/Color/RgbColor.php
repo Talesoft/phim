@@ -20,6 +20,12 @@ class RgbColor implements RgbColorInterface
         return new RgbaColor($this->red, $this->green, $this->blue, 1);
     }
 
+    public function withoutAlphaSupport()
+    {
+
+        return new self($this->red, $this->green, $this->blue);
+    }
+
     public function getMax()
     {
 
@@ -41,28 +47,13 @@ class RgbColor implements RgbColorInterface
     public function getRgb()
     {
 
-        return $this;
+        return new self($this->red, $this->green, $this->blue);
     }
 
-    public function getCmyk()
+    public function getRgba()
     {
 
-        $c = 255 - $this->red;
-        $m = 255 - $this->green;
-        $y = 255 - $this->blue;
-        $k = min($c, $m, $y);
-        $delta = 255 - $k;
-
-        if ($delta === 0)
-            $c = $m = $y = 0;
-        else {
-
-            $c = ($c - $k) / $delta;
-            $m = ($m - $k) / $delta;
-            $y = ($y - $k) / $delta;
-        }
-
-        return new CmykColor($c, $m, $y, $k);
+        return $this->withAlphaSupport();
     }
 
     public function getHsl()
@@ -71,75 +62,68 @@ class RgbColor implements RgbColorInterface
         $r = $this->red / 255;
         $g = $this->green / 255;
         $b = $this->blue / 255;
-        
-        $min = min($r, $g, $b);
-        $max = max($r, $g, $b);
-        $delta = $max - $min;
 
-        $h = $s = $l = 0;
+        $max = max($r, $g, $b);
+        $min = min($r, $g, $b);
+        $h = $s = 0;
         $l = ($max + $min) / 2;
 
-        if ($delta != 0) { //For some reason, sometimes $delta is 0 but fails the !== check which throws a division error. We check loosely, that seems to work.
+        if ($max !== $min) {
 
-            if ($l < 0.5)
-                $s = $delta / ($max + $min);
-            else
-                $s = $delta / (2 - $max - $min);
+          $d = $max - $min;
+          $s = $l > 0.5 ? $d / (2 - $max - $min) : $d / ($max + $min);
 
-            $deltaR = ((($max - $r) / 6) + ($delta / 2)) / $delta;
-            $deltaG = ((($max - $g) / 6) + ($delta / 2)) / $delta;
-            $deltaB = ((($max - $b) / 6) + ($delta / 2)) / $delta;
+          switch ($max) {
+              case $r: $h = ($g - $b) / $d + ($g < $b ? 6 : 0); break;
+              case $g: $h = ($b - $r) / $d + 2; break;
+              case $b: $h = ($r - $g) / $d + 4; break;
+          }
 
-            if ($r == $max)
-                $h = $deltaB - $deltaG;
-            else if ($g == $max)
-                $h = (1 / 3) + $deltaR - $deltaB;
-            else if ($b == $max)
-                $h = (2 / 3) + $deltaG - $deltaR;
-
-            if ($h < 0) $h++;
-            if ($h > 1) $h--;
+          $h /= 6;
         }
 
         return new HslColor($h * 360, $s, $l);
     }
 
+    public function getHsla()
+    {
+
+        return $this->getHsl()->withAlphaSupport();
+    }
+
     public function getHsv()
     {
 
-        //This is actually the same as to HSL except for $l, which is $max always here.
-        //Maybe there's a way to combine those two smoothly?
         $r = $this->red / 255;
         $g = $this->green / 255;
         $b = $this->blue / 255;
 
-        $min = min($r, $g, $b);
         $max = max($r, $g, $b);
-        $delta = $max - $min;
+        $min = min($r, $g, $b);
+        $d = $max - $min;
 
-        $h = $s = $l = 0;
-        $l = $max;
+        $h = $s = 0;
+        $s = $max === 0 ? 0 : $d / $max;
+        $v = $max;
 
-        if ($delta != 0) { //For some reason, sometimes $delta is 0 but fails the !== check which throws a division error. We check loosely, that seems to work.
+        if ($max !== $min) {
 
-            $s = $delta / $max;
+            switch ($max) {
+                case $r: $h = ($g - $b) / $d + ($g < $b ? 6 : 0); break;
+                case $g: $h = ($b - $r) / $d + 2; break;
+                case $b: $h = ($r - $g) / $d + 4; break;
+            }
 
-            $deltaR = ((($max - $r) / 6) + ($delta / 2)) / $delta;
-            $deltaG = ((($max - $g) / 6) + ($delta / 2)) / $delta;
-            $deltaB = ((($max - $b) / 6) + ($delta / 2)) / $delta;
-
-            if ($r == $max)
-                $h = $deltaB - $deltaG;
-            else if ($g == $max)
-                $h = (1 / 3) + $deltaR - $deltaB;
-            else if ($b == $max)
-                $h = (2 / 3) + $deltaG - $deltaR;
-
-            if ($h < 0) $h++;
-            if ($h > 1) $h--;
+            $h /= 6;
         }
 
-        return new HsvColor($h * 360, $s, $l);
+        return new HsvColor($h * 360, $s, $v);
+    }
+
+    public function getHsva()
+    {
+
+        return $this->getHsv()->withAlphaSupport();
     }
 
     public function __toString()

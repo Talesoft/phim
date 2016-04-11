@@ -15,15 +15,18 @@ for ($r = 0; $r < 255; $r += 20) {
         for ($b = 0; $b < 255; $b += 20) {
 
             $rgb = new RgbColor($r, $g, $b);
-
-            $cmyk = $rgb->getCmyk();
+            $rgba = $rgb->withAlphaSupport()->withAlpha(.5);
             $hsl = $rgb->getHsl();
+            $hsla = $hsl->withAlphaSupport()->withAlpha(.5);
             $hsv = $rgb->getHsv();
+            $hsva = $hsv->withAlphaSupport()->withAlpha(.5);
 
             div($rgb);
-            div($cmyk);
+            div($rgba);
             div($hsl->getRgb());
-            div($hsv);
+            div($hsla->getRgba());
+            div($hsv->getRgb());
+            div($hsva->getRgba());
             echo '<br style="clear: both">';
         }
     }

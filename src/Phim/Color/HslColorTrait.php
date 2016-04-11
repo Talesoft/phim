@@ -26,6 +26,6 @@ trait HslColorTrait
 
         $color = clone $this;
         $color->lightness = $lightness;
-        return $this;
+        return $color;
     }
 }
