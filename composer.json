@@ -1,0 +1,34 @@
+{
+    "name": "talesoft/phim",
+    "type": "library",
+    "keywords": ["image", "manipulation", "processing", "gd", "imagick"],
+    "description": "An image manipulation and processing library for PHP",
+    "license": "MIT",
+    "homepage": "http://phim.talesoft.io",
+    "authors": [
+        {
+            "name": "Torben Koehn",
+            "email": "tk@talesoft.io"
+        }
+    ],
+    "support": {
+        "email": "info@talesoft.io",
+        "issues": "https://github.com/talesoft/phim/issues",
+        "source": "https://github.com/talesoft/phim",
+        "docs": "http://phim.talesoft.io/docs"
+    },
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.5.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "": "src/"
+        }
+    },
+    "bin": ["phim"],
+    "suggest": {
+        "gd": "For image processing with GD",
+        "imagick": "For image processing with Imagick"
+    }
+}
