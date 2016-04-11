@@ -2,8 +2,8 @@
 
 namespace Phim;
 
-use Phim\Point\Immutable;
+use Phim\Point\ImmutablePoint;
 
-class Point extends Immutable
+class Point extends ImmutablePoint
 {
 }

@@ -1,12 +1,12 @@
 <?php
 
-namespace Phim;
+namespace Phim\Point;
 
-trait PointTrait
+trait PointDataTrait
 {
-    
-    protected $x;
-    protected $y;
+
+    protected $x = 0;
+    protected $y = 0;
 
     public function getX()
     {
@@ -16,12 +16,12 @@ trait PointTrait
 
     public function getY()
     {
+
         return $this->y;
     }
-    
-    public function getXyArray()
+
+    public function getArray()
     {
-        
         return [$this->x, $this->y];
     }
 }

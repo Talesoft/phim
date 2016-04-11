@@ -2,10 +2,8 @@
 
 namespace Phim;
 
-interface PointInterface
-{
+use Phim\Point\ImmutablePointInterface;
 
-    public function getX();
-    public function getY();
-    public function getXyArray();
+interface PointInterface extends ImmutablePointInterface
+{
 }

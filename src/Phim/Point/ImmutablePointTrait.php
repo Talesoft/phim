@@ -6,9 +6,18 @@ use Phim\PointTrait;
 use Phim\Util\MathUtil;
 use Phim\Util\PointUtil;
 
-trait ImmutableTrait
+trait ImmutablePointTrait
 {
     use PointTrait;
+
+    public function mutate(callable $mutator)
+    {
+
+        $point = new MutablePoint($this->x, $this->y);
+        $mutator($point);
+
+        return $point->immutate();
+    }
 
     public function withX($x)
     {
@@ -26,7 +35,7 @@ trait ImmutableTrait
         return $point;
     }
 
-    public function withXy($x, $y = null)
+    public function with($x, $y = null)
     {
 
         $point = clone $this;
@@ -35,10 +44,10 @@ trait ImmutableTrait
         return $point;
     }
 
-    public function withXyArray(array $xy)
+    public function withArray(array $array)
     {
 
-        list($x, $y) = PointUtil::parseXyArray($xy);
+        list($x, $y) = PointUtil::parseArray($array);
 
         $point = clone $this;
         if ($x)
@@ -62,16 +71,16 @@ trait ImmutableTrait
         return $this->withY($this->y + $y);
     }
 
-    public function withAddedXy($x, $y = null)
+    public function withAdded($x, $y = null)
     {
         
-        return $this->withXy($this->x + $x, $this->y + ($y ?: $x));
+        return $this->with($this->x + $x, $this->y + ($y ?: $x));
     }
 
-    public function withAddedXyArray(array $xy)
+    public function withAddedArray(array $array)
     {
         
-        list($x, $y) = PointUtil::parseXyArray($xy);
+        list($x, $y) = PointUtil::parseArray($array);
         
         $point = clone $this;
         if ($x)
@@ -95,16 +104,16 @@ trait ImmutableTrait
         return $this->withY($this->y - $y);
     }
 
-    public function withSubtractedXy($x, $y = null)
+    public function withSubtracted($x, $y = null)
     {
 
-        return $this->withXy($this->x - $x, $this->y - ($y ?: $x));
+        return $this->with($this->x - $x, $this->y - ($y ?: $x));
     }
 
-    public function withSubtractedXyArray(array $xy)
+    public function withSubtractedArray(array $xy)
     {
 
-        list($x, $y) = PointUtil::parseXyArray($xy);
+        list($x, $y) = PointUtil::parseArray($xy);
 
         $point = clone $this;
         if ($x)
@@ -132,7 +141,7 @@ trait ImmutableTrait
         return $this->withY($this->y / $y);
     }
 
-    public function withDividedXy($x, $y = null)
+    public function withDivided($x, $y = null)
     {
 
         MathUtil::validateDivisor($x);
@@ -140,13 +149,13 @@ trait ImmutableTrait
         if ($y)
             MathUtil::validateDivisor($y);
 
-        return $this->withXy($this->x / $x, $this->y / ($y ?: $x));
+        return $this->with($this->x / $x, $this->y / ($y ?: $x));
     }
 
-    public function withDividedXyArray(array $xy)
+    public function withDividedArray(array $xy)
     {
 
-        list($x, $y) = PointUtil::parseXyArray($xy);
+        list($x, $y) = PointUtil::parseArray($xy);
 
         $point = clone $this;
         if ($x) {
@@ -176,16 +185,16 @@ trait ImmutableTrait
         return $this->withY($this->y * $y);
     }
 
-    public function withMultipliedXy($x, $y = null)
+    public function withMultiplied($x, $y = null)
     {
 
-        return $this->withXy($this->x * $x, $this->y * ($y ?: $x));
+        return $this->with($this->x * $x, $this->y * ($y ?: $x));
     }
 
-    public function withMultipliedXyArray(array $xy)
+    public function withMultipliedArray(array $xy)
     {
 
-        list($x, $y) = PointUtil::parseXyArray($xy);
+        list($x, $y) = PointUtil::parseArray($xy);
 
         $point = clone $this;
         if ($x)

@@ -6,9 +6,15 @@ use Phim\PointTrait;
 use Phim\Util\MathUtil;
 use Phim\Util\PointUtil;
 
-trait MutableTrait
+trait MutablePointTrait
 {
     use PointTrait;
+    
+    public function immutate()
+    {
+
+        return new ImmutablePoint($this->x, $this->y);
+    }
 
     public function setX($x)
     {
@@ -26,7 +32,7 @@ trait MutableTrait
         return $this;
     }
 
-    public function setXy($x, $y = null)
+    public function set($x, $y = null)
     {
         
         $this->x = $x;
@@ -35,10 +41,10 @@ trait MutableTrait
         return $this;
     }
 
-    public function setXyArray(array $xy)
+    public function setArray(array $xy)
     {
 
-        list($x, $y) = PointUtil::parseXyArray($xy);
+        list($x, $y) = PointUtil::parseArray($xy);
 
         if ($x)
             $this->x = $x;
@@ -65,7 +71,7 @@ trait MutableTrait
         return $this;
     }
 
-    public function addXy($x, $y = null)
+    public function add($x, $y = null)
     {
 
         $this->x += $x;
@@ -74,10 +80,10 @@ trait MutableTrait
         return $this;
     }
 
-    public function addXyArray(array $xy)
+    public function addArray(array $xy)
     {
 
-        list($x, $y) = PointUtil::parseXyArray($xy);
+        list($x, $y) = PointUtil::parseArray($xy);
 
         if ($x)
             $this->x += $x;
@@ -104,7 +110,7 @@ trait MutableTrait
         return $this;
     }
 
-    public function subtractXy($x, $y = null)
+    public function subtract($x, $y = null)
     {
 
         $this->x -= $x;
@@ -113,10 +119,10 @@ trait MutableTrait
         return $this;
     }
 
-    public function subtractXyArray(array $xy)
+    public function subtractArray(array $xy)
     {
 
-        list($x, $y) = PointUtil::parseXyArray($xy);
+        list($x, $y) = PointUtil::parseArray($xy);
 
         if ($x)
             $this->x -= $x;
@@ -147,7 +153,7 @@ trait MutableTrait
         return $this;
     }
 
-    public function divideXy($x, $y = null)
+    public function divide($x, $y = null)
     {
         
         MathUtil::validateDivisor($x);
@@ -161,10 +167,10 @@ trait MutableTrait
         return $this;
     }
 
-    public function divideXyArray(array $xy)
+    public function divideArray(array $xy)
     {
 
-        list($x, $y) = PointUtil::parseXyArray($xy);
+        list($x, $y) = PointUtil::parseArray($xy);
 
         if ($x) {
 
@@ -197,7 +203,7 @@ trait MutableTrait
         return $this;
     }
 
-    public function multiplyXy($x, $y = null)
+    public function multiply($x, $y = null)
     {
 
         $this->x *= $x;
@@ -206,10 +212,10 @@ trait MutableTrait
         return $this;
     }
 
-    public function multiplyXyArray(array $xy)
+    public function multiplyArray(array $xy)
     {
 
-        list($x, $y) = PointUtil::parseXyArray($xy);
+        list($x, $y) = PointUtil::parseArray($xy);
 
         if ($x)
             $this->x *= $x;

@@ -2,7 +2,7 @@
 
 namespace Phim\Util;
 
-use Phim\Exception\ZeroDivisionException;
+use Phim\Exception\Runtime\ZeroDivisionException;
 
 class MathUtil
 {
