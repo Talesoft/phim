@@ -11,7 +11,7 @@ class HsvaColor extends HsvColor implements HsvaColorInterface
 
         parent::__construct($hue, $saturation, $value);;
 
-        $this->alpha = $alpha;
+        $this->alpha = min(1, max($alpha, 0));;
     }
 
     public function getRgba()

@@ -11,7 +11,7 @@ class RgbaColor extends RgbColor implements RgbaColorInterface
 
         parent::__construct($red, $green, $blue);
 
-        $this->alpha = $alpha;
+        $this->alpha = min(1, max($alpha, 0));;
     }
 
     public function getRgba()

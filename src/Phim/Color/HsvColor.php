@@ -11,7 +11,7 @@ class HsvColor extends HsColorBase implements HsvColorInterface
 
         parent::__construct($hue, $saturation);
 
-        $this->value = $value;
+        $this->value = min(1, max($value, 0));;
     }
 
     public function withAlphaSupport()

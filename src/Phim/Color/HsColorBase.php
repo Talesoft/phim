@@ -9,7 +9,7 @@ abstract class HsColorBase implements HsColorInterface
     public function __construct($hue, $saturation)
     {
 
-        $this->hue = $hue;
-        $this->saturation = $saturation;
+        $this->hue = intval($hue);
+        $this->saturation = min(1, max($saturation, 0));
     }
 }

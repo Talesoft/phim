@@ -11,7 +11,7 @@ class HslaColor extends HslColor implements HslaColorInterface
 
         parent::__construct($hue, $saturation, $lightness);;
 
-        $this->alpha = $alpha;
+        $this->alpha = min(1, max($alpha, 0));;
     }
 
     public function getRgba()

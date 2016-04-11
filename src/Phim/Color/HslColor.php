@@ -11,7 +11,7 @@ class HslColor extends HsColorBase implements HslColorInterface
 
         parent::__construct($hue, $saturation);
 
-        $this->lightness = $lightness;
+        $this->lightness = min(1, max($lightness, 0));;
     }
 
     public function withAlphaSupport()

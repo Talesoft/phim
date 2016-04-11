@@ -9,9 +9,9 @@ class RgbColor implements RgbColorInterface
     public function __construct($red, $green, $blue)
     {
 
-        $this->red = $red;
-        $this->green = $green;
-        $this->blue = $blue;
+        $this->red = intval($red);
+        $this->green = intval($green);
+        $this->blue = intval($blue);
     }
 
     public function withAlphaSupport()

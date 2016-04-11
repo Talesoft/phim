@@ -1,5 +1,6 @@
 <?php
 
+use Phim\Color;
 use Phim\Color\RgbColor;
 
 include '../../vendor/autoload.php';
@@ -7,7 +8,7 @@ include '../../vendor/autoload.php';
 function div(\Phim\ColorInterface $color)
 {
 
-    echo '<div style="width: 100px; font-size: 14px; height: 100px; float: left; background: '.$color.'">'.$color.'</div>';
+    echo '<div style="width: 100px; font-size: 14px; height: 100px; float: left; background: '.$color.'">'.Color::getHexString($color).'</div>';
 }
 
 for ($r = 0; $r < 255; $r += 20) {
