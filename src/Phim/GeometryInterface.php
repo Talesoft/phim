@@ -2,6 +2,6 @@
 
 namespace Phim;
 
-interface GeometryInterface extends PointInterface
+interface GeometryInterface extends PointInterface, DrawableInterface
 {
 }

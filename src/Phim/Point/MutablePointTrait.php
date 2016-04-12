@@ -8,7 +8,7 @@ use Phim\Util\PointUtil;
 
 trait MutablePointTrait
 {
-    use PointTrait;
+    use PointDataTrait;
     
     public function immutate()
     {
@@ -36,7 +36,7 @@ trait MutablePointTrait
     {
         
         $this->x = $x;
-        $this->y = $y ?: $x;
+        $this->y = $y !== null ? $y : $x;
         
         return $this;
     }
@@ -75,7 +75,7 @@ trait MutablePointTrait
     {
 
         $this->x += $x;
-        $this->y += $y ?: $x;
+        $this->y += $y !== null ? $y : $x;
 
         return $this;
     }
@@ -114,7 +114,7 @@ trait MutablePointTrait
     {
 
         $this->x -= $x;
-        $this->y -= $y ?: $x;
+        $this->y -= $y !== null ? $y : $x;
 
         return $this;
     }
@@ -162,7 +162,7 @@ trait MutablePointTrait
             MathUtil::validateDivisor($y);
 
         $this->x /= $x;
-        $this->y /= $y ?: $x;
+        $this->y /= $y !== null ? $y : $x;
 
         return $this;
     }
@@ -207,7 +207,7 @@ trait MutablePointTrait
     {
 
         $this->x *= $x;
-        $this->y *= $y ?: $x;
+        $this->y *= $y !== null ? $y : $x;
 
         return $this;
     }

@@ -8,7 +8,7 @@ use Phim\Util\PointUtil;
 
 trait ImmutablePointTrait
 {
-    use PointTrait;
+    use PointDataTrait;
 
     public function mutate(callable $mutator)
     {
@@ -40,7 +40,7 @@ trait ImmutablePointTrait
 
         $point = clone $this;
         $point->x = $x;
-        $point->y = $y ?: $x;
+        $point->y = $y !== null ? $y : $x;
         return $point;
     }
 
@@ -74,7 +74,7 @@ trait ImmutablePointTrait
     public function withAdded($x, $y = null)
     {
         
-        return $this->with($this->x + $x, $this->y + ($y ?: $x));
+        return $this->with($this->x + $x, $this->y + ($y !== null ? $y : $x));
     }
 
     public function withAddedArray(array $array)
@@ -107,7 +107,7 @@ trait ImmutablePointTrait
     public function withSubtracted($x, $y = null)
     {
 
-        return $this->with($this->x - $x, $this->y - ($y ?: $x));
+        return $this->with($this->x - $x, $this->y - ($y !== null ? $y : $x));
     }
 
     public function withSubtractedArray(array $xy)
@@ -149,7 +149,7 @@ trait ImmutablePointTrait
         if ($y)
             MathUtil::validateDivisor($y);
 
-        return $this->with($this->x / $x, $this->y / ($y ?: $x));
+        return $this->with($this->x / $x, $this->y / ($y !== null ? $y : $x));
     }
 
     public function withDividedArray(array $xy)
@@ -188,7 +188,7 @@ trait ImmutablePointTrait
     public function withMultiplied($x, $y = null)
     {
 
-        return $this->with($this->x * $x, $this->y * ($y ?: $x));
+        return $this->with($this->x * $x, $this->y * ($y !== null ? $y : $x));
     }
 
     public function withMultipliedArray(array $xy)
