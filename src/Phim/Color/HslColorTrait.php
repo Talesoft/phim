@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Phim\Color;
 
@@ -6,26 +7,27 @@ trait HslColorTrait
 {
     use HsColorTrait;
 
-    protected $lightness = 0;
+    protected $lightness = 0.0;
 
     /**
-     * @return int
+     * @return float
      */
-    public function getLightness()
+    public function getLightness(): float
     {
 
         return $this->lightness;
     }
 
     /**
-     * @param int $lightness
-     * @return $this
+     * @param float $lightness
+     * @return $this|HslColorInterface
      */
-    public function withLightness($lightness)
+    public function withLightness(float $lightness): HslColorInterface
     {
 
         $color = clone $this;
         $color->lightness = $lightness;
+        
         return $color;
     }
 }

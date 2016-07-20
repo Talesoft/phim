@@ -1,6 +1,9 @@
 <?php
+declare(strict_types=1);
 
 namespace Phim\Color;
+
+use Phim\Util\MathUtil;
 
 trait AlphaTrait
 {
@@ -10,7 +13,7 @@ trait AlphaTrait
     /**
      * @return float
      */
-    public function getAlpha()
+    public function getAlpha(): float
     {
 
         return $this->alpha;
@@ -18,13 +21,14 @@ trait AlphaTrait
 
     /**
      * @param float $alpha
-     * @return $this
+     * @return $this|AlphaColorInterface
      */
-    public function withAlpha($alpha)
+    public function withAlpha(float $alpha): AlphaColorInterface
     {
 
         $color = clone $this;
-        $color->alpha = $alpha;
+        $color->alpha = MathUtil::capFloat($alpha);
+
         return $color;
     }
 }

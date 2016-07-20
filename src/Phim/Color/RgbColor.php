@@ -1,62 +1,49 @@
 <?php
+declare(strict_types=1);
 
 namespace Phim\Color;
 
-class RgbColor implements RgbColorInterface
+use Phim\ColorBase;
+use Phim\ColorInterface;
+use Phim\Util\MathUtil;
+
+class RgbColor extends ColorBase implements RgbColorInterface
 {
     use RgbColorTrait;
 
-    public function __construct($red, $green, $blue)
+    public function __construct(int $red, int $green, int $blue)
     {
 
-        $this->red = intval($red);
-        $this->green = intval($green);
-        $this->blue = intval($blue);
+        $this->red = MathUtil::capInt($red, 255);
+        $this->green = MathUtil::capInt($green, 255);
+        $this->blue = MathUtil::capInt($blue, 255);
     }
 
-    public function withAlphaSupport()
+    public function withAlphaSupport(): AlphaColorInterface
     {
 
         return new RgbaColor($this->red, $this->green, $this->blue, 1);
     }
 
-    public function withoutAlphaSupport()
+    public function withoutAlphaSupport(): ColorInterface
     {
 
         return new self($this->red, $this->green, $this->blue);
     }
 
-    public function getMax()
-    {
-
-        return max($this->red, $this->green, $this->blue);
-    }
-
-    public function getAverage()
-    {
-
-        return ($this->red + $this->green + $this->blue) / 3;
-    }
-
-    public function getMin()
-    {
-
-        return min($this->red, $this->blue, $this->green);
-    }
-
-    public function getRgb()
+    public function getRgb(): RgbColorInterface
     {
 
         return new self($this->red, $this->green, $this->blue);
     }
 
-    public function getRgba()
+    public function getRgba(): RgbaColorInterface
     {
 
         return $this->withAlphaSupport();
     }
 
-    public function getHsl()
+    public function getHsl(): HslColorInterface
     {
 
         $r = $this->red / 255;
@@ -82,16 +69,16 @@ class RgbColor implements RgbColorInterface
           $h /= 6;
         }
 
-        return new HslColor($h * 360, $s, $l);
+        return new HslColor((int)($h * 360), $s, $l);
     }
 
-    public function getHsla()
+    public function getHsla(): HslaColorInterface
     {
 
         return $this->getHsl()->withAlphaSupport();
     }
 
-    public function getHsv()
+    public function getHsv(): HsvColorInterface
     {
 
         $r = $this->red / 255;
@@ -117,10 +104,10 @@ class RgbColor implements RgbColorInterface
             $h /= 6;
         }
 
-        return new HsvColor($h * 360, $s, $v);
+        return new HsvColor((int)($h * 360), $s, $v);
     }
 
-    public function getHsva()
+    public function getHsva(): HsvaColorInterface
     {
 
         return $this->getHsv()->withAlphaSupport();
@@ -129,6 +116,6 @@ class RgbColor implements RgbColorInterface
     public function __toString()
     {
 
-        return "rgb({$this->red},{$this->blue},{$this->green})";
+        return "rgb({$this->red},{$this->green},{$this->blue})";
     }
 }

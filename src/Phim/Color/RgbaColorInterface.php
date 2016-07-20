@@ -1,7 +1,8 @@
 <?php
+declare(strict_types=1);
 
 namespace Phim\Color;
 
-interface RgbaColorInterface extends RgbColorInterface, AlphaInterface
+interface RgbaColorInterface extends RgbColorInterface, AlphaColorInterface
 {
 }

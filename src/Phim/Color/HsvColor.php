@@ -1,32 +1,38 @@
 <?php
+declare(strict_types=1);
 
 namespace Phim\Color;
+
+use Phim\ColorInterface;
+use Phim\float;
+use Phim\int;
+use Phim\Util\MathUtil;
 
 class HsvColor extends HsColorBase implements HsvColorInterface
 {
     use HsvColorTrait;
 
-    public function __construct($hue, $saturation, $value)
+    public function __construct(int $hue, float $saturation, float $value)
     {
 
         parent::__construct($hue, $saturation);
 
-        $this->value = min(1, max($value, 0));;
+        $this->value = MathUtil::capFloat($value);
     }
 
-    public function withAlphaSupport()
+    public function withAlphaSupport(): AlphaColorInterface
     {
 
         return new HsvaColor($this->hue, $this->saturation, $this->value, 1);
     }
 
-    public function withoutAlphaSupport()
+    public function withoutAlphaSupport(): ColorInterface
     {
 
         return new HsvColor($this->hue, $this->saturation, $this->value);
     }
 
-    public function getRgb()
+    public function getRgb(): RgbColorInterface
     {
 
         $h = $this->hue / 360;
@@ -50,16 +56,20 @@ class HsvColor extends HsColorBase implements HsvColorInterface
             case 5: $r = $v; $g = $p; $b = $q; break;
         }
 
-        return new RgbColor($r * 255, $g * 255, $b * 255);
+        return new RgbColor(
+            (int)($r * 255),
+            (int)($g * 255),
+            (int)($b * 255)
+        );
     }
 
-    public function getRgba()
+    public function getRgba(): RgbaColorInterface
     {
 
         return $this->getRgb()->withAlphaSupport();
     }
 
-    public function getHsl()
+    public function getHsl(): HslColorInterface
     {
 
         $h = $this->hue;
@@ -73,19 +83,19 @@ class HsvColor extends HsColorBase implements HsvColorInterface
         );
     }
 
-    public function getHsla()
+    public function getHsla(): HslaColorInterface
     {
 
         return $this->getHsl()->withAlphaSupport();
     }
 
-    public function getHsv()
+    public function getHsv(): HsvColorInterface
     {
 
         return new HsvColor($this->hue, $this->saturation, $this->value);
     }
 
-    public function getHsva()
+    public function getHsva(): HsvaColorInterface
     {
 
         return $this->withAlphaSupport();

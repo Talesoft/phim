@@ -1,32 +1,41 @@
 <?php
+declare(strict_types=1);
 
 namespace Phim\Color;
+
+use Phim\Util\MathUtil;
 
 class RgbaColor extends RgbColor implements RgbaColorInterface
 {
     use RgbaColorTrait;
 
-    public function __construct($red, $green, $blue, $alpha)
+    public function __construct(int $red, int $green, int $blue, float $alpha)
     {
 
         parent::__construct($red, $green, $blue);
 
-        $this->alpha = min(1, max($alpha, 0));;
+        $this->alpha = MathUtil::capFloat($alpha);
     }
 
-    public function getRgba()
+    public function withAlphaSupport(): AlphaColorInterface
+    {
+
+        return new self($this->red, $this->green, $this->blue, $this->alpha);
+    }
+
+    public function getRgba(): RgbaColorInterface
     {
 
         return new RgbaColor($this->red, $this->green, $this->blue, $this->alpha);
     }
 
-    public function getHsla()
+    public function getHsla(): HslaColorInterface
     {
 
         return $this->getHsl()->withAlphaSupport()->withAlpha($this->alpha);
     }
 
-    public function getHsva()
+    public function getHsva(): HsvaColorInterface
     {
 
         return $this->getHsv()->withAlphaSupport()->withAlpha($this->alpha);
@@ -35,6 +44,6 @@ class RgbaColor extends RgbColor implements RgbaColorInterface
     public function __toString()
     {
 
-        return "rgba({$this->red},{$this->blue},{$this->green},{$this->alpha})";
+        return "rgba({$this->red},{$this->green},{$this->blue},{$this->alpha})";
     }
 }

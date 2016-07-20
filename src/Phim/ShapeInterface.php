@@ -2,7 +2,7 @@
 
 namespace Phim;
 
-interface ShapeInterface
+interface ShapeInterface extends DrawableInterface
 {
 
     public function getGeometry();

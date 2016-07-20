@@ -1,32 +1,36 @@
 <?php
+declare(strict_types=1);
 
 namespace Phim\Color;
+
+use Phim\ColorInterface;
+use Phim\Util\MathUtil;
 
 class HslColor extends HsColorBase implements HslColorInterface
 {
     use HslColorTrait;
 
-    public function __construct($hue, $saturation, $lightness)
+    public function __construct(int $hue, float $saturation, float $lightness)
     {
 
         parent::__construct($hue, $saturation);
 
-        $this->lightness = min(1, max($lightness, 0));;
+        $this->lightness = MathUtil::capFloat($lightness);
     }
 
-    public function withAlphaSupport()
+    public function withAlphaSupport(): AlphaColorInterface
     {
 
         return new HslaColor($this->hue, $this->saturation, $this->lightness, 1);
     }
 
-    public function withoutAlphaSupport()
+    public function withoutAlphaSupport(): ColorInterface
     {
 
         return new HslColor($this->hue, $this->saturation, $this->lightness);
     }
 
-    private function getRgbFromHue($p, $q, $t)
+    private function getRgbFromHue(float $p, float $q, float $t): float
     {
 
         //Normalize
@@ -47,7 +51,7 @@ class HslColor extends HsColorBase implements HslColorInterface
         return $p;
     }
 
-    public function getRgb()
+    public function getRgb(): RgbColorInterface
     {
 
         $r = $g = $b = 0;
@@ -68,28 +72,32 @@ class HslColor extends HsColorBase implements HslColorInterface
             $b = $this->getRgbFromHue($p, $q, $h - 1/3);
         }
 
-        return new RgbColor($r * 255, $g * 255, $b * 255);
+        return new RgbColor(
+            (int)($r * 255),
+            (int)($g * 255),
+            (int)($b * 255)
+        );
     }
 
-    public function getRgba()
+    public function getRgba(): RgbaColorInterface
     {
 
         return $this->getRgb()->withAlphaSupport();
     }
 
-    public function getHsl()
+    public function getHsl(): HslColorInterface
     {
 
         return new HslColor($this->hue, $this->saturation, $this->lightness);
     }
 
-    public function getHsla()
+    public function getHsla(): HslaColorInterface
     {
 
         return $this->withAlphaSupport();
     }
 
-    public function getHsv()
+    public function getHsv(): HsvColorInterface
     {
         $l = $this->lightness;
         $s = $this->saturation * ($l < .5 ? $l : 1 - $l);
@@ -101,7 +109,7 @@ class HslColor extends HsColorBase implements HslColorInterface
         );
     }
 
-    public function getHsva()
+    public function getHsva(): HsvaColorInterface
     {
 
         return $this->getHsv()->withAlphaSupport();

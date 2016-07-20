@@ -12,7 +12,7 @@ trait RgbColorTrait
     /**
      * @return int
      */
-    public function getRed()
+    public function getRed(): int
     {
 
         return $this->red;
@@ -20,9 +20,9 @@ trait RgbColorTrait
 
     /**
      * @param int $red
-     * @return $this
+     * @return $this|RgbColorInterface
      */
-    public function withRed($red)
+    public function withRed(int $red): RgbColorInterface
     {
 
         $color = clone $this;
@@ -33,7 +33,7 @@ trait RgbColorTrait
     /**
      * @return int
      */
-    public function getGreen()
+    public function getGreen(): int
     {
 
         return $this->green;
@@ -41,9 +41,9 @@ trait RgbColorTrait
 
     /**
      * @param int $green
-     * @return $this
+     * @return $this|RgbColorInterface
      */
-    public function withGreen($green)
+    public function withGreen(int $green): RgbColorInterface
     {
 
         $color = clone $this;
@@ -54,7 +54,7 @@ trait RgbColorTrait
     /**
      * @return int
      */
-    public function getBlue()
+    public function getBlue(): int
     {
 
         return $this->blue;
@@ -62,9 +62,9 @@ trait RgbColorTrait
 
     /**
      * @param int $blue
-     * @return $this
+     * @return $this|RgbColorInterface
      */
-    public function withBlue($blue)
+    public function withBlue(int $blue): RgbColorInterface
     {
 
         $color = clone $this;

@@ -22,6 +22,7 @@ trait PointDataTrait
 
     public function getArray()
     {
+        
         return [$this->x, $this->y];
     }
 }

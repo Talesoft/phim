@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Phim\Color;
 
@@ -8,11 +9,11 @@ interface AlphaInterface
     /**
      * @return float
      */
-    public function getAlpha();
+    public function getAlpha(): float;
 
     /**
      * @param float $alpha
-     * @return $this
+     * @return $this|AlphaColorInterface
      */
-    public function withAlpha($alpha);
+    public function withAlpha(float $alpha): AlphaColorInterface;
 }
