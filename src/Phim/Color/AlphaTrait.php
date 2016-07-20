@@ -2,6 +2,8 @@
 
 namespace Phim\Color;
 
+use Phim\Util\MathUtil;
+
 trait AlphaTrait
 {
 
@@ -24,7 +26,7 @@ trait AlphaTrait
     {
 
         $color = clone $this;
-        $color->alpha = $alpha;
+        $color->alpha = MathUtil::capValue($alpha, 0.0, 1.0);
         return $color;
     }
 }

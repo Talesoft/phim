@@ -24,7 +24,10 @@
     "autoload": {
         "psr-4": {
             "": "src/"
-        }
+        },
+        "files": [
+            "src/Phim/functions.php"
+        ]
     },
     "bin": ["phim"],
     "suggest": {

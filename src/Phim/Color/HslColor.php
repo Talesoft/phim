@@ -2,6 +2,8 @@
 
 namespace Phim\Color;
 
+use Phim\Util\MathUtil;
+
 class HslColor extends HsColorBase implements HslColorInterface
 {
     use HslColorTrait;
@@ -11,7 +13,7 @@ class HslColor extends HsColorBase implements HslColorInterface
 
         parent::__construct($hue, $saturation);
 
-        $this->lightness = min(1, max($lightness, 0));;
+        $this->lightness = MathUtil::capValue($lightness, 0.0, 1.0);
     }
 
     public function withAlphaSupport()

@@ -2,6 +2,8 @@
 
 namespace Phim\Color;
 
+use Phim\Util\MathUtil;
+
 trait RgbColorTrait
 {
 
@@ -26,7 +28,7 @@ trait RgbColorTrait
     {
 
         $color = clone $this;
-        $color->red = $red;
+        $color->red = MathUtil::capValue($red, 0, 255);
         return $color;
     }
 
@@ -47,7 +49,7 @@ trait RgbColorTrait
     {
 
         $color = clone $this;
-        $color->green = $green;
+        $color->green = MathUtil::capValue($green, 0, 255);
         return $color;
     }
 
@@ -68,7 +70,7 @@ trait RgbColorTrait
     {
 
         $color = clone $this;
-        $color->blue = $blue;
+        $color->blue = MathUtil::capValue($blue, 0, 255);
         return $color;
     }
 }

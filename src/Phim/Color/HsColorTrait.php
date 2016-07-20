@@ -2,6 +2,8 @@
 
 namespace Phim\Color;
 
+use Phim\Util\MathUtil;
+
 trait HsColorTrait
 {
 
@@ -25,7 +27,7 @@ trait HsColorTrait
     {
 
         $color = clone $this;
-        $color->hue = $hue;
+        $color->hue = MathUtil::rotateValue($hue, 360);
         return $color;
     }
 
@@ -46,7 +48,7 @@ trait HsColorTrait
     {
 
         $color = clone $this;
-        $color->saturation = $saturation;
+        $color->saturation = MathUtil::capValue($saturation, 0.0, 1.0);
         return $color;
     }
 }

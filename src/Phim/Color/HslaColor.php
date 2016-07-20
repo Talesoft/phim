@@ -2,6 +2,8 @@
 
 namespace Phim\Color;
 
+use Phim\Util\MathUtil;
+
 class HslaColor extends HslColor implements HslaColorInterface
 {
     use HslaColorTrait;
@@ -11,7 +13,7 @@ class HslaColor extends HslColor implements HslaColorInterface
 
         parent::__construct($hue, $saturation, $lightness);;
 
-        $this->alpha = min(1, max($alpha, 0));;
+        $this->alpha = MathUtil::capValue($alpha, 0.0, 1.0);
     }
 
     public function getRgba()

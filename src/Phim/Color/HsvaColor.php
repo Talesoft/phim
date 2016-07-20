@@ -2,6 +2,8 @@
 
 namespace Phim\Color;
 
+use Phim\Util\MathUtil;
+
 class HsvaColor extends HsvColor implements HsvaColorInterface
 {
     use HsvaColorTrait;
@@ -11,7 +13,7 @@ class HsvaColor extends HsvColor implements HsvaColorInterface
 
         parent::__construct($hue, $saturation, $value);;
 
-        $this->alpha = min(1, max($alpha, 0));;
+        $this->alpha = MathUtil::capValue($alpha, 0.0, 1.0);
     }
 
     public function getRgba()

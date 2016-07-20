@@ -2,6 +2,8 @@
 
 namespace Phim\Color;
 
+use Phim\Util\MathUtil;
+
 class HsvColor extends HsColorBase implements HsvColorInterface
 {
     use HsvColorTrait;
@@ -11,7 +13,7 @@ class HsvColor extends HsColorBase implements HsvColorInterface
 
         parent::__construct($hue, $saturation);
 
-        $this->value = min(1, max($value, 0));;
+        $this->value = MathUtil::capValue($value, 0.0, 1.0);
     }
 
     public function withAlphaSupport()

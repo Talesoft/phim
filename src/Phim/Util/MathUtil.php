@@ -17,4 +17,21 @@ class MathUtil
                 "Failed to divide: You can't divide by zero"
             );
     }
+
+    public static function capValue($value, $min, $max) {
+
+        return max($min, min($value, $max));
+    }
+
+    public static function rotateValue($value, $base)
+    {
+
+        if ($value > $base)
+            $value -= $base;
+
+        if ($value < 0)
+            $value = $base + $value;
+
+        return $value;
+    }
 }

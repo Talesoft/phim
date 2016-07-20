@@ -2,6 +2,8 @@
 
 namespace Phim\Color;
 
+use Phim\Util\MathUtil;
+
 trait HsvColorTrait
 {
     use HsColorTrait;
@@ -25,7 +27,7 @@ trait HsvColorTrait
     {
 
         $color = clone $this;
-        $color->value = $value;
+        $color->value = MathUtil::capValue($value, 0.0, 1.0);
         return $color;
     }
 }

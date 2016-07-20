@@ -2,6 +2,8 @@
 
 namespace Phim\Color;
 
+use Phim\Util\MathUtil;
+
 class RgbColor implements RgbColorInterface
 {
     use RgbColorTrait;
@@ -9,9 +11,9 @@ class RgbColor implements RgbColorInterface
     public function __construct($red, $green, $blue)
     {
 
-        $this->red = intval($red);
-        $this->green = intval($green);
-        $this->blue = intval($blue);
+        $this->red = MathUtil::capValue($red, 0, 255);
+        $this->green = MathUtil::capValue($green, 0, 255);
+        $this->blue = MathUtil::capValue($blue, 0, 255);
     }
 
     public function withAlphaSupport()
@@ -24,24 +26,6 @@ class RgbColor implements RgbColorInterface
     {
 
         return new self($this->red, $this->green, $this->blue);
-    }
-
-    public function getMax()
-    {
-
-        return max($this->red, $this->green, $this->blue);
-    }
-
-    public function getAverage()
-    {
-
-        return ($this->red + $this->green + $this->blue) / 3;
-    }
-
-    public function getMin()
-    {
-
-        return min($this->red, $this->blue, $this->green);
     }
 
     public function getRgb()
@@ -129,6 +113,6 @@ class RgbColor implements RgbColorInterface
     public function __toString()
     {
 
-        return "rgb({$this->red},{$this->blue},{$this->green})";
+        return "rgb({$this->red},{$this->green},{$this->blue})";
     }
 }

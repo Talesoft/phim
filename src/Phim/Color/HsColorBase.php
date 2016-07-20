@@ -2,6 +2,8 @@
 
 namespace Phim\Color;
 
+use Phim\Util\MathUtil;
+
 abstract class HsColorBase implements HsColorInterface
 {
     use HsColorTrait;
@@ -9,7 +11,7 @@ abstract class HsColorBase implements HsColorInterface
     public function __construct($hue, $saturation)
     {
 
-        $this->hue = intval($hue);
-        $this->saturation = min(1, max($saturation, 0));
+        $this->hue = MathUtil::rotateValue($hue, 360);
+        $this->saturation = MathUtil::capValue($saturation, 0.0, 1.0);
     }
 }
