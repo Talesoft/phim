@@ -113,6 +113,9 @@ class RgbColor implements RgbColorInterface
     public function __toString()
     {
 
-        return "rgb({$this->red},{$this->green},{$this->blue})";
+        $r = intval($this->red);
+        $g = intval($this->green);
+        $b = intval($this->blue);
+        return "rgb({$r},{$g},{$b})";
     }
 }

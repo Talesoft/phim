@@ -37,6 +37,10 @@ class RgbaColor extends RgbColor implements RgbaColorInterface
     public function __toString()
     {
 
-        return "rgba({$this->red},{$this->green},{$this->blue},{$this->alpha})";
+        $r = intval($this->red);
+        $g = intval($this->green);
+        $b = intval($this->blue);
+        $alph = round($this->alpha, 2);
+        return "rgba({$r},{$g},{$b},{$alph})";
     }
 }

@@ -37,6 +37,10 @@ class HslaColor extends HslColor implements HslaColorInterface
     public function __toString()
     {
 
-        return "hsla({$this->hue},{$this->saturation},{$this->lightness},{$this->alpha})";
+        $hue = round($this->hue, 2);
+        $sat = round($this->saturation * 100, 2).'%';
+        $light = round($this->lightness * 100, 2).'%';
+        $alph = round($this->alpha, 2);
+        return "hsla({$hue},{$sat},{$light},{$alph})";
     }
 }

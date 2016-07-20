@@ -37,6 +37,10 @@ class HsvaColor extends HsvColor implements HsvaColorInterface
     public function __toString()
     {
 
-        return "hsva({$this->hue},{$this->saturation},{$this->value},{$this->alpha})";
+        $hue = round($this->hue, 2);
+        $sat = round($this->saturation * 100, 2).'%';
+        $val = round($this->value * 100, 2).'%';
+        $alph = round($this->alpha, 2);
+        return "hsva({$hue},{$sat},{$val},{$alph})";
     }
 }

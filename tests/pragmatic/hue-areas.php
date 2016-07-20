@@ -11,7 +11,7 @@ include '../../vendor/autoload.php';
 function div(ColorInterface $color)
 {
 
-    echo '<div style="width: 100px; font-size: 14px; height: 100px; float: left; background: '.$color.'">'.color_get_hex($color).'</div>';
+    echo '<div style="width: 100px; font-size: 14px; height: 100px; float: left; background: '.$color->getHsl().'">'.color_get_hex($color).'</div>';
 }
 
 $names = array_replace([

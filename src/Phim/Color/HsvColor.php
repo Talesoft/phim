@@ -96,6 +96,9 @@ class HsvColor extends HsColorBase implements HsvColorInterface
     public function __toString()
     {
 
-        return "hsv({$this->hue},{$this->saturation},{$this->value})";
+        $hue = round($this->hue, 2);
+        $sat = round($this->saturation * 100, 2).'%';
+        $val = round($this->value * 100, 2).'%';
+        return "hsv({$hue},{$sat},{$val})";
     }
 }
