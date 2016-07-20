@@ -109,12 +109,18 @@ class HslColor extends HsColorBase implements HslColorInterface
         return $this->getHsv()->withAlphaSupport();
     }
 
-    public function __toString()
+    public function getCssString()
     {
 
         $hue = round($this->hue, 2);
         $sat = round($this->saturation * 100, 2).'%';
         $light = round($this->lightness * 100, 2).'%';
         return "hsl({$hue},{$sat},{$light})";
+    }
+
+    public function __toString()
+    {
+
+        return "hsl({$this->hue},{$this->saturation},{$this->lightness})";
     }
 }

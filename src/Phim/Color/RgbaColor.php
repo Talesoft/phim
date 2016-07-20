@@ -34,7 +34,7 @@ class RgbaColor extends RgbColor implements RgbaColorInterface
         return $this->getHsv()->withAlphaSupport()->withAlpha($this->alpha);
     }
 
-    public function __toString()
+    public function getCssString()
     {
 
         $r = intval($this->red);
@@ -42,5 +42,11 @@ class RgbaColor extends RgbColor implements RgbaColorInterface
         $b = intval($this->blue);
         $alph = round($this->alpha, 2);
         return "rgba({$r},{$g},{$b},{$alph})";
+    }
+
+    public function __toString()
+    {
+
+        return "rgba({$this->red},{$this->green},{$this->blue},{$this->alpha})";
     }
 }

@@ -110,12 +110,18 @@ class RgbColor implements RgbColorInterface
         return $this->getHsv()->withAlphaSupport();
     }
 
-    public function __toString()
+    public function getCssString()
     {
 
         $r = intval($this->red);
         $g = intval($this->green);
         $b = intval($this->blue);
         return "rgb({$r},{$g},{$b})";
+    }
+
+    public function __toString()
+    {
+
+        return "rgb({$this->red},{$this->green},{$this->blue})";
     }
 }

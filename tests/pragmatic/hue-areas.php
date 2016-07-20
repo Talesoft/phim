@@ -1,18 +1,6 @@
 <?php
 
-
-use Phim\Color;
-use function Phim\color_get;
-use function Phim\color_get_hex;
-use Phim\ColorInterface;
-
 include '../../vendor/autoload.php';
-
-function div(ColorInterface $color)
-{
-
-    echo '<div style="width: 100px; font-size: 14px; height: 100px; float: left; background: '.$color->getHsl().'">'.color_get_hex($color).'</div>';
-}
 
 $names = array_replace([
     'fullred' => '#f00',
@@ -21,13 +9,11 @@ $names = array_replace([
     'fullyellow' => '#ff0',
     'fullcyan' => '#0ff',
     'fullmagenta' => '#f0f'
-], Color::getNames());
+], \Phim\color_get_names());
 
 foreach ($names as $name => $hex) {
-    
-    $color = color_get($hex);
-    
-    div($color);
-    echo $name.' => '.Color::getHueArea($color->getHsl()->getHue());
-    echo '<br style="clear: both">';
+
+    echo \Phim\color_get_html($hex);
+    echo $name.' => '.\Phim\color_get_hue_range($hex);
+    echo '<br>';
 }

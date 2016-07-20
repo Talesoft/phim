@@ -31,5 +31,7 @@ interface ColorInterface
     /** @return HsvaColorInterface */
     public function getHsva();
 
+    public function getCssString();
+
     public function __toString();
 }

@@ -4,5 +4,5 @@ namespace Phim\Color;
 
 trait RgbaColorTrait
 {
-    use RgbColorTrait, AlphaTrait;
+    use RgbColorTrait, AlphaColorTrait;
 }

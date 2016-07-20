@@ -2,6 +2,6 @@
 
 namespace Phim\Color;
 
-interface HsvaColorInterface extends HsvColorInterface, AlphaInterface
+interface HsvaColorInterface extends HsvColorInterface, AlphaColorInterface
 {
 }

@@ -4,5 +4,5 @@ namespace Phim\Color;
 
 trait HslaColorTrait
 {
-    use HslColorTrait, AlphaTrait;
+    use HslColorTrait, AlphaColorTrait;
 }
