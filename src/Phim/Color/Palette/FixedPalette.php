@@ -6,6 +6,7 @@ use Phim\Color\Palette;
 
 abstract class FixedPalette extends Palette
 {
+    
     private $size;
 
     /**

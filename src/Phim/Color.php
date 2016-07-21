@@ -1208,7 +1208,7 @@ class Color
     public static function getName(ColorInterface $color)
     {
 
-        $hex = self::getHexString($color->withoutAlphaSupport());
+        $hex = self::getHexString($color->withoutAlphaSupport(), true);
 
         $name = array_search($hex, self::$names, true);
 
@@ -1308,7 +1308,7 @@ class Color
         return new $className(...$args);
     }
 
-    public static function getHexString(ColorInterface $color)
+    public static function getHexString(ColorInterface $color, $expand = false)
     {
 
         /** @var RgbaColor $rgb */
@@ -1321,8 +1321,10 @@ class Color
         $hex .= str_pad(dechex($rgb->getGreen()), 2, '0', STR_PAD_LEFT);
         $hex .= str_pad(dechex($rgb->getBlue()), 2, '0', STR_PAD_LEFT);
 
-        if ($rgb instanceof RgbaColor)
+        if ($rgb instanceof AlphaColorInterface)
             $hex .= str_pad(dechex($rgb->getAlpha() * 255), 2, '0', STR_PAD_LEFT);
+        else if ($hex[1] === $hex[2] && $hex[3] === $hex[4] && $hex[5] === $hex[6] && !$expand)
+            $hex = '#'.$hex[1].$hex[3].$hex[5];
 
         return $hex;
     }
@@ -1559,13 +1561,14 @@ class Color
         return sprintf(
             '<div style="display: inline-block; vertical-align: middle; width: %dpx; height: %dpx; '.
             'background: %s; color: %s; font-size: 12px; font-family: Arial, sans-serif; '.
-            'text-align: center; line-height: %dpx;">%s<br>%s%s</div>',
+            'text-align: center; line-height: %dpx;">%s<br>%s<br>%s%s</div>',
             $width,
             $height,
             $color->getCssString(),
             $inversed->getCssString(),
-            intval($height / 3),
+            intval($height / 4),
             $color->getCssString(),
+            Color::getHexString($color->getRgb()),
             self::getHueRange($hue)."->".round($hue, 2),
             $name ? "<br>$name" : ''
         );
