@@ -11,6 +11,15 @@ trait PaletteTrait
 
     private $colors;
 
+    /**
+     * @return ColorInterface[]
+     */
+    public function getColors()
+    {
+
+        return $this->colors;
+    }
+
     public function getIterator()
     {
 

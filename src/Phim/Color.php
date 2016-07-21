@@ -1548,6 +1548,33 @@ class Color
         return $color->withAlpha($color->getAlpha() - $ratio);
     }
 
+    public static function equals(ColorInterface $color, ColorInterface $compareColor, $tolerance = null, $ignoreAlpha = false)
+    {
+
+        $tolerance = $tolerance ?: 0;
+        $color = $ignoreAlpha
+            ? $color->getRgb()
+            : $color->getRgba();
+
+        $compareColor = $ignoreAlpha
+            ? $compareColor->getRgb()
+            : $compareColor->getRgba();
+
+        if (abs($color->getRed() - $compareColor->getRed()) > $tolerance)
+            return false;
+
+        if (abs($color->getGreen() - $compareColor->getGreen()) > $tolerance)
+            return false;
+
+        if (abs($color->getBlue() - $compareColor->getBlue()) > $tolerance)
+            return false;
+
+        if (!$ignoreAlpha && abs($color->getAlpha() - $compareColor->getAlpha()) > ($tolerance / 255))
+            return false;
+
+        return true;
+    }
+
     public static function getHtml(ColorInterface $color, int $width = null, int $height = null)
     {
 

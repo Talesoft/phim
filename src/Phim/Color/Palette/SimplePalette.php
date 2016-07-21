@@ -2,11 +2,15 @@
 
 namespace Phim\Color\Palette;
 
+use Phim\Color;
 use Phim\Color\Palette;
+use Phim\Color\PaletteInterface;
+use Phim\Color\PaletteTrait;
 
-abstract class FixedPalette extends Palette
+class SimplePalette implements PaletteInterface
 {
-    
+    use PaletteTrait;
+
     private $size;
 
     /**
@@ -15,12 +19,15 @@ abstract class FixedPalette extends Palette
      * @param int $size
      * @param \Traversable|array $colors
      */
-    public function __construct($size, $colors = null)
+    public function __construct($colors = null, $size = null)
     {
 
+        $this->colors = [];
         $this->size = $size;
-
-        parent::__construct($colors);
+        
+        if ($colors)
+            foreach ($colors as $color)
+                $this[] = $color;
     }
 
     public function getSize()
@@ -29,17 +36,23 @@ abstract class FixedPalette extends Palette
         return $this->size;
     }
 
+    public function add(PaletteInterface $palette, $prepend = false)
+    {
+
+        return Palette::merge($this, $palette, $prepend);
+    }
+
     public function offsetSet($offset, $color)
     {
 
         if ($offset === null)
             $offset = $this->count();
 
-        if ($offset > $this->size - 1)
+        if ($this->size && $offset > $this->size - 1)
             throw new \OutOfBoundsException(
                 "Tried to set offset $offset in a palette that fits only {$this->size} values"
             );
 
-        parent::offsetSet($offset, $color);
+        $this->colors[$offset] = Color::get($color);
     }
 }

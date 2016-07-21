@@ -48,7 +48,7 @@ abstract class ContinousSchemeBase extends Color\SchemeBase
     {
 
         yield $baseColor;
-        for ($i = 1; $i < $this->amount; $i++) {
+        for ($i = 1; $i <= $this->amount; $i++) {
 
             yield $this->generateStep($baseColor, $i, $this->step);
         }

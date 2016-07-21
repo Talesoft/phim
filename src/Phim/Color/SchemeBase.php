@@ -3,10 +3,10 @@
 namespace Phim\Color;
 
 use Phim\Color;
-use Phim\Color\Palette\FixedPalette;
+use Phim\Color\Palette\SimplePalette;
 use Phim\ColorInterface;
 
-abstract class SchemeBase extends FixedPalette
+abstract class SchemeBase extends SimplePalette
 {
     use SchemeTrait;
 
@@ -15,7 +15,7 @@ abstract class SchemeBase extends FixedPalette
 
         $this->baseColor = Color::get($baseColor);
         $colors = iterator_to_array($this->generate($this->baseColor));
-        parent::__construct(count($colors), $colors);
+        parent::__construct($colors, count($colors));
     }
 
     /**

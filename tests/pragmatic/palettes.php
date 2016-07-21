@@ -2,30 +2,45 @@
 
 use Phim\Color\Palette;
 use Phim\Color\Palette\ShadePalette;
+use Phim\Color\Palette\SimplePalette;
+use Phim\Color\Scheme\AnalogousScheme;
+use Phim\Color\Scheme\TetradicScheme;
 
 include '../../vendor/autoload.php';
 
-$sorter = function($a, $b) {
 
-    return \Phim\color_get($a)->getHsl()->getLightness() <=> \Phim\color_get($b)->getHsl()->getLightness();
-};
+$hueRange = isset($_GET['hue']) ? $_GET['hue'] : 'red';
 
 $colorNames = array_values(\Phim\color_get_names());
-usort($colorNames, $sorter);
 
-?><h1>Shades</h1><?php
+?>
+<p>
+    Let's take all named colors, build tetradic complements for them and filter out the coolest values
+    of a specific hue range
+</p>
+<?php
+
+$palette = new SimplePalette();
 foreach ($colorNames as $color) {
 
-    $sp = new ShadePalette($color, 4, .1);
-    echo Palette::getHtml($sp);
-    echo '<br>';
+    $palette = $palette->add(new TetradicScheme($color));
+    $palette = $palette->add(new AnalogousScheme($color));
 }
 
+$filtered = Palette::filterByHueRange($palette, $hueRange);
+$deduplicated = Palette::filterDuplicates($filtered, 10);
 
-?><h1>Complements</h1><?php
-foreach ($colorNames as $color) {
+?>
+<table width="100%">
+    <tr>
+        <th>All</th>
+        <th>Only <strong><?=$hueRange?></strong> colors</th>
+        <th>Without duplicates (Tolerance: 10)</th>
+    </tr>
+    <tr>
+        <td valign="top" align="center"><?=Palette::getHtml($palette, 4)?></td>
+        <td valign="top" align="center"><?=Palette::getHtml($filtered, 4)?></td>
+        <td valign="top" align="center"><?=Palette::getHtml($deduplicated, 4)?></td>
+    </tr>
+</table>
 
-    $cp = new Palette\ComplementPalette($color, 8);
-    echo Palette::getHtml($cp);
-    echo '<br>';
-}
