@@ -9,7 +9,7 @@ use Phim\Color\PaletteTrait;
 
 class SimplePalette implements PaletteInterface
 {
-    use PaletteTrait;
+    use PaletteTrait { offsetSet as private paletteTraitOffsetSet; }
 
     private $size;
 
@@ -53,6 +53,6 @@ class SimplePalette implements PaletteInterface
                 "Tried to set offset $offset in a palette that fits only {$this->size} values"
             );
 
-        $this->colors[$offset] = Color::get($color);
+        $this->paletteTraitOffsetSet($offset, $color);
     }
 }

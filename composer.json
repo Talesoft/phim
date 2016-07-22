@@ -31,7 +31,8 @@
     },
     "bin": ["phim"],
     "suggest": {
-        "gd": "For image processing with GD",
-        "imagick": "For image processing with Imagick"
+        "gd": "for image processing with GD",
+        "imagick": "for image processing with Imagick",
+        "symfony/mbstring-polyfill": "if youre lacking the mbstring extension or can't install it"
     }
 }

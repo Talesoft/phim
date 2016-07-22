@@ -599,15 +599,6 @@ class Color
     const YELLOW = '#ffff00';
     const YELLOWGREEN = '#9acd32';
 
-    private static $functions = [
-        'rgb' => RgbColor::class,
-        'rgba' => RgbaColor::class,
-        'hsl' => HslColor::class,
-        'hsla' => HslaColor::class,
-        'hsv' => HsvColor::class,
-        'hsva' => HsvaColor::class
-    ];
-
     private static $names = [
         'abbiexxxx' => self::ABBIEXXXX,
         'absolutezero' => self::ABSOLUTEZERO,
@@ -1185,6 +1176,42 @@ class Color
         'yellowgreen' => self::YELLOWGREEN
     ];
 
+    private static $functions = [
+        'rgb' => ['className' => RgbColor::class, 'args' => [
+            ['type' => 'int', 'base' => 255],
+            ['type' => 'int', 'base' => 255],
+            ['type' => 'int', 'base' => 255]
+        ]],
+        'rgba' => ['className' => RgbaColor::class, 'args' => [
+            ['type' => 'int', 'base' => 255],
+            ['type' => 'int', 'base' => 255],
+            ['type' => 'int', 'base' => 255],
+            ['type' => 'float', 'base' => 1]
+        ]],
+        'hsl' => ['className' => HslColor::class, 'args' => [
+            ['type' => 'float', 'base' => 360, 'rotate' => true],
+            ['type' => 'float', 'base' => 1],
+            ['type' => 'float', 'base' => 1]
+        ]],
+        'hsla' => ['className' => HslaColor::class, 'args' => [
+            ['type' => 'float', 'base' => 360, 'rotate' => true],
+            ['type' => 'float', 'base' => 1],
+            ['type' => 'float', 'base' => 1],
+            ['type' => 'float', 'base' => 1]
+        ]],
+        'hsv' => ['className' => HsvColor::class, 'args' => [
+            ['type' => 'float', 'base' => 360, 'rotate' => true],
+            ['type' => 'float', 'base' => 1],
+            ['type' => 'float', 'base' => 1]
+        ]],
+        'hsva' => ['className' => HsvaColor::class, 'args' => [
+            ['type' => 'float', 'base' => 360, 'rotate' => true],
+            ['type' => 'float', 'base' => 1],
+            ['type' => 'float', 'base' => 1],
+            ['type' => 'float', 'base' => 1]
+        ]]
+    ];
+
     private function __construct() {}
 
     /**
@@ -1209,7 +1236,6 @@ class Color
     {
 
         $hex = self::getHexString($color->withoutAlphaSupport(), true);
-
         $name = array_search($hex, self::$names, true);
 
         if ($name)
@@ -1353,6 +1379,23 @@ class Color
         return $color instanceof ColorInterface
             ? $color
             : Color::fromString((string)$color);
+    }
+
+    public function create($type, array $args)
+    {
+
+        if (!isset(self::$functions[$type]))
+            throw new \InvalidArgumentException(
+                "Passed color type $type is not registered. Please register it with ::registerFunction first"
+            );
+        
+        $type = self::$functions[$type];
+        
+        foreach ($type['args'] as $arg) {
+            
+            $argType = $arg['type'];
+            $argBase = $arg['base'];
+        }
     }
 
     public static function getMax(ColorInterface $color)
@@ -1553,29 +1596,29 @@ class Color
 
         $tolerance = $tolerance ?: 0;
         $color = $ignoreAlpha
-            ? $color->getRgb()
-            : $color->getRgba();
+            ? $color->getHsl()
+            : $color->getHsla();
 
         $compareColor = $ignoreAlpha
-            ? $compareColor->getRgb()
-            : $compareColor->getRgba();
+            ? $compareColor->getHsl()
+            : $compareColor->getHsla();
 
-        if (abs($color->getRed() - $compareColor->getRed()) > $tolerance)
+        if (abs($color->getHue() - $compareColor->getHue()) > (360 * $tolerance))
             return false;
 
-        if (abs($color->getGreen() - $compareColor->getGreen()) > $tolerance)
+        if (abs($color->getSaturation() - $compareColor->getSaturation()) > $tolerance)
             return false;
 
-        if (abs($color->getBlue() - $compareColor->getBlue()) > $tolerance)
+        if (abs($color->getLightness() - $compareColor->getLightness()) > $tolerance)
             return false;
 
-        if (!$ignoreAlpha && abs($color->getAlpha() - $compareColor->getAlpha()) > ($tolerance / 255))
+        if (!$ignoreAlpha && abs($color->getAlpha() - $compareColor->getAlpha()) > $tolerance)
             return false;
 
         return true;
     }
 
-    public static function getHtml(ColorInterface $color, int $width = null, int $height = null)
+    public static function getHtml(ColorInterface $color, $width = null, $height = null)
     {
 
         $width = $width ?: 120;
