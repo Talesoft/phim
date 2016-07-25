@@ -1649,6 +1649,7 @@ class Color
         return $color->withAlpha($color->getAlpha() - $ratio);
     }
 
+    //https://github.com/supplyhog/phpOptics/blob/master/OpticsColorPoint.php
     public static function getDifference(ColorInterface $color, ColorInterface $compareColor)
     {
 
