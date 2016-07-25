@@ -31,11 +31,11 @@ class MathUtil
     public static function rotateValue($value, $base)
     {
 
-        if ($value > $base)
+        while ($value > $base)
             $value -= $base;
 
-        if ($value < 0)
-            $value = $base + $value;
+        while ($value < 0)
+            $value += $base;
 
         return $value;
     }
@@ -47,26 +47,26 @@ class MathUtil
 
             //sorted by probable occurence
             $checkUnits = [self::UNIT_PERCENT, self::UNIT_RADIANS, self::UNIT_PERMILLE];
-            foreach ($checkUnits as $currentUnit => $unitBase) {
+            $len = mb_strlen($value);
+            foreach ($checkUnits as $currentUnit) {
 
-                $len = mb_strlen($currentUnit);
-                if (mb_strpos($value, $currentUnit, -$len) !== false) {
+                $unitLen = mb_strlen($currentUnit);
+                if ($len > $unitLen && mb_substr($value, -$unitLen) === $currentUnit) {
 
-                    $value = floatval(mb_substr($value, 0, -$len));
-
+                    $value = floatval(mb_substr($value, 0, -$unitLen));
                     switch ($currentUnit) {
                         case self::UNIT_RADIANS:
-
-                            $value = $value * (M_PI / 180);
+                            $value = round($value * 180 / M_PI, 3, PHP_ROUND_HALF_UP);
                             break;
                         case self::UNIT_PERCENT:
-                            $value = 100 / $base * $value;
+                            $value = $base / 100 * $value;
                             break;
                         case self::UNIT_PERMILLE:
-                            $value = 1000 / $base * $value;
+                            $value = $base / 1000 * $value;
                             break;
                     }
-                    continue;
+
+                    break;
                 }
             }
 
@@ -76,9 +76,19 @@ class MathUtil
                 );
         }
 
+        if ($rotate)
+            $value = self::rotateValue($value, $base);
+
         switch ($type) {
-            case 'int': return round($value, 0, PHP_ROUND_HALF_UP);
+            case 'int': return (int)round($value, 0, PHP_ROUND_HALF_UP);
+            case 'float': break;
+            default:
+
+                throw new \InvalidArgumentException(
+                    "Passed value type $type is not valid. Use 'float' or 'int'."
+                );
         }
 
+        return floatval($value);
     }
 }

@@ -3,12 +3,14 @@
 namespace Phim;
 
 use Phim\Color\AlphaInterface;
+use Phim\Color\LabColorInterface;
 use Phim\Color\HslaColorInterface;
 use Phim\Color\HslColorInterface;
 use Phim\Color\HsvaColorInterface;
 use Phim\Color\HsvColorInterface;
 use Phim\Color\RgbaColorInterface;
 use Phim\Color\RgbColorInterface;
+use Phim\Color\XyzColorInterface;
 
 interface ColorInterface
 {
@@ -31,7 +33,11 @@ interface ColorInterface
     /** @return HsvaColorInterface */
     public function getHsva();
 
-    public function getCssString();
+    /** @return XyzColorInterface */
+    public function getXyz();
+
+    /** @return LabColorInterface */
+    public function getLab();
 
     public function __toString();
 }

@@ -19,25 +19,25 @@ class RgbColor implements RgbColorInterface
     public function withAlphaSupport()
     {
 
-        return new RgbaColor($this->red, $this->green, $this->blue, 1);
+        return $this->getRgba();
     }
 
     public function withoutAlphaSupport()
     {
 
-        return new self($this->red, $this->green, $this->blue);
+        return $this->getRgb();
     }
 
     public function getRgb()
     {
 
-        return new self($this->red, $this->green, $this->blue);
+        return new RgbColor($this->red, $this->green, $this->blue);
     }
 
     public function getRgba()
     {
 
-        return $this->withAlphaSupport();
+        return new RgbaColor($this->red, $this->green, $this->blue, 1);
     }
 
     public function getHsl()
@@ -110,18 +110,52 @@ class RgbColor implements RgbColorInterface
         return $this->getHsv()->withAlphaSupport();
     }
 
-    public function getCssString()
+    public function getXyz()
+    {
+
+        $r = ($this->red / 255);        //R from 0 to 255
+        $g = ($this->green / 255);        //G from 0 to 255
+        $b = ($this->blue / 255);        //B from 0 to 255
+
+        if ($r > 0.04045)
+            $r = (($r + 0.055) / 1.055) ^ 2.4;
+        else
+            $r = $r / 12.92;
+
+        if ($g > 0.04045)
+            $g = (($g + 0.055) / 1.055) ^ 2.4;
+        else
+            $g = $g / 12.92;
+
+        if ($b > 0.04045)
+            $b = (($b + 0.055) / 1.055) ^ 2.4;
+        else
+            $b = $b / 12.92;
+
+        $r = $r * 100;
+        $g = $g * 100;
+        $b = $b * 100;
+
+        //Observer. = 2°, Illuminant = D65
+        $x = $r * 0.4124 + $g * 0.3576 + $b * 0.1805;
+        $y = $r * 0.2126 + $g * 0.7152 + $b * 0.0722;
+        $z = $r * 0.0193 + $g * 0.1192 + $b * 0.9505;
+
+        return new XyzColor($x, $y, $z);
+    }
+
+    public function getLab()
+    {
+
+        return $this->getXyz()->getLab();
+    }
+
+    public function __toString()
     {
 
         $r = intval($this->red);
         $g = intval($this->green);
         $b = intval($this->blue);
         return "rgb({$r},{$g},{$b})";
-    }
-
-    public function __toString()
-    {
-
-        return "rgb({$this->red},{$this->green},{$this->blue})";
     }
 }

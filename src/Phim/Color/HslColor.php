@@ -19,13 +19,13 @@ class HslColor extends HsColorBase implements HslColorInterface
     public function withAlphaSupport()
     {
 
-        return new HslaColor($this->hue, $this->saturation, $this->lightness, 1);
+        return $this->getHsla();
     }
 
     public function withoutAlphaSupport()
     {
 
-        return new HslColor($this->hue, $this->saturation, $this->lightness);
+        return $this->getHsl();
     }
 
     private function getRgbFromHue($p, $q, $t)
@@ -88,7 +88,7 @@ class HslColor extends HsColorBase implements HslColorInterface
     public function getHsla()
     {
 
-        return $this->withAlphaSupport();
+        return new HslaColor($this->hue, $this->saturation, $this->lightness, 1);
     }
 
     public function getHsv()
@@ -109,18 +109,25 @@ class HslColor extends HsColorBase implements HslColorInterface
         return $this->getHsv()->withAlphaSupport();
     }
 
-    public function getCssString()
+    public function getXyz()
+    {
+
+        return $this->getRgb()->getXyz();
+    }
+
+    public function getLab()
+    {
+
+        return $this->getRgb()->getLab();
+    }
+
+
+    public function __toString()
     {
 
         $hue = round($this->hue, 2);
         $sat = round($this->saturation * 100, 2).'%';
         $light = round($this->lightness * 100, 2).'%';
         return "hsl({$hue},{$sat},{$light})";
-    }
-
-    public function __toString()
-    {
-
-        return "hsl({$this->hue},{$this->saturation},{$this->lightness})";
     }
 }

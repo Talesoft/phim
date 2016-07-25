@@ -13,7 +13,7 @@
     for ($l = 0.0; $l < 1.0; $l += $step) {
         for ($h = 0; $h < 360; $h += 4) {
 
-            echo '<div class="color" style="display: inline-block; width: 4px; height: 4px; background: '.(new \Phim\Color\HslColor($h, 1, $l))->getCssString().'"></div>';
+            echo '<div class="color" style="display: inline-block; width: 4px; height: 4px; background: '.(new \Phim\Color\HslColor($h, 1, $l)).'"></div>';
         }
         echo '<br>';
     }
@@ -26,7 +26,7 @@
     for ($s = 0.0; $s < 1.0; $s += $step) {
         for ($h = 0; $h < 360; $h += 4) {
 
-            echo '<div class="color" style="display: inline-block; width: 4px; height: 4px; background: '.(new \Phim\Color\HslColor($h, $s, .5))->getCssString().'"></div>';
+            echo '<div class="color" style="display: inline-block; width: 4px; height: 4px; background: '.(new \Phim\Color\HslColor($h, $s, .5)).'"></div>';
         }
         echo '<br>';
     }
@@ -39,7 +39,7 @@
     for ($s = 0.0; $s < 1.0; $s += $step) {
         for ($l = 0; $l < 1.0; $l += $step) {
 
-            echo '<div class="color" style="display: inline-block; width: 4px; height: 4px; background: '.(new \Phim\Color\HslColor(0, $s, $l))->getCssString().'"></div>';
+            echo '<div class="color" style="display: inline-block; width: 4px; height: 4px; background: '.(new \Phim\Color\HslColor(0, $s, $l)).'"></div>';
         }
         echo '<br>';
     }
@@ -51,7 +51,7 @@
     <?php
     for ($h = 0; $h < 360; $h++) {
 
-        echo '<div class="color" style="display: inline-block; width: 4px; height: 20px; background: '.(new \Phim\Color\HslColor($h, 1, .5))->getCssString().'"></div>';
+        echo '<div class="color" style="display: inline-block; width: 4px; height: 20px; background: '.(new \Phim\Color\HslColor($h, 1, .5)).'"></div>';
     }
 
     ?>

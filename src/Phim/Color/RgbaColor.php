@@ -25,16 +25,16 @@ class RgbaColor extends RgbColor implements RgbaColorInterface
     public function getHsla()
     {
 
-        return $this->getHsl()->withAlphaSupport()->withAlpha($this->alpha);
+        return parent::getHsla()->withAlpha($this->alpha);
     }
 
     public function getHsva()
     {
 
-        return $this->getHsv()->withAlphaSupport()->withAlpha($this->alpha);
+        return parent::getHsva()->withAlpha($this->alpha);
     }
 
-    public function getCssString()
+    public function __toString()
     {
 
         $r = intval($this->red);
@@ -42,11 +42,5 @@ class RgbaColor extends RgbColor implements RgbaColorInterface
         $b = intval($this->blue);
         $alph = round($this->alpha, 2);
         return "rgba({$r},{$g},{$b},{$alph})";
-    }
-
-    public function __toString()
-    {
-
-        return "rgba({$this->red},{$this->green},{$this->blue},{$this->alpha})";
     }
 }

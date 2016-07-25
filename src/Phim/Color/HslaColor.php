@@ -19,22 +19,22 @@ class HslaColor extends HslColor implements HslaColorInterface
     public function getRgba()
     {
 
-        return $this->getRgb()->withAlphaSupport()->withAlpha($this->alpha);
+        return parent::getRgba()->withAlpha($this->alpha);
     }
 
     public function getHsla()
     {
 
-        return new HslaColor($this->hue, $this->saturation, $this->lightness, $this->alpha);
+        return new static($this->hue, $this->saturation, $this->lightness, $this->alpha);
     }
 
     public function getHsva()
     {
 
-        return $this->getHsv()->withAlphaSupport()->withAlpha($this->alpha);
+        return parent::getHsva()->withAlpha($this->alpha);
     }
 
-    public function getCssString()
+    public function __toString()
     {
 
         $hue = round($this->hue, 2);
@@ -42,11 +42,5 @@ class HslaColor extends HslColor implements HslaColorInterface
         $light = round($this->lightness * 100, 2).'%';
         $alph = round($this->alpha, 2);
         return "hsla({$hue},{$sat},{$light},{$alph})";
-    }
-
-    public function __toString()
-    {
-
-        return "hsla({$this->hue},{$this->saturation},{$this->lightness},{$this->alpha})";
     }
 }

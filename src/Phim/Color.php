@@ -2,15 +2,20 @@
 
 namespace Phim;
 
+use Exception;
 use Phim\Color\AlphaColorInterface;
 use Phim\Color\AlphaInterface;
 use Phim\Color\HslaColor;
 use Phim\Color\HslColor;
 use Phim\Color\HsvaColor;
 use Phim\Color\HsvColor;
+use Phim\Color\LabColor;
 use Phim\Color\RgbaColor;
 use Phim\Color\RgbColor;
+use Phim\Color\XyzColor;
 use Phim\Exception\Runtime\NonExistentFunctionNameException;
+use Phim\Exception\RuntimeException;
+use Phim\Util\MathUtil;
 
 class Color
 {
@@ -24,580 +29,580 @@ class Color
     const HUE_RANGE_BLUE = 'blue';
     const HUE_RANGE_MAGENTA = 'magenta';
 
-    const ABBIEXXXX = '#4c2f27';
-    const ABSOLUTEZERO = '#0048ba';
-    const ACIDGREEN = '#b0bf1a';
-    const AERO = '#7cb9e8';
-    const AEROBLUE = '#c9ffe5';
-    const AFRICANVIOLET = '#b284be';
-    const AIRFORCEBLUERAF = '#5d8aa8';
-    const AIRFORCEBLUEUSAF = '#00308f';
-    const AIRSUPERIORITYBLUE = '#72a0c1';
-    const ALABAMACRIMSON = '#af002a';
-    const ALABASTER = '#f2f0e6';
-    const ALICEBLUE = '#f0f8ff';
-    const ALIENARMPIT = '#84de02';
-    const ALIZARINCRIMSON = '#e32636';
-    const ALLOYORANGE = '#c46210';
-    const ALMOND = '#efdecd';
-    const AMARANTH = '#e52b50';
-    const AMARANTHDEEPPURPLE = '#9f2b68';
-    const AMARANTHPINK = '#f19cbb';
-    const AMARANTHPURPLE = '#ab274f';
-    const AMARANTHRED = '#d3212d';
-    const AMAZON = '#3b7a57';
-    const AMAZONITE = '#00c4b0';
-    const AMBER = '#ffbf00';
-    const AMBERSAEECE = '#ff7e00';
-    const AMERICANROSE = '#ff033e';
-    const AMETHYST = '#9966cc';
-    const ANDROIDGREEN = '#a4c639';
-    const ANTIFLASHWHITE = '#f2f3f4';
-    const ANTIQUEBRASS = '#cd9575';
-    const ANTIQUEBRONZE = '#665d1e';
-    const ANTIQUEFUCHSIA = '#915c83';
-    const ANTIQUERUBY = '#841b2d';
-    const ANTIQUEWHITE = '#faebd7';
-    const AOENGLISH = '#008000';
-    const APPLEGREEN = '#8db600';
-    const APRICOT = '#fbceb1';
-    const AQUA = '#00ffff';
-    const AQUAMARINE = '#7fffd4';
-    const ARCTICLIME = '#d0ff14';
-    const ARMYGREEN = '#4b5320';
-    const ARSENIC = '#3b444b';
-    const ARTICHOKE = '#8f9779';
-    const ARYLIDEYELLOW = '#e9d66b';
-    const ASHGREY = '#b2beb5';
-    const ASPARAGUS = '#87a96b';
-    const ATOMICTANGERINE = '#ff9966';
-    const AUBURN = '#a52a2a';
-    const AUREOLIN = '#fdee00';
-    const AUROMETALSAURUS = '#6e7f80';
-    const AVOCADO = '#568203';
-    const AWESOME = '#ff2052';
-    const AZTECGOLD = '#c39953';
-    const AZURE = '#007fff';
-    const AZUREISHWHITE = '#dbe9f4';
-    const AZUREMIST = '#f0ffff';
-    const AZUREWEBCOLOR = '#f0ffff';
-    const BABYBLUE = '#89cff0';
-    const BABYBLUEEYES = '#a1caf1';
-    const BABYPINK = '#f4c2c2';
-    const BABYPOWDER = '#fefefa';
-    const BAKERMILLERPINK = '#ff91af';
-    const BALLBLUE = '#21abcd';
-    const BANANAMANIA = '#fae7b5';
-    const BANANAYELLOW = '#ffe135';
-    const BANGLADESHGREEN = '#006a4e';
-    const BARBIEPINK = '#e0218a';
-    const BARNRED = '#7c0a02';
-    const BATTERYCHARGEDBLUE = '#1dacd6';
-    const BATTLESHIPGREY = '#848482';
-    const BAZAAR = '#98777b';
-    const BDAZZLEDBLUE = '#2e5894';
-    const BEAUBLUE = '#bcd4e6';
-    const BEAVER = '#9f8170';
-    const BEGONIA = '#fa6e79';
-    const BEIGE = '#f5f5dc';
-    const BIGDIPORUBY = '#9c2542';
-    const BIGFOOTFEET = '#e88e5a';
-    const BISQUE = '#ffe4c4';
-    const BISTRE = '#3d2b1f';
-    const BISTREBROWN = '#967117';
-    const BITTERLEMON = '#cae00d';
-    const BITTERLIME = '#bfff00';
-    const BITTERSWEET = '#fe6f5e';
-    const BITTERSWEETSHIMMER = '#bf4f51';
-    const BLACK = '#000000';
-    const BLACKBEAN = '#3d0c02';
-    const BLACKCORAL = '#54626f';
-    const BLACKLEATHERJACKET = '#253529';
-    const BLACKOLIVE = '#3b3c36';
-    const BLACKSHADOWS = '#bfafb2';
-    const BLANCHEDALMOND = '#ffebcd';
-    const BLASTOFFBRONZE = '#a57164';
-    const BLEUDEFRANCE = '#318ce7';
-    const BLIZZARDBLUE = '#ace5ee';
-    const BLOND = '#faf0be';
-    const BLUE = '#0000ff';
-    const BLUEBELL = '#a2a2d0';
-    const BLUEBERRY = '#4f86f7';
-    const BLUEBOLT = '#00b9fb';
-    const BLUEBONNET = '#1c1cf0';
-    const BLUECRAYOLA = '#1f75fe';
-    const BLUEGRAY = '#6699cc';
-    const BLUEGREEN = '#0d98ba';
-    const BLUEJEANS = '#5dadec';
-    const BLUELAGOON = '#ace5ee';
-    const BLUEMAGENTAVIOLET = '#553592';
-    const BLUEMUNSELL = '#0093af';
-    const BLUENCS = '#0087bd';
-    const BLUEPANTONE = '#0018a8';
-    const BLUEPIGMENT = '#333399';
-    const BLUERYB = '#0247fe';
-    const BLUESAPPHIRE = '#126180';
-    const BLUEVIOLET = '#8a2be2';
-    const BLUEYONDER = '#5072a7';
-    const BLUSH = '#de5d83';
-    const BOLE = '#79443b';
-    const BONDIBLUE = '#0095b6';
-    const BONE = '#e3dac9';
-    const BOOGERBUSTER = '#dde26a';
-    const BOSTONUNIVERSITYRED = '#cc0000';
-    const BOTTLEGREEN = '#006a4e';
-    const BOYSENBERRY = '#873260';
-    const BRANDEISBLUE = '#0070ff';
-    const BRASS = '#b5a642';
-    const BRICKRED = '#cb4154';
-    const BRIGHTCERULEAN = '#1dacd6';
-    const BRIGHTGREEN = '#66ff00';
-    const BRIGHTLAVENDER = '#bf94e4';
-    const BRIGHTLILAC = '#d891ef';
-    const BRIGHTMAROON = '#c32148';
-    const BRIGHTNAVYBLUE = '#1974d2';
-    const BRIGHTPINK = '#ff007f';
-    const BRIGHTTURQUOISE = '#08e8de';
-    const BRIGHTUBE = '#d19fe8';
-    const BRIGHTYELLOWCRAYOLA = '#ffaa1d';
-    const BRILLIANTAZURE = '#3399ff';
-    const BRILLIANTLAVENDER = '#f4bbff';
-    const BRILLIANTROSE = '#ff55a3';
-    const BRINKPINK = '#fb607f';
-    const BRITISHRACINGGREEN = '#004225';
-    const BRONZE = '#cd7f32';
-    const BRONZEYELLOW = '#737000';
-    const BROWN = '#a52a2a';
-    const BROWNNOSE = '#6b4423';
-    const BROWNSUGAR = '#af6e4d';
-    const BROWNTRADITIONAL = '#964b00';
-    const BROWNWEB = '#a52a2a';
-    const BROWNYELLOW = '#cc9966';
-    const BRUNSWICKGREEN = '#1b4d3e';
-    const BUBBLEGUM = '#ffc1cc';
-    const BUBBLES = '#e7feff';
-    const BUDGREEN = '#7bb661';
-    const BUFF = '#f0dc82';
-    const BULGARIANROSE = '#480607';
-    const BURGUNDY = '#800020';
-    const BURLYWOOD = '#deb887';
-    const BURNISHEDBROWN = '#a17a74';
-    const BURNTORANGE = '#cc5500';
-    const BURNTSIENNA = '#e97451';
-    const BURNTUMBER = '#8a3324';
-    const BYZANTINE = '#bd33a4';
-    const BYZANTIUM = '#702963';
-    const CADET = '#536872';
-    const CADETBLUE = '#5f9ea0';
-    const CADETGREY = '#91a3b0';
-    const CADMIUMGREEN = '#006b3c';
-    const CADMIUMORANGE = '#ed872d';
-    const CADMIUMRED = '#e30022';
-    const CADMIUMYELLOW = '#fff600';
-    const CAFAULAIT = '#a67b5b';
-    const CAFNOIR = '#4b3621';
-    const CALPOLYPOMONAGREEN = '#1e4d2b';
-    const CAMBRIDGEBLUE = '#a3c1ad';
-    const CAMEL = '#c19a6b';
-    const CAMEOPINK = '#efbbcc';
-    const CAMOUFLAGEGREEN = '#78866b';
-    const CANARY = '#ffff99';
-    const CANARYYELLOW = '#ffef00';
-    const CANDYAPPLERED = '#ff0800';
-    const CANDYPINK = '#e4717a';
-    const CAPRI = '#00bfff';
-    const CAPUTMORTUUM = '#592720';
-    const CARDINAL = '#c41e3a';
-    const CARIBBEANGREEN = '#00cc99';
-    const CARMINE = '#960018';
-    const CARMINEMP = '#d70040';
-    const CARMINEPINK = '#eb4c42';
-    const CARMINERED = '#ff0038';
-    const CARNATIONPINK = '#ffa6c9';
-    const CARNELIAN = '#b31b1b';
-    const CAROLINABLUE = '#56a0d3';
-    const CARROTORANGE = '#ed9121';
-    const CASTLETONGREEN = '#00563f';
-    const CATALINABLUE = '#062a78';
-    const CATAWBA = '#703642';
-    const CEDARCHEST = '#c95a49';
-    const CEIL = '#92a1cf';
-    const CELADON = '#ace1af';
-    const CELADONBLUE = '#007ba7';
-    const CELADONGREEN = '#2f847c';
-    const CELESTE = '#b2ffff';
-    const CELESTIALBLUE = '#4997d0';
-    const CERISE = '#de3163';
-    const CERISEPINK = '#ec3b83';
-    const CERULEAN = '#007ba7';
-    const CERULEANBLUE = '#2a52be';
-    const CERULEANFROST = '#6d9bc3';
-    const CGBLUE = '#007aa5';
-    const CGRED = '#e03c31';
-    const CHAMOISEE = '#a0785a';
-    const CHAMPAGNE = '#f7e7ce';
-    const CHAMPAGNEPINK = '#f1ddcf';
-    const CHARCOAL = '#36454f';
-    const CHARLESTONGREEN = '#232b2b';
-    const CHARMPINK = '#e68fac';
-    const CHARTREUSE = '#7fff00';
-    const CHARTREUSETRADITIONAL = '#dfff00';
-    const CHARTREUSEWEB = '#7fff00';
-    const CHERRY = '#de3163';
-    const CHERRYBLOSSOMPINK = '#ffb7c5';
-    const CHESTNUT = '#954535';
-    const CHINAPINK = '#de6fa1';
-    const CHINAROSE = '#a8516e';
-    const CHINESERED = '#aa381e';
-    const CHINESEVIOLET = '#856088';
-    const CHLOROPHYLLGREEN = '#4aff00';
-    const CHOCOLATE = '#d2691e';
-    const CHOCOLATETRADITIONAL = '#7b3f00';
-    const CHOCOLATEWEB = '#d2691e';
-    const CHROMEYELLOW = '#ffa700';
-    const CINEREOUS = '#98817b';
-    const CINNABAR = '#e34234';
-    const CINNAMONCITATIONNEEDED = '#d2691e';
-    const CINNAMONSATIN = '#cd607e';
-    const CITRINE = '#e4d00a';
-    const CITRON = '#9fa91f';
-    const CLARET = '#7f1734';
-    const CLASSICROSE = '#fbcce7';
-    const COBALTBLUE = '#0047ab';
-    const COCOABROWN = '#d2691e';
-    const COCONUT = '#965a3e';
-    const COFFEE = '#6f4e37';
-    const COLUMBIABLUE = '#c4d8e2';
-    const CONGOPINK = '#f88379';
-    const COOLBLACK = '#002e63';
-    const COOLGREY = '#8c92ac';
-    const COPPER = '#b87333';
-    const COPPERCRAYOLA = '#da8a67';
-    const COPPERPENNY = '#ad6f69';
-    const COPPERRED = '#cb6d51';
-    const COPPERROSE = '#996666';
-    const COQUELICOT = '#ff3800';
-    const CORAL = '#ff7f50';
-    const CORALPINK = '#f88379';
-    const CORALRED = '#ff4040';
-    const CORALREEF = '#fd7c6e';
-    const CORDOVAN = '#893f45';
-    const CORN = '#fbec5d';
-    const CORNELLRED = '#b31b1b';
-    const CORNFLOWERBLUE = '#6495ed';
-    const CORNSILK = '#fff8dc';
-    const COSMICCOBALT = '#2e2d88';
-    const COSMICLATTE = '#fff8e7';
-    const COTTONCANDY = '#ffbcd9';
-    const COYOTEBROWN = '#81613c';
-    const CREAM = '#fffdd0';
-    const CRIMSON = '#dc143c';
-    const CRIMSONGLORY = '#be0032';
-    const CRIMSONRED = '#990000';
-    const CULTURED = '#f5f5f5';
-    const CYAN = '#00ffff';
-    const CYANAZURE = '#4e82b4';
-    const CYANBLUEAZURE = '#4682bf';
-    const CYANCOBALTBLUE = '#28589c';
-    const CYANCORNFLOWERBLUE = '#188bc2';
-    const CYANPROCESS = '#00b7eb';
-    const CYBERGRAPE = '#58427c';
-    const CYBERYELLOW = '#ffd300';
-    const CYCLAMEN = '#f56fa1';
-    const DAFFODIL = '#ffff31';
-    const DANDELION = '#f0e130';
-    const DARKBLUE = '#00008b';
-    const DARKBLUEGRAY = '#666699';
-    const DARKBROWN = '#654321';
-    const DARKBROWNTANGELO = '#88654e';
-    const DARKBYZANTIUM = '#5d3954';
-    const DARKCANDYAPPLERED = '#a40000';
-    const DARKCERULEAN = '#08457e';
-    const DARKCHESTNUT = '#986960';
-    const DARKCORAL = '#cd5b45';
-    const DARKCYAN = '#008b8b';
-    const DARKELECTRICBLUE = '#536878';
-    const DARKGOLDENROD = '#b8860b';
-    const DARKGRAY = '#a9a9a9';
-    const DARKGRAYX11 = '#a9a9a9';
-    const DARKGREEN = '#013220';
-    const DARKGREENX11 = '#006400';
-    const DARKGREY = '#a9a9a9';
-    const DARKGUNMETAL = '#1f262a';
-    const DARKIMPERIALBLUE = '#00416a';
-    const DARKJUNGLEGREEN = '#1a2421';
-    const DARKKHAKI = '#bdb76b';
-    const DARKLAVA = '#483c32';
-    const DARKLAVENDER = '#734f96';
-    const DARKLIVER = '#534b4f';
-    const DARKLIVERHORSES = '#543d37';
-    const DARKMAGENTA = '#8b008b';
-    const DARKMEDIUMGRAY = '#a9a9a9';
-    const DARKMIDNIGHTBLUE = '#003366';
-    const DARKMOSSGREEN = '#4a5d23';
-    const DARKOLIVEGREEN = '#556b2f';
-    const DARKORANGE = '#ff8c00';
-    const DARKORCHID = '#9932cc';
-    const DARKPASTELBLUE = '#779ecb';
-    const DARKPASTELGREEN = '#03c03c';
-    const DARKPASTELPURPLE = '#966fd6';
-    const DARKPASTELRED = '#c23b22';
-    const DARKPINK = '#e75480';
-    const DARKPOWDERBLUE = '#003399';
-    const DARKPUCE = '#4f3a3c';
-    const DARKPURPLE = '#301934';
-    const DARKRASPBERRY = '#872657';
-    const DARKRED = '#8b0000';
-    const DARKSALMON = '#e9967a';
-    const DARKSCARLET = '#560319';
-    const DARKSEAGREEN = '#8fbc8f';
-    const DARKSIENNA = '#3c1414';
-    const DARKSKYBLUE = '#8cbed6';
-    const DARKSLATEBLUE = '#483d8b';
-    const DARKSLATEGRAY = '#2f4f4f';
-    const DARKSLATEGREY = '#2f4f4f';
-    const DARKSPRINGGREEN = '#177245';
-    const DARKTAN = '#918151';
-    const DARKTANGERINE = '#ffa812';
-    const DARKTAUPE = '#483c32';
-    const DARKTERRACOTTA = '#cc4e5c';
-    const DARKTURQUOISE = '#00ced1';
-    const DARKVANILLA = '#d1bea8';
-    const DARKVIOLET = '#9400d3';
-    const DARKYELLOW = '#9b870c';
-    const DARTMOUTHGREEN = '#00703c';
-    const DAVYSGREY = '#555555';
-    const DEBIANRED = '#d70a53';
-    const DEEPAQUAMARINE = '#40826d';
-    const DEEPCARMINE = '#a9203e';
-    const DEEPCARMINEPINK = '#ef3038';
-    const DEEPCARROTORANGE = '#e9692c';
-    const DEEPCERISE = '#da3287';
-    const DEEPCHAMPAGNE = '#fad6a5';
-    const DEEPCHESTNUT = '#b94e48';
-    const DEEPCOFFEE = '#704241';
-    const DEEPFUCHSIA = '#c154c1';
-    const DEEPGREEN = '#056608';
-    const DEEPGREENCYANTURQUOISE = '#0e7c61';
-    const DEEPJUNGLEGREEN = '#004b49';
-    const DEEPKOAMARU = '#333366';
-    const DEEPLEMON = '#f5c71a';
-    const DEEPLILAC = '#9955bb';
-    const DEEPMAGENTA = '#cc00cc';
-    const DEEPMAROON = '#820000';
-    const DEEPMAUVE = '#d473d4';
-    const DEEPMOSSGREEN = '#355e3b';
-    const DEEPPEACH = '#ffcba4';
-    const DEEPPINK = '#ff1493';
-    const DEEPPUCE = '#a95c68';
-    const DEEPRED = '#850101';
-    const DEEPRUBY = '#843f5b';
-    const DEEPSAFFRON = '#ff9933';
-    const DEEPSKYBLUE = '#00bfff';
-    const DEEPSPACESPARKLE = '#4a646c';
-    const DEEPSPRINGBUD = '#556b2f';
-    const DEEPTAUPE = '#7e5e60';
-    const DEEPTUSCANRED = '#66424d';
-    const DEEPVIOLET = '#330066';
-    const DEER = '#ba8759';
-    const DENIM = '#1560bd';
-    const DENIMBLUE = '#2243b6';
-    const DESATURATEDCYAN = '#669999';
-    const DESERT = '#c19a6b';
-    const DESERTSAND = '#edc9af';
-    const DESIRE = '#ea3c53';
-    const DIAMOND = '#b9f2ff';
-    const DIMGRAY = '#696969';
-    const DIMGREY = '#696969';
-    const DINGYDUNGEON = '#c53151';
-    const DIRT = '#9b7653';
-    const DODGERBLUE = '#1e90ff';
-    const DOGWOODROSE = '#d71868';
-    const DOLLARBILL = '#85bb65';
-    const DOLPHINGRAY = '#828e84';
-    const DONKEYBROWN = '#664c28';
-    const DRAB = '#967117';
-    const DUKEBLUE = '#00009c';
-    const DUSTSTORM = '#e5ccc9';
-    const DUTCHWHITE = '#efdfbb';
-    const EARTHYELLOW = '#e1a95f';
-    const EBONY = '#555d50';
-    const ECRU = '#c2b280';
-    const EERIEBLACK = '#1b1b1b';
-    const EGGPLANT = '#614051';
-    const EGGSHELL = '#f0ead6';
-    const EGYPTIANBLUE = '#1034a6';
-    const ELECTRICBLUE = '#7df9ff';
-    const ELECTRICCRIMSON = '#ff003f';
-    const ELECTRICCYAN = '#00ffff';
-    const ELECTRICGREEN = '#00ff00';
-    const ELECTRICINDIGO = '#6f00ff';
-    const ELECTRICLAVENDER = '#f4bbff';
-    const ELECTRICLIME = '#ccff00';
-    const ELECTRICPURPLE = '#bf00ff';
-    const ELECTRICULTRAMARINE = '#3f00ff';
-    const ELECTRICVIOLET = '#8f00ff';
-    const ELECTRICYELLOW = '#ffff33';
-    const EMERALD = '#50c878';
-    const EMINENCE = '#6c3082';
-    const ENGLISHGREEN = '#1b4d3e';
-    const ENGLISHLAVENDER = '#b48395';
-    const ENGLISHRED = '#ab4b52';
-    const ENGLISHVERMILLION = '#cc474b';
-    const ENGLISHVIOLET = '#563c5c';
-    const ETONBLUE = '#96c8a2';
-    const EUCALYPTUS = '#44d7a8';
-    const FALLOW = '#c19a6b';
-    const FALURED = '#801818';
-    const FANDANGO = '#b53389';
-    const FANDANGOPINK = '#de5285';
-    const FASHIONFUCHSIA = '#f400a1';
-    const FAWN = '#e5aa70';
-    const FELDGRAU = '#4d5d53';
-    const FELDSPAR = '#fdd5b1';
-    const FERNGREEN = '#4f7942';
-    const FERRARIRED = '#ff2800';
-    const FIELDDRAB = '#6c541e';
-    const FIERYROSE = '#ff5470';
-    const FIREBRICK = '#b22222';
-    const FIREENGINERED = '#ce2029';
-    const FLAME = '#e25822';
-    const FLAMINGOPINK = '#fc8eac';
-    const FLATTERY = '#6b4423';
-    const FLAVESCENT = '#f7e98e';
-    const FLAX = '#eedc82';
-    const FLIRT = '#a2006d';
-    const FLORALWHITE = '#fffaf0';
-    const FLUORESCENTORANGE = '#ffbf00';
-    const FLUORESCENTPINK = '#ff1493';
-    const FLUORESCENTYELLOW = '#ccff00';
-    const FOLLY = '#ff004f';
-    const FORESTGREEN = '#228b22';
-    const FORESTGREENTRADITIONAL = '#014421';
-    const FORESTGREENWEB = '#228b22';
-    const FRENCHBEIGE = '#a67b5b';
-    const FRENCHBISTRE = '#856d4d';
-    const FRENCHBLUE = '#0072bb';
-    const FRENCHFUCHSIA = '#fd3f92';
-    const FRENCHLILAC = '#86608e';
-    const FRENCHLIME = '#9efd38';
-    const FRENCHMAUVE = '#d473d4';
-    const FRENCHPINK = '#fd6c9e';
-    const FRENCHPLUM = '#811453';
-    const FRENCHPUCE = '#4e1609';
-    const FRENCHRASPBERRY = '#c72c48';
-    const FRENCHROSE = '#f64a8a';
-    const FRENCHSKYBLUE = '#77b5fe';
-    const FRENCHVIOLET = '#8806ce';
-    const FRENCHWINE = '#ac1e44';
-    const FRESHAIR = '#a6e7ff';
-    const FROSTBITE = '#e936a7';
-    const FUCHSIA = '#ff00ff';
-    const FUCHSIACRAYOLA = '#c154c1';
-    const FUCHSIAPINK = '#ff77ff';
-    const FUCHSIAPURPLE = '#cc397b';
-    const FUCHSIAROSE = '#c74375';
-    const FULVOUS = '#e48400';
-    const FUZZYWUZZY = '#cc6666';
-    const GAINSBORO = '#dcdcdc';
-    const GHOSTWHITE = '#f8f8ff';
-    const GOLD = '#ffd700';
-    const GOLDENROD = '#daa520';
-    const GRAY = '#808080';
-    const GREEN = '#008000';
-    const GREENYELLOW = '#adff2f';
-    const GREY = '#808080';
-    const HONEYDEW = '#f0fff0';
-    const HOTPINK = '#ff69b4';
-    const INDIANRED = '#cd5c5c';
-    const INDIGO = '#4b0082';
-    const IVORY = '#fffff0';
-    const KHAKI = '#f0e68c';
-    const LAVENDER = '#e6e6fa';
-    const LAVENDERBLUSH = '#fff0f5';
-    const LAWNGREEN = '#7cfc00';
-    const LEMONCHIFFON = '#fffacd';
-    const LIGHTBLUE = '#add8e6';
-    const LIGHTCORAL = '#f08080';
-    const LIGHTCYAN = '#e0ffff';
-    const LIGHTGOLDENRODYELLOW = '#fafad2';
-    const LIGHTGRAY = '#d3d3d3';
-    const LIGHTGREEN = '#90ee90';
-    const LIGHTGREY = '#d3d3d3';
-    const LIGHTPINK = '#ffb6c1';
-    const LIGHTSALMON = '#ffa07a';
-    const LIGHTSEAGREEN = '#20b2aa';
-    const LIGHTSKYBLUE = '#87cefa';
-    const LIGHTSLATEGRAY = '#778899';
-    const LIGHTSLATEGREY = '#778899';
-    const LIGHTSTEELBLUE = '#b0c4de';
-    const LIGHTYELLOW = '#ffffe0';
-    const LIME = '#00ff00';
-    const LIMEGREEN = '#32cd32';
-    const LINEN = '#faf0e6';
-    const MAGENTA = '#ff00ff';
-    const MAROON = '#800000';
-    const MEDIUMAQUAMARINE = '#66cdaa';
-    const MEDIUMBLUE = '#0000cd';
-    const MEDIUMORCHID = '#ba55d3';
-    const MEDIUMPURPLE = '#9370db';
-    const MEDIUMSEAGREEN = '#3cb371';
-    const MEDIUMSLATEBLUE = '#7b68ee';
-    const MEDIUMSPRINGGREEN = '#00fa9a';
-    const MEDIUMTURQUOISE = '#48d1cc';
-    const MEDIUMVIOLETRED = '#c71585';
-    const MIDNIGHTBLUE = '#191970';
-    const MINTCREAM = '#f5fffa';
-    const MISTYROSE = '#ffe4e1';
-    const MOCCASIN = '#ffe4b5';
-    const NAVAJOWHITE = '#ffdead';
-    const NAVY = '#000080';
-    const OLDLACE = '#fdf5e6';
-    const OLIVE = '#808000';
-    const OLIVEDRAB = '#6b8e23';
-    const ORANGE = '#ffa500';
-    const ORANGERED = '#ff4500';
-    const ORCHID = '#da70d6';
-    const PALEGOLDENROD = '#eee8aa';
-    const PALEGREEN = '#98fb98';
-    const PALETURQUOISE = '#afeeee';
-    const PALEVIOLETRED = '#db7093';
-    const PAPAYAWHIP = '#ffefd5';
-    const PEACHPUFF = '#ffdab9';
-    const PERU = '#cd853f';
-    const PINK = '#ffc0cb';
-    const PLUM = '#dda0dd';
-    const POWDERBLUE = '#b0e0e6';
-    const PURPLE = '#800080';
-    const REBECCAPURPLE = '#663399';
-    const RED = '#ff0000';
-    const ROSYBROWN = '#bc8f8f';
-    const ROYALBLUE = '#4169e1';
-    const SADDLEBROWN = '#8b4513';
-    const SALMON = '#fa8072';
-    const SANDYBROWN = '#f4a460';
-    const SEAGREEN = '#2e8b57';
-    const SEASHELL = '#fff5ee';
-    const SIENNA = '#a0522d';
-    const SILVER = '#c0c0c0';
-    const SKYBLUE = '#87ceeb';
-    const SLATEBLUE = '#6a5acd';
-    const SLATEGRAY = '#708090';
-    const SLATEGREY = '#708090';
-    const SNOW = '#fffafa';
-    const SPRINGGREEN = '#00ff7f';
-    const STEELBLUE = '#4682b4';
-    const TAN = '#d2b48c';
-    const TEAL = '#008080';
-    const THISTLE = '#d8bfd8';
-    const TOMATO = '#ff6347';
-    const TURQUOISE = '#40e0d0';
-    const VIOLET = '#ee82ee';
-    const WHEAT = '#f5deb3';
-    const WHITE = '#ffffff';
-    const WHITESMOKE = '#f5f5f5';
-    const YELLOW = '#ffff00';
-    const YELLOWGREEN = '#9acd32';
+    const ABBIEXXXX = 0x4c2f27;
+    const ABSOLUTEZERO = 0x0048ba;
+    const ACIDGREEN = 0xb0bf1a;
+    const AERO = 0x7cb9e8;
+    const AEROBLUE = 0xc9ffe5;
+    const AFRICANVIOLET = 0xb284be;
+    const AIRFORCEBLUERAF = 0x5d8aa8;
+    const AIRFORCEBLUEUSAF = 0x00308f;
+    const AIRSUPERIORITYBLUE = 0x72a0c1;
+    const ALABAMACRIMSON = 0xaf002a;
+    const ALABASTER = 0xf2f0e6;
+    const ALICEBLUE = 0xf0f8ff;
+    const ALIENARMPIT = 0x84de02;
+    const ALIZARINCRIMSON = 0xe32636;
+    const ALLOYORANGE = 0xc46210;
+    const ALMOND = 0xefdecd;
+    const AMARANTH = 0xe52b50;
+    const AMARANTHDEEPPURPLE = 0x9f2b68;
+    const AMARANTHPINK = 0xf19cbb;
+    const AMARANTHPURPLE = 0xab274f;
+    const AMARANTHRED = 0xd3212d;
+    const AMAZON = 0x3b7a57;
+    const AMAZONITE = 0x00c4b0;
+    const AMBER = 0xffbf00;
+    const AMBERSAEECE = 0xff7e00;
+    const AMERICANROSE = 0xff033e;
+    const AMETHYST = 0x9966cc;
+    const ANDROIDGREEN = 0xa4c639;
+    const ANTIFLASHWHITE = 0xf2f3f4;
+    const ANTIQUEBRASS = 0xcd9575;
+    const ANTIQUEBRONZE = 0x665d1e;
+    const ANTIQUEFUCHSIA = 0x915c83;
+    const ANTIQUERUBY = 0x841b2d;
+    const ANTIQUEWHITE = 0xfaebd7;
+    const AOENGLISH = 0x008000;
+    const APPLEGREEN = 0x8db600;
+    const APRICOT = 0xfbceb1;
+    const AQUA = 0x00ffff;
+    const AQUAMARINE = 0x7fffd4;
+    const ARCTICLIME = 0xd0ff14;
+    const ARMYGREEN = 0x4b5320;
+    const ARSENIC = 0x3b444b;
+    const ARTICHOKE = 0x8f9779;
+    const ARYLIDEYELLOW = 0xe9d66b;
+    const ASHGREY = 0xb2beb5;
+    const ASPARAGUS = 0x87a96b;
+    const ATOMICTANGERINE = 0xff9966;
+    const AUBURN = 0xa52a2a;
+    const AUREOLIN = 0xfdee00;
+    const AUROMETALSAURUS = 0x6e7f80;
+    const AVOCADO = 0x568203;
+    const AWESOME = 0xff2052;
+    const AZTECGOLD = 0xc39953;
+    const AZURE = 0x007fff;
+    const AZUREISHWHITE = 0xdbe9f4;
+    const AZUREMIST = 0xf0ffff;
+    const AZUREWEBCOLOR = 0xf0ffff;
+    const BABYBLUE = 0x89cff0;
+    const BABYBLUEEYES = 0xa1caf1;
+    const BABYPINK = 0xf4c2c2;
+    const BABYPOWDER = 0xfefefa;
+    const BAKERMILLERPINK = 0xff91af;
+    const BALLBLUE = 0x21abcd;
+    const BANANAMANIA = 0xfae7b5;
+    const BANANAYELLOW = 0xffe135;
+    const BANGLADESHGREEN = 0x006a4e;
+    const BARBIEPINK = 0xe0218a;
+    const BARNRED = 0x7c0a02;
+    const BATTERYCHARGEDBLUE = 0x1dacd6;
+    const BATTLESHIPGREY = 0x848482;
+    const BAZAAR = 0x98777b;
+    const BDAZZLEDBLUE = 0x2e5894;
+    const BEAUBLUE = 0xbcd4e6;
+    const BEAVER = 0x9f8170;
+    const BEGONIA = 0xfa6e79;
+    const BEIGE = 0xf5f5dc;
+    const BIGDIPORUBY = 0x9c2542;
+    const BIGFOOTFEET = 0xe88e5a;
+    const BISQUE = 0xffe4c4;
+    const BISTRE = 0x3d2b1f;
+    const BISTREBROWN = 0x967117;
+    const BITTERLEMON = 0xcae00d;
+    const BITTERLIME = 0xbfff00;
+    const BITTERSWEET = 0xfe6f5e;
+    const BITTERSWEETSHIMMER = 0xbf4f51;
+    const BLACK = 0x000000;
+    const BLACKBEAN = 0x3d0c02;
+    const BLACKCORAL = 0x54626f;
+    const BLACKLEATHERJACKET = 0x253529;
+    const BLACKOLIVE = 0x3b3c36;
+    const BLACKSHADOWS = 0xbfafb2;
+    const BLANCHEDALMOND = 0xffebcd;
+    const BLASTOFFBRONZE = 0xa57164;
+    const BLEUDEFRANCE = 0x318ce7;
+    const BLIZZARDBLUE = 0xace5ee;
+    const BLOND = 0xfaf0be;
+    const BLUE = 0x0000ff;
+    const BLUEBELL = 0xa2a2d0;
+    const BLUEBERRY = 0x4f86f7;
+    const BLUEBOLT = 0x00b9fb;
+    const BLUEBONNET = 0x1c1cf0;
+    const BLUECRAYOLA = 0x1f75fe;
+    const BLUEGRAY = 0x6699cc;
+    const BLUEGREEN = 0x0d98ba;
+    const BLUEJEANS = 0x5dadec;
+    const BLUELAGOON = 0xace5ee;
+    const BLUEMAGENTAVIOLET = 0x553592;
+    const BLUEMUNSELL = 0x0093af;
+    const BLUENCS = 0x0087bd;
+    const BLUEPANTONE = 0x0018a8;
+    const BLUEPIGMENT = 0x333399;
+    const BLUERYB = 0x0247fe;
+    const BLUESAPPHIRE = 0x126180;
+    const BLUEVIOLET = 0x8a2be2;
+    const BLUEYONDER = 0x5072a7;
+    const BLUSH = 0xde5d83;
+    const BOLE = 0x79443b;
+    const BONDIBLUE = 0x0095b6;
+    const BONE = 0xe3dac9;
+    const BOOGERBUSTER = 0xdde26a;
+    const BOSTONUNIVERSITYRED = 0xcc0000;
+    const BOTTLEGREEN = 0x006a4e;
+    const BOYSENBERRY = 0x873260;
+    const BRANDEISBLUE = 0x0070ff;
+    const BRASS = 0xb5a642;
+    const BRICKRED = 0xcb4154;
+    const BRIGHTCERULEAN = 0x1dacd6;
+    const BRIGHTGREEN = 0x66ff00;
+    const BRIGHTLAVENDER = 0xbf94e4;
+    const BRIGHTLILAC = 0xd891ef;
+    const BRIGHTMAROON = 0xc32148;
+    const BRIGHTNAVYBLUE = 0x1974d2;
+    const BRIGHTPINK = 0xff007f;
+    const BRIGHTTURQUOISE = 0x08e8de;
+    const BRIGHTUBE = 0xd19fe8;
+    const BRIGHTYELLOWCRAYOLA = 0xffaa1d;
+    const BRILLIANTAZURE = 0x3399ff;
+    const BRILLIANTLAVENDER = 0xf4bbff;
+    const BRILLIANTROSE = 0xff55a3;
+    const BRINKPINK = 0xfb607f;
+    const BRITISHRACINGGREEN = 0x004225;
+    const BRONZE = 0xcd7f32;
+    const BRONZEYELLOW = 0x737000;
+    const BROWN = 0xa52a2a;
+    const BROWNNOSE = 0x6b4423;
+    const BROWNSUGAR = 0xaf6e4d;
+    const BROWNTRADITIONAL = 0x964b00;
+    const BROWNWEB = 0xa52a2a;
+    const BROWNYELLOW = 0xcc9966;
+    const BRUNSWICKGREEN = 0x1b4d3e;
+    const BUBBLEGUM = 0xffc1cc;
+    const BUBBLES = 0xe7feff;
+    const BUDGREEN = 0x7bb661;
+    const BUFF = 0xf0dc82;
+    const BULGARIANROSE = 0x480607;
+    const BURGUNDY = 0x800020;
+    const BURLYWOOD = 0xdeb887;
+    const BURNISHEDBROWN = 0xa17a74;
+    const BURNTORANGE = 0xcc5500;
+    const BURNTSIENNA = 0xe97451;
+    const BURNTUMBER = 0x8a3324;
+    const BYZANTINE = 0xbd33a4;
+    const BYZANTIUM = 0x702963;
+    const CADET = 0x536872;
+    const CADETBLUE = 0x5f9ea0;
+    const CADETGREY = 0x91a3b0;
+    const CADMIUMGREEN = 0x006b3c;
+    const CADMIUMORANGE = 0xed872d;
+    const CADMIUMRED = 0xe30022;
+    const CADMIUMYELLOW = 0xfff600;
+    const CAFAULAIT = 0xa67b5b;
+    const CAFNOIR = 0x4b3621;
+    const CALPOLYPOMONAGREEN = 0x1e4d2b;
+    const CAMBRIDGEBLUE = 0xa3c1ad;
+    const CAMEL = 0xc19a6b;
+    const CAMEOPINK = 0xefbbcc;
+    const CAMOUFLAGEGREEN = 0x78866b;
+    const CANARY = 0xffff99;
+    const CANARYYELLOW = 0xffef00;
+    const CANDYAPPLERED = 0xff0800;
+    const CANDYPINK = 0xe4717a;
+    const CAPRI = 0x00bfff;
+    const CAPUTMORTUUM = 0x592720;
+    const CARDINAL = 0xc41e3a;
+    const CARIBBEANGREEN = 0x00cc99;
+    const CARMINE = 0x960018;
+    const CARMINEMP = 0xd70040;
+    const CARMINEPINK = 0xeb4c42;
+    const CARMINERED = 0xff0038;
+    const CARNATIONPINK = 0xffa6c9;
+    const CARNELIAN = 0xb31b1b;
+    const CAROLINABLUE = 0x56a0d3;
+    const CARROTORANGE = 0xed9121;
+    const CASTLETONGREEN = 0x00563f;
+    const CATALINABLUE = 0x062a78;
+    const CATAWBA = 0x703642;
+    const CEDARCHEST = 0xc95a49;
+    const CEIL = 0x92a1cf;
+    const CELADON = 0xace1af;
+    const CELADONBLUE = 0x007ba7;
+    const CELADONGREEN = 0x2f847c;
+    const CELESTE = 0xb2ffff;
+    const CELESTIALBLUE = 0x4997d0;
+    const CERISE = 0xde3163;
+    const CERISEPINK = 0xec3b83;
+    const CERULEAN = 0x007ba7;
+    const CERULEANBLUE = 0x2a52be;
+    const CERULEANFROST = 0x6d9bc3;
+    const CGBLUE = 0x007aa5;
+    const CGRED = 0xe03c31;
+    const CHAMOISEE = 0xa0785a;
+    const CHAMPAGNE = 0xf7e7ce;
+    const CHAMPAGNEPINK = 0xf1ddcf;
+    const CHARCOAL = 0x36454f;
+    const CHARLESTONGREEN = 0x232b2b;
+    const CHARMPINK = 0xe68fac;
+    const CHARTREUSE = 0x7fff00;
+    const CHARTREUSETRADITIONAL = 0xdfff00;
+    const CHARTREUSEWEB = 0x7fff00;
+    const CHERRY = 0xde3163;
+    const CHERRYBLOSSOMPINK = 0xffb7c5;
+    const CHESTNUT = 0x954535;
+    const CHINAPINK = 0xde6fa1;
+    const CHINAROSE = 0xa8516e;
+    const CHINESERED = 0xaa381e;
+    const CHINESEVIOLET = 0x856088;
+    const CHLOROPHYLLGREEN = 0x4aff00;
+    const CHOCOLATE = 0xd2691e;
+    const CHOCOLATETRADITIONAL = 0x7b3f00;
+    const CHOCOLATEWEB = 0xd2691e;
+    const CHROMEYELLOW = 0xffa700;
+    const CINEREOUS = 0x98817b;
+    const CINNABAR = 0xe34234;
+    const CINNAMONCITATIONNEEDED = 0xd2691e;
+    const CINNAMONSATIN = 0xcd607e;
+    const CITRINE = 0xe4d00a;
+    const CITRON = 0x9fa91f;
+    const CLARET = 0x7f1734;
+    const CLASSICROSE = 0xfbcce7;
+    const COBALTBLUE = 0x0047ab;
+    const COCOABROWN = 0xd2691e;
+    const COCONUT = 0x965a3e;
+    const COFFEE = 0x6f4e37;
+    const COLUMBIABLUE = 0xc4d8e2;
+    const CONGOPINK = 0xf88379;
+    const COOLBLACK = 0x002e63;
+    const COOLGREY = 0x8c92ac;
+    const COPPER = 0xb87333;
+    const COPPERCRAYOLA = 0xda8a67;
+    const COPPERPENNY = 0xad6f69;
+    const COPPERRED = 0xcb6d51;
+    const COPPERROSE = 0x996666;
+    const COQUELICOT = 0xff3800;
+    const CORAL = 0xff7f50;
+    const CORALPINK = 0xf88379;
+    const CORALRED = 0xff4040;
+    const CORALREEF = 0xfd7c6e;
+    const CORDOVAN = 0x893f45;
+    const CORN = 0xfbec5d;
+    const CORNELLRED = 0xb31b1b;
+    const CORNFLOWERBLUE = 0x6495ed;
+    const CORNSILK = 0xfff8dc;
+    const COSMICCOBALT = 0x2e2d88;
+    const COSMICLATTE = 0xfff8e7;
+    const COTTONCANDY = 0xffbcd9;
+    const COYOTEBROWN = 0x81613c;
+    const CREAM = 0xfffdd0;
+    const CRIMSON = 0xdc143c;
+    const CRIMSONGLORY = 0xbe0032;
+    const CRIMSONRED = 0x990000;
+    const CULTURED = 0xf5f5f5;
+    const CYAN = 0x00ffff;
+    const CYANAZURE = 0x4e82b4;
+    const CYANBLUEAZURE = 0x4682bf;
+    const CYANCOBALTBLUE = 0x28589c;
+    const CYANCORNFLOWERBLUE = 0x188bc2;
+    const CYANPROCESS = 0x00b7eb;
+    const CYBERGRAPE = 0x58427c;
+    const CYBERYELLOW = 0xffd300;
+    const CYCLAMEN = 0xf56fa1;
+    const DAFFODIL = 0xffff31;
+    const DANDELION = 0xf0e130;
+    const DARKBLUE = 0x00008b;
+    const DARKBLUEGRAY = 0x666699;
+    const DARKBROWN = 0x654321;
+    const DARKBROWNTANGELO = 0x88654e;
+    const DARKBYZANTIUM = 0x5d3954;
+    const DARKCANDYAPPLERED = 0xa40000;
+    const DARKCERULEAN = 0x08457e;
+    const DARKCHESTNUT = 0x986960;
+    const DARKCORAL = 0xcd5b45;
+    const DARKCYAN = 0x008b8b;
+    const DARKELECTRICBLUE = 0x536878;
+    const DARKGOLDENROD = 0xb8860b;
+    const DARKGRAY = 0xa9a9a9;
+    const DARKGRAYX11 = 0xa9a9a9;
+    const DARKGREEN = 0x013220;
+    const DARKGREENX11 = 0x006400;
+    const DARKGREY = 0xa9a9a9;
+    const DARKGUNMETAL = 0x1f262a;
+    const DARKIMPERIALBLUE = 0x00416a;
+    const DARKJUNGLEGREEN = 0x1a2421;
+    const DARKKHAKI = 0xbdb76b;
+    const DARKLAVA = 0x483c32;
+    const DARKLAVENDER = 0x734f96;
+    const DARKLIVER = 0x534b4f;
+    const DARKLIVERHORSES = 0x543d37;
+    const DARKMAGENTA = 0x8b008b;
+    const DARKMEDIUMGRAY = 0xa9a9a9;
+    const DARKMIDNIGHTBLUE = 0x003366;
+    const DARKMOSSGREEN = 0x4a5d23;
+    const DARKOLIVEGREEN = 0x556b2f;
+    const DARKORANGE = 0xff8c00;
+    const DARKORCHID = 0x9932cc;
+    const DARKPASTELBLUE = 0x779ecb;
+    const DARKPASTELGREEN = 0x03c03c;
+    const DARKPASTELPURPLE = 0x966fd6;
+    const DARKPASTELRED = 0xc23b22;
+    const DARKPINK = 0xe75480;
+    const DARKPOWDERBLUE = 0x003399;
+    const DARKPUCE = 0x4f3a3c;
+    const DARKPURPLE = 0x301934;
+    const DARKRASPBERRY = 0x872657;
+    const DARKRED = 0x8b0000;
+    const DARKSALMON = 0xe9967a;
+    const DARKSCARLET = 0x560319;
+    const DARKSEAGREEN = 0x8fbc8f;
+    const DARKSIENNA = 0x3c1414;
+    const DARKSKYBLUE = 0x8cbed6;
+    const DARKSLATEBLUE = 0x483d8b;
+    const DARKSLATEGRAY = 0x2f4f4f;
+    const DARKSLATEGREY = 0x2f4f4f;
+    const DARKSPRINGGREEN = 0x177245;
+    const DARKTAN = 0x918151;
+    const DARKTANGERINE = 0xffa812;
+    const DARKTAUPE = 0x483c32;
+    const DARKTERRACOTTA = 0xcc4e5c;
+    const DARKTURQUOISE = 0x00ced1;
+    const DARKVANILLA = 0xd1bea8;
+    const DARKVIOLET = 0x9400d3;
+    const DARKYELLOW = 0x9b870c;
+    const DARTMOUTHGREEN = 0x00703c;
+    const DAVYSGREY = 0x555555;
+    const DEBIANRED = 0xd70a53;
+    const DEEPAQUAMARINE = 0x40826d;
+    const DEEPCARMINE = 0xa9203e;
+    const DEEPCARMINEPINK = 0xef3038;
+    const DEEPCARROTORANGE = 0xe9692c;
+    const DEEPCERISE = 0xda3287;
+    const DEEPCHAMPAGNE = 0xfad6a5;
+    const DEEPCHESTNUT = 0xb94e48;
+    const DEEPCOFFEE = 0x704241;
+    const DEEPFUCHSIA = 0xc154c1;
+    const DEEPGREEN = 0x056608;
+    const DEEPGREENCYANTURQUOISE = 0x0e7c61;
+    const DEEPJUNGLEGREEN = 0x004b49;
+    const DEEPKOAMARU = 0x333366;
+    const DEEPLEMON = 0xf5c71a;
+    const DEEPLILAC = 0x9955bb;
+    const DEEPMAGENTA = 0xcc00cc;
+    const DEEPMAROON = 0x820000;
+    const DEEPMAUVE = 0xd473d4;
+    const DEEPMOSSGREEN = 0x355e3b;
+    const DEEPPEACH = 0xffcba4;
+    const DEEPPINK = 0xff1493;
+    const DEEPPUCE = 0xa95c68;
+    const DEEPRED = 0x850101;
+    const DEEPRUBY = 0x843f5b;
+    const DEEPSAFFRON = 0xff9933;
+    const DEEPSKYBLUE = 0x00bfff;
+    const DEEPSPACESPARKLE = 0x4a646c;
+    const DEEPSPRINGBUD = 0x556b2f;
+    const DEEPTAUPE = 0x7e5e60;
+    const DEEPTUSCANRED = 0x66424d;
+    const DEEPVIOLET = 0x330066;
+    const DEER = 0xba8759;
+    const DENIM = 0x1560bd;
+    const DENIMBLUE = 0x2243b6;
+    const DESATURATEDCYAN = 0x669999;
+    const DESERT = 0xc19a6b;
+    const DESERTSAND = 0xedc9af;
+    const DESIRE = 0xea3c53;
+    const DIAMOND = 0xb9f2ff;
+    const DIMGRAY = 0x696969;
+    const DIMGREY = 0x696969;
+    const DINGYDUNGEON = 0xc53151;
+    const DIRT = 0x9b7653;
+    const DODGERBLUE = 0x1e90ff;
+    const DOGWOODROSE = 0xd71868;
+    const DOLLARBILL = 0x85bb65;
+    const DOLPHINGRAY = 0x828e84;
+    const DONKEYBROWN = 0x664c28;
+    const DRAB = 0x967117;
+    const DUKEBLUE = 0x00009c;
+    const DUSTSTORM = 0xe5ccc9;
+    const DUTCHWHITE = 0xefdfbb;
+    const EARTHYELLOW = 0xe1a95f;
+    const EBONY = 0x555d50;
+    const ECRU = 0xc2b280;
+    const EERIEBLACK = 0x1b1b1b;
+    const EGGPLANT = 0x614051;
+    const EGGSHELL = 0xf0ead6;
+    const EGYPTIANBLUE = 0x1034a6;
+    const ELECTRICBLUE = 0x7df9ff;
+    const ELECTRICCRIMSON = 0xff003f;
+    const ELECTRICCYAN = 0x00ffff;
+    const ELECTRICGREEN = 0x00ff00;
+    const ELECTRICINDIGO = 0x6f00ff;
+    const ELECTRICLAVENDER = 0xf4bbff;
+    const ELECTRICLIME = 0xccff00;
+    const ELECTRICPURPLE = 0xbf00ff;
+    const ELECTRICULTRAMARINE = 0x3f00ff;
+    const ELECTRICVIOLET = 0x8f00ff;
+    const ELECTRICYELLOW = 0xffff33;
+    const EMERALD = 0x50c878;
+    const EMINENCE = 0x6c3082;
+    const ENGLISHGREEN = 0x1b4d3e;
+    const ENGLISHLAVENDER = 0xb48395;
+    const ENGLISHRED = 0xab4b52;
+    const ENGLISHVERMILLION = 0xcc474b;
+    const ENGLISHVIOLET = 0x563c5c;
+    const ETONBLUE = 0x96c8a2;
+    const EUCALYPTUS = 0x44d7a8;
+    const FALLOW = 0xc19a6b;
+    const FALURED = 0x801818;
+    const FANDANGO = 0xb53389;
+    const FANDANGOPINK = 0xde5285;
+    const FASHIONFUCHSIA = 0xf400a1;
+    const FAWN = 0xe5aa70;
+    const FELDGRAU = 0x4d5d53;
+    const FELDSPAR = 0xfdd5b1;
+    const FERNGREEN = 0x4f7942;
+    const FERRARIRED = 0xff2800;
+    const FIELDDRAB = 0x6c541e;
+    const FIERYROSE = 0xff5470;
+    const FIREBRICK = 0xb22222;
+    const FIREENGINERED = 0xce2029;
+    const FLAME = 0xe25822;
+    const FLAMINGOPINK = 0xfc8eac;
+    const FLATTERY = 0x6b4423;
+    const FLAVESCENT = 0xf7e98e;
+    const FLAX = 0xeedc82;
+    const FLIRT = 0xa2006d;
+    const FLORALWHITE = 0xfffaf0;
+    const FLUORESCENTORANGE = 0xffbf00;
+    const FLUORESCENTPINK = 0xff1493;
+    const FLUORESCENTYELLOW = 0xccff00;
+    const FOLLY = 0xff004f;
+    const FORESTGREEN = 0x228b22;
+    const FORESTGREENTRADITIONAL = 0x014421;
+    const FORESTGREENWEB = 0x228b22;
+    const FRENCHBEIGE = 0xa67b5b;
+    const FRENCHBISTRE = 0x856d4d;
+    const FRENCHBLUE = 0x0072bb;
+    const FRENCHFUCHSIA = 0xfd3f92;
+    const FRENCHLILAC = 0x86608e;
+    const FRENCHLIME = 0x9efd38;
+    const FRENCHMAUVE = 0xd473d4;
+    const FRENCHPINK = 0xfd6c9e;
+    const FRENCHPLUM = 0x811453;
+    const FRENCHPUCE = 0x4e1609;
+    const FRENCHRASPBERRY = 0xc72c48;
+    const FRENCHROSE = 0xf64a8a;
+    const FRENCHSKYBLUE = 0x77b5fe;
+    const FRENCHVIOLET = 0x8806ce;
+    const FRENCHWINE = 0xac1e44;
+    const FRESHAIR = 0xa6e7ff;
+    const FROSTBITE = 0xe936a7;
+    const FUCHSIA = 0xff00ff;
+    const FUCHSIACRAYOLA = 0xc154c1;
+    const FUCHSIAPINK = 0xff77ff;
+    const FUCHSIAPURPLE = 0xcc397b;
+    const FUCHSIAROSE = 0xc74375;
+    const FULVOUS = 0xe48400;
+    const FUZZYWUZZY = 0xcc6666;
+    const GAINSBORO = 0xdcdcdc;
+    const GHOSTWHITE = 0xf8f8ff;
+    const GOLD = 0xffd700;
+    const GOLDENROD = 0xdaa520;
+    const GRAY = 0x808080;
+    const GREEN = 0x008000;
+    const GREENYELLOW = 0xadff2f;
+    const GREY = 0x808080;
+    const HONEYDEW = 0xf0fff0;
+    const HOTPINK = 0xff69b4;
+    const INDIANRED = 0xcd5c5c;
+    const INDIGO = 0x4b0082;
+    const IVORY = 0xfffff0;
+    const KHAKI = 0xf0e68c;
+    const LAVENDER = 0xe6e6fa;
+    const LAVENDERBLUSH = 0xfff0f5;
+    const LAWNGREEN = 0x7cfc00;
+    const LEMONCHIFFON = 0xfffacd;
+    const LIGHTBLUE = 0xadd8e6;
+    const LIGHTCORAL = 0xf08080;
+    const LIGHTCYAN = 0xe0ffff;
+    const LIGHTGOLDENRODYELLOW = 0xfafad2;
+    const LIGHTGRAY = 0xd3d3d3;
+    const LIGHTGREEN = 0x90ee90;
+    const LIGHTGREY = 0xd3d3d3;
+    const LIGHTPINK = 0xffb6c1;
+    const LIGHTSALMON = 0xffa07a;
+    const LIGHTSEAGREEN = 0x20b2aa;
+    const LIGHTSKYBLUE = 0x87cefa;
+    const LIGHTSLATEGRAY = 0x778899;
+    const LIGHTSLATEGREY = 0x778899;
+    const LIGHTSTEELBLUE = 0xb0c4de;
+    const LIGHTYELLOW = 0xffffe0;
+    const LIME = 0x00ff00;
+    const LIMEGREEN = 0x32cd32;
+    const LINEN = 0xfaf0e6;
+    const MAGENTA = 0xff00ff;
+    const MAROON = 0x800000;
+    const MEDIUMAQUAMARINE = 0x66cdaa;
+    const MEDIUMBLUE = 0x0000cd;
+    const MEDIUMORCHID = 0xba55d3;
+    const MEDIUMPURPLE = 0x9370db;
+    const MEDIUMSEAGREEN = 0x3cb371;
+    const MEDIUMSLATEBLUE = 0x7b68ee;
+    const MEDIUMSPRINGGREEN = 0x00fa9a;
+    const MEDIUMTURQUOISE = 0x48d1cc;
+    const MEDIUMVIOLETRED = 0xc71585;
+    const MIDNIGHTBLUE = 0x191970;
+    const MINTCREAM = 0xf5fffa;
+    const MISTYROSE = 0xffe4e1;
+    const MOCCASIN = 0xffe4b5;
+    const NAVAJOWHITE = 0xffdead;
+    const NAVY = 0x000080;
+    const OLDLACE = 0xfdf5e6;
+    const OLIVE = 0x808000;
+    const OLIVEDRAB = 0x6b8e23;
+    const ORANGE = 0xffa500;
+    const ORANGERED = 0xff4500;
+    const ORCHID = 0xda70d6;
+    const PALEGOLDENROD = 0xeee8aa;
+    const PALEGREEN = 0x98fb98;
+    const PALETURQUOISE = 0xafeeee;
+    const PALEVIOLETRED = 0xdb7093;
+    const PAPAYAWHIP = 0xffefd5;
+    const PEACHPUFF = 0xffdab9;
+    const PERU = 0xcd853f;
+    const PINK = 0xffc0cb;
+    const PLUM = 0xdda0dd;
+    const POWDERBLUE = 0xb0e0e6;
+    const PURPLE = 0x800080;
+    const REBECCAPURPLE = 0x663399;
+    const RED = 0xff0000;
+    const ROSYBROWN = 0xbc8f8f;
+    const ROYALBLUE = 0x4169e1;
+    const SADDLEBROWN = 0x8b4513;
+    const SALMON = 0xfa8072;
+    const SANDYBROWN = 0xf4a460;
+    const SEAGREEN = 0x2e8b57;
+    const SEASHELL = 0xfff5ee;
+    const SIENNA = 0xa0522d;
+    const SILVER = 0xc0c0c0;
+    const SKYBLUE = 0x87ceeb;
+    const SLATEBLUE = 0x6a5acd;
+    const SLATEGRAY = 0x708090;
+    const SLATEGREY = 0x708090;
+    const SNOW = 0xfffafa;
+    const SPRINGGREEN = 0x00ff7f;
+    const STEELBLUE = 0x4682b4;
+    const TAN = 0xd2b48c;
+    const TEAL = 0x008080;
+    const THISTLE = 0xd8bfd8;
+    const TOMATO = 0xff6347;
+    const TURQUOISE = 0x40e0d0;
+    const VIOLET = 0xee82ee;
+    const WHEAT = 0xf5deb3;
+    const WHITE = 0xffffff;
+    const WHITESMOKE = 0xf5f5f5;
+    const YELLOW = 0xffff00;
+    const YELLOWGREEN = 0x9acd32;
 
     private static $names = [
         'abbiexxxx' => self::ABBIEXXXX,
@@ -1209,6 +1214,16 @@ class Color
             ['type' => 'float', 'base' => 1],
             ['type' => 'float', 'base' => 1],
             ['type' => 'float', 'base' => 1]
+        ]],
+        'xyz' => ['className' => XyzColor::class, 'args' => [
+            ['type' => 'float', 'base' => 100],
+            ['type' => 'float', 'base' => 100],
+            ['type' => 'float', 'base' => 100]
+        ]],
+        'lab' => ['className' => LabColor::class, 'args' => [
+            ['type' => 'float', 'base' => 100],
+            ['type' => 'float', 'base' => 1],
+            ['type' => 'float', 'base' => 1]
         ]]
     ];
 
@@ -1235,8 +1250,8 @@ class Color
     public static function getName(ColorInterface $color)
     {
 
-        $hex = self::getHexString($color->withoutAlphaSupport(), true);
-        $name = array_search($hex, self::$names, true);
+        $int = self::getInt($color);
+        $name = array_search($int, self::$names, true);
 
         if ($name)
             return $name;
@@ -1265,7 +1280,7 @@ class Color
         if (!isset(self::$names[$name]))
             return null;
 
-        return self::parseHexString(self::$names[$name]);
+        return self::parseInt(self::$names[$name]);
     }
 
     public static function registerName($name, $hexString)
@@ -1296,23 +1311,49 @@ class Color
                     hexdec(substr($string,2,1).substr($string,2,1)),
                     hexdec(substr($string,3,1).substr($string,3,1)) / 255
                 );
-            case 6:
-                return new RgbColor(
-                    hexdec(substr($string,0,2)),
-                    hexdec(substr($string,2,2)),
-                    hexdec(substr($string,4,2))
-                );
-            case 8:
-                return new RgbColor(
-                    hexdec(substr($string,0,2)),
-                    hexdec(substr($string,2,2)),
-                    hexdec(substr($string,4,2)),
-                    hexdec(substr($string,6,2)) / 255
-                );
         }
 
-        throw new \InvalidArgumentException(
-            "The color passed seems to be a hex string, but has neither 3-4 nor 6-8 characters"
+        return self::parseInt(hexdec($string));
+    }
+
+    public static function parseInt($int)
+    {
+
+        if ($int > 0xffffff)
+            return new RgbaColor(
+                (int)((255 & ($int >> 32)) / 255),
+                (int)(255 & ($int >> 16)),
+                (int)(255 & ($int >> 8)),
+                (int)(255 & ($int))
+            );
+
+        return new RgbColor(
+            (int)(255 & ($int >> 16)),
+            (int)(255 & ($int >> 8)),
+            (int)(255 & ($int))
+        );
+    }
+
+    public static function getInt(ColorInterface $color)
+    {
+
+        if ($color instanceof AlphaColorInterface) {
+
+            $color = $color->getRgba();
+
+            return (int)(
+                ((int)($color->getAlpha() * 255) << 32)
+              + ($color->getRed() << 16)
+              + ($color->getGreen() << 8)
+              + $color->getBlue()
+            );
+        }
+
+        $color = $color->getRgb();
+        return (int)(
+            + ($color->getRed() << 16)
+            + ($color->getGreen() << 8)
+            + $color->getBlue()
         );
     }
 
@@ -1330,7 +1371,21 @@ class Color
                 "Color function $function is not registered"
             );
 
-        $className = self::$functions[$function];
+        $className = self::$functions[$function]['className'];
+        $argDefs = self::$functions[$function]['args'];
+
+        if (count($args) !== count($argDefs))
+            throw new RuntimeException(sprintf(
+                "Invalid argument count for $function: Expected %d values, got %d values",
+                count($argDefs),
+                count($args)
+            ));
+
+        $args = array_map(function($value, $arg) {
+
+            return MathUtil::convertValue($value, $arg['type'], $arg['base'], isset($arg['rotate']) && $arg['rotate']);
+        }, $args, $argDefs);
+
         return new $className(...$args);
     }
 
@@ -1355,30 +1410,33 @@ class Color
         return $hex;
     }
 
-    public static function fromString($string)
+    /**
+     * @param $value
+     *
+     * @return ColorInterface
+     */
+    public static function get($value)
     {
 
-        if (empty($string))
+        if ($value instanceof ColorInterface)
+            return $value;
+
+        if (empty($value))
             return new RgbColor(0,0,0);
 
-        if ($color = self::parseName($string))
+        if (is_int($value))
+            return self::parseInt($value);
+
+        if ($color = self::parseName($value))
             return $color;
 
-        if ($color = self::parseHexString($string))
+        if ($color = self::parseHexString($value))
             return $color;
 
-        if ($color = self::parseFunctionString($string))
+        if ($color = self::parseFunctionString($value))
             return $color;
 
         return null;
-    }
-
-    public static function get($color)
-    {
-
-        return $color instanceof ColorInterface
-            ? $color
-            : Color::fromString((string)$color);
     }
 
     public function create($type, array $args)
@@ -1591,29 +1649,107 @@ class Color
         return $color->withAlpha($color->getAlpha() - $ratio);
     }
 
+    public static function getDifference(ColorInterface $color, ColorInterface $compareColor)
+    {
+
+        $color = $color->getLab();
+        $compareColor = $color->getLab();
+
+        $kl = $kc = $kh = 1.0;
+        $barL = ($color->getL() + $compareColor->getL()) / 2.0;
+        //(Numbers corrispond to http://www.ece.rochester.edu/~gsharma/ciede2000/ciede2000noteCRNA.pdf eq)
+        //2
+        $helperB1Sq = pow($color->getB(), 2);
+        $helperB2Sq = pow($compareColor->getB(), 2);
+        $c1 = sqrt(pow($color->getA(), 2) + $helperB1Sq);
+        $c2 = sqrt(pow($compareColor->getA(), 2) + $helperB2Sq);
+        //3
+        $barC = ($c1 + $c2) / 2.0;
+        //4
+        $helperPow7 = sqrt(pow($barC, 7) / (pow($barC, 7) + 6103515625));
+        $g = 0.5 * (1 - $helperPow7);
+        //5
+        $primeA1 = (1 + $g) * $color->getA();
+        $primeA2 = (1 + $g) * $compareColor->getA();
+        //6
+        $primeC1 = sqrt(pow($primeA1, 2) + $helperB1Sq);
+        $primeC2 = sqrt(pow($primeA2, 2) + $helperB2Sq);
+        //7
+        if ($color->getB() === 0 && $primeA1 === 0) {
+            $primeH1 = 0;
+        } else {
+            $primeH1 = (atan2($color->getB(), $primeA1) + 2 * M_PI) * (180 / M_PI);
+        }
+        if ($compareColor->getB() === 0 && $primeA2 === 0) {
+            $primeH2 = 0;
+        } else {
+            $primeH2 = (atan2($compareColor->getB(), $primeA2) + 2 * M_PI) * (180 / M_PI);
+        }
+        //8
+        $deltaLPrime = $compareColor->getL() - $color->getL();
+        //9
+        $deltaCPrime = $primeC2 - $primeC1;
+        //10
+        $helperH = $primeH2 - $primeH1;
+        if ($primeC1 * $primeC2 === 0) {
+            $deltahPrime = 0;
+        } else if (abs($helperH) <= 180) {
+            $deltahPrime = $helperH;
+        } else if ($helperH > 180) {
+            $deltahPrime = $helperH - 360.0;
+        } else if ($helperH < -180) {
+            $deltahPrime = $helperH + 360.0;
+        } else {
+            throw new Exception('Invalid delta h\'');
+        }
+        //11
+        $deltaHPrime = 2 * sqrt($primeC1 * $primeC2) * sin(($deltahPrime / 2.0) * (M_PI / 180));
+        //12
+        $barLPrime = ($color->getL() + $compareColor->getL()) / 2.0;
+        //13
+        $barCPrime = ($primeC1 + $primeC2) / 2.0;
+        //14
+        $helperH = abs($primeH1 - $primeH2);
+        if ($primeC1 * $primeC2 === 0) {
+            $barHPrime = $primeH1 + $primeH2;
+        } else if ($helperH <= 180) {
+            $barHPrime = ($primeH1 + $primeH2) / 2.0;
+        } else if ($helperH > 180 && ($primeH1 + $primeH2) < 360) {
+            $barHPrime = ($primeH1 + $primeH2 + 360) / 2.0;
+        } else if ($helperH > 180 && ($primeH1 + $primeH2) >= 360) {
+            $barHPrime = ($primeH1 + $primeH2 - 360) / 2.0;
+        } else {
+            throw new Exception('Invalid bar h\'');
+        }
+        //15
+        $t = 1 - .17 * cos(($barHPrime - 30) * (M_PI / 180)) + .24 * cos((2 * $barHPrime) * (M_PI / 180)) + .32 * cos((3 * $barHPrime + 6) * (M_PI / 180)) - .2 * cos((4 * $barHPrime - 63) * (M_PI / 180));
+        //16
+        $deltaTheta = 30 * exp(-1 * pow((($barHPrime - 275) / 25), 2));
+        //17
+        $rc = 2 * $helperPow7;
+        //18
+        $slHelper = pow($barLPrime - 50, 2);
+        $sl = 1 + ((0.015 * $slHelper) / sqrt(20 + $slHelper));
+        //19
+        $sc = 1 + 0.046 * $barCPrime;
+        //20
+        $sh = 1 + 0.015 * $barCPrime * $t;
+        //21
+        $rt = -1 * sin((2 * $deltaTheta) * (M_PI / 180)) * $rc;
+        //22
+        $deltaESquared = pow($deltaLPrime / ($kl * $sl), 2) +
+            pow($deltaCPrime / ($kc * $sc), 2) +
+            pow($deltaHPrime / ($kh * $sh), 2) +
+            ($rt * ($deltaCPrime / ($kc * $sc)) * ($deltaHPrime / ($kh * $sh)));
+        $deltaE = sqrt($deltaESquared);
+
+        return $deltaE;
+    }
+
     public static function equals(ColorInterface $color, ColorInterface $compareColor, $tolerance = null, $ignoreAlpha = false)
     {
 
-        $tolerance = $tolerance ?: 0;
-        $color = $ignoreAlpha
-            ? $color->getHsl()
-            : $color->getHsla();
 
-        $compareColor = $ignoreAlpha
-            ? $compareColor->getHsl()
-            : $compareColor->getHsla();
-
-        if (abs($color->getHue() - $compareColor->getHue()) > (360 * $tolerance))
-            return false;
-
-        if (abs($color->getSaturation() - $compareColor->getSaturation()) > $tolerance)
-            return false;
-
-        if (abs($color->getLightness() - $compareColor->getLightness()) > $tolerance)
-            return false;
-
-        if (!$ignoreAlpha && abs($color->getAlpha() - $compareColor->getAlpha()) > $tolerance)
-            return false;
 
         return true;
     }
@@ -1634,10 +1770,10 @@ class Color
             'text-align: center; line-height: %dpx;">%s<br>%s<br>%s%s</div>',
             $width,
             $height,
-            $color->getCssString(),
-            $inversed->getCssString(),
+            $color,
+            $inversed,
             intval($height / 4),
-            $color->getCssString(),
+            $color->getLab(),
             Color::getHexString($color->getRgb()),
             self::getHueRange($hue)."->".round($hue, 2),
             $name ? "<br>$name" : ''

@@ -120,9 +120,9 @@ function color_fade($color, $ratio)
     return Color::fade(color_get($color), $ratio);
 }
 
-function color_get_html($color)
+function color_get_html($color, $width = null, $height = null)
 {
 
-    return Color::getHtml(color_get($color));
+    return Color::getHtml(color_get($color), $width, $height);
 }
 

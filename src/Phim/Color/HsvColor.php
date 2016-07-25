@@ -19,13 +19,13 @@ class HsvColor extends HsColorBase implements HsvColorInterface
     public function withAlphaSupport()
     {
 
-        return new HsvaColor($this->hue, $this->saturation, $this->value, 1);
+        return $this->getHsva();
     }
 
     public function withoutAlphaSupport()
     {
 
-        return new HsvColor($this->hue, $this->saturation, $this->value);
+        return $this->getHsv();
     }
 
     public function getRgb()
@@ -90,21 +90,27 @@ class HsvColor extends HsColorBase implements HsvColorInterface
     public function getHsva()
     {
 
-        return $this->withAlphaSupport();
+        return new HsvaColor($this->hue, $this->saturation, $this->value, 1);
     }
 
-    public function getCssString()
+    public function getXyz()
+    {
+
+        return $this->getRgb()->getXyz();
+    }
+
+    public function getLab()
+    {
+
+        return $this->getRgb()->getLab();
+    }
+
+    public function __toString()
     {
 
         $hue = round($this->hue, 2);
         $sat = round($this->saturation * 100, 2).'%';
         $val = round($this->value * 100, 2).'%';
         return "hsv({$hue},{$sat},{$val})";
-    }
-
-    public function __toString()
-    {
-
-        return "hsv({$this->hue},{$this->saturation},{$this->value})";
     }
 }
