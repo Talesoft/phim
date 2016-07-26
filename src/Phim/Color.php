@@ -1250,13 +1250,13 @@ class Color
     public static function getName(ColorInterface $color)
     {
 
-        $int = self::getInt($color);
+        $int = self::getInt($color->getRgb());
         $name = array_search($int, self::$names, true);
 
         if ($name)
             return $name;
 
-        return null;
+        return '0x'.dechex($int);
     }
 
     public static function getHueRanges()
@@ -1321,10 +1321,10 @@ class Color
 
         if ($int > 0xffffff)
             return new RgbaColor(
-                (int)((255 & ($int >> 32)) / 255),
+                (int)(255 & ($int >> 24)),
                 (int)(255 & ($int >> 16)),
                 (int)(255 & ($int >> 8)),
-                (int)(255 & ($int))
+                (int)((255 & $int) / 255)
             );
 
         return new RgbColor(
@@ -1342,10 +1342,10 @@ class Color
             $color = $color->getRgba();
 
             return (int)(
-                ((int)($color->getAlpha() * 255) << 32)
-              + ($color->getRed() << 16)
-              + ($color->getGreen() << 8)
-              + $color->getBlue()
+              + ($color->getRed() << 24)
+              + ($color->getGreen() << 16)
+              + ($color->getBlue() << 8)
+              + (int)($color->getAlpha() * 255)
             );
         }
 
@@ -1649,110 +1649,122 @@ class Color
         return $color->withAlpha($color->getAlpha() - $ratio);
     }
 
-    //https://github.com/supplyhog/phpOptics/blob/master/OpticsColorPoint.php
+    //http://www.easyrgb.com/index.php?X=DELT&H=05#text5
     public static function getDifference(ColorInterface $color, ColorInterface $compareColor)
     {
 
         $color = $color->getLab();
-        $compareColor = $color->getLab();
+        $compareColor = $compareColor->getLab();
 
-        $kl = $kc = $kh = 1.0;
-        $barL = ($color->getL() + $compareColor->getL()) / 2.0;
-        //(Numbers corrispond to http://www.ece.rochester.edu/~gsharma/ciede2000/ciede2000noteCRNA.pdf eq)
-        //2
-        $helperB1Sq = pow($color->getB(), 2);
-        $helperB2Sq = pow($compareColor->getB(), 2);
-        $c1 = sqrt(pow($color->getA(), 2) + $helperB1Sq);
-        $c2 = sqrt(pow($compareColor->getA(), 2) + $helperB2Sq);
-        //3
-        $barC = ($c1 + $c2) / 2.0;
-        //4
-        $helperPow7 = sqrt(pow($barC, 7) / (pow($barC, 7) + 6103515625));
-        $g = 0.5 * (1 - $helperPow7);
-        //5
-        $primeA1 = (1 + $g) * $color->getA();
-        $primeA2 = (1 + $g) * $compareColor->getA();
-        //6
-        $primeC1 = sqrt(pow($primeA1, 2) + $helperB1Sq);
-        $primeC2 = sqrt(pow($primeA2, 2) + $helperB2Sq);
-        //7
-        if ($color->getB() === 0 && $primeA1 === 0) {
-            $primeH1 = 0;
-        } else {
-            $primeH1 = (atan2($color->getB(), $primeA1) + 2 * M_PI) * (180 / M_PI);
+        $kl = $kc = $kh = 1;
+
+        $l1 = $color->getL();
+        $a1 = $color->getA();
+        $b1 = $color->getB();
+        $l2 = $compareColor->getL();
+        $a2 = $compareColor->getA();
+        $b2 = $compareColor->getB();
+
+        $c1 = sqrt($a1 * $a1 + $b1 * $b1);
+        $c2 = sqrt($a2 * $a2 + $b2 * $b2);
+        $cx = ($c1 + $c2) / 2;
+        $gx = 0.5 * (1 - sqrt(pow($cx, 7) / (pow($cx, 7) + pow(25, 7))));
+        $nn = (1 + $gx) * $a1;
+        $c1 = sqrt($nn * $nn + $b1 * $b1);
+        $h1 = self::cieLabToHue($nn, $b1);
+        $nn = (1 + $gx) * $a2;
+        $c2 = sqrt($nn * $nn + $b2 * $b2);
+        $h2 = self::cieLabToHue($nn, $b2);
+        $dl = $l2 - $l1;
+        $dc = $c2 - $c1;
+
+        $dh = 0;
+        if (($c1 * $c2) !== 0) {
+
+            $nn = round($h1 - $h2, 12);
+            if (abs($nn) <= 180) {
+                $dh = $h2 - $h1;
+            } else {
+                if ($nn > 180)
+                    $dh = $h2 - $h1 - 360;
+                else
+                    $dh = $h2 - $h1 + 360;
+           }
         }
-        if ($compareColor->getB() === 0 && $primeA2 === 0) {
-            $primeH2 = 0;
-        } else {
-            $primeH2 = (atan2($compareColor->getB(), $primeA2) + 2 * M_PI) * (180 / M_PI);
+
+        $dh = 2 * sqrt($c1 * $c2) * sin(deg2rad($dh / 2));
+        $lx = ($l1 + $l2) / 2;
+        $cy = ($c1 + $c2) / 2;
+
+        $hx = $h1 + $h2;
+        if (($c1 * $c2) !== 0) {
+
+            $nn = abs(round($h1 - $h2, 12));
+            if ($nn > 180) {
+                if (($h2 + $h1) < 360)
+                    $hx = $h1 + $h2 + 360;
+                else
+                    $hx = $h1 + $h2 - 360;
+            } else {
+                $hx = $h1 + $h2;
+            }
+            $hx /= 2;
         }
-        //8
-        $deltaLPrime = $compareColor->getL() - $color->getL();
-        //9
-        $deltaCPrime = $primeC2 - $primeC1;
-        //10
-        $helperH = $primeH2 - $primeH1;
-        if ($primeC1 * $primeC2 === 0) {
-            $deltahPrime = 0;
-        } else if (abs($helperH) <= 180) {
-            $deltahPrime = $helperH;
-        } else if ($helperH > 180) {
-            $deltahPrime = $helperH - 360.0;
-        } else if ($helperH < -180) {
-            $deltahPrime = $helperH + 360.0;
-        } else {
-            throw new Exception('Invalid delta h\'');
-        }
-        //11
-        $deltaHPrime = 2 * sqrt($primeC1 * $primeC2) * sin(($deltahPrime / 2.0) * (M_PI / 180));
-        //12
-        $barLPrime = ($color->getL() + $compareColor->getL()) / 2.0;
-        //13
-        $barCPrime = ($primeC1 + $primeC2) / 2.0;
-        //14
-        $helperH = abs($primeH1 - $primeH2);
-        if ($primeC1 * $primeC2 === 0) {
-            $barHPrime = $primeH1 + $primeH2;
-        } else if ($helperH <= 180) {
-            $barHPrime = ($primeH1 + $primeH2) / 2.0;
-        } else if ($helperH > 180 && ($primeH1 + $primeH2) < 360) {
-            $barHPrime = ($primeH1 + $primeH2 + 360) / 2.0;
-        } else if ($helperH > 180 && ($primeH1 + $primeH2) >= 360) {
-            $barHPrime = ($primeH1 + $primeH2 - 360) / 2.0;
-        } else {
-            throw new Exception('Invalid bar h\'');
-        }
-        //15
-        $t = 1 - .17 * cos(($barHPrime - 30) * (M_PI / 180)) + .24 * cos((2 * $barHPrime) * (M_PI / 180)) + .32 * cos((3 * $barHPrime + 6) * (M_PI / 180)) - .2 * cos((4 * $barHPrime - 63) * (M_PI / 180));
-        //16
-        $deltaTheta = 30 * exp(-1 * pow((($barHPrime - 275) / 25), 2));
-        //17
-        $rc = 2 * $helperPow7;
-        //18
-        $slHelper = pow($barLPrime - 50, 2);
-        $sl = 1 + ((0.015 * $slHelper) / sqrt(20 + $slHelper));
-        //19
-        $sc = 1 + 0.046 * $barCPrime;
-        //20
-        $sh = 1 + 0.015 * $barCPrime * $t;
-        //21
-        $rt = -1 * sin((2 * $deltaTheta) * (M_PI / 180)) * $rc;
-        //22
-        $deltaESquared = pow($deltaLPrime / ($kl * $sl), 2) +
-            pow($deltaCPrime / ($kc * $sc), 2) +
-            pow($deltaHPrime / ($kh * $sh), 2) +
-            ($rt * ($deltaCPrime / ($kc * $sc)) * ($deltaHPrime / ($kh * $sh)));
-        $deltaE = sqrt($deltaESquared);
+
+        $tx = 1 - 0.17 * cos(deg2rad($hx - 30)) + 0.24 * cos(deg2rad(2 * $hx)) + 0.32
+            * cos(deg2rad(3 * $hx + 6)) - 0.20 * cos(deg2rad(4 * $hx - 63));
+        $ph = 30 * exp(-(($hx - 275) / 25) * (($hx - 275) / 25));
+        $rc = 2 * sqrt(pow($cy, 7) / (pow($cy, 7) + pow(25, 7)));
+        $sl = 1 + ((0.015 * (($lx - 50) * ($lx - 50))) / sqrt(20 + (($lx - 50) * ($lx - 50))));
+        $sc = 1 + 0.045 * $cy;
+        $sh = 1 + 0.015 * $cy * $tx;
+        $rt = -sin(deg2rad(2 * $ph)) * $rc;
+        $dl = $dl / ($kl * $sl);
+        $dc = $dc / ($kc * $sc);
+        $dh = $dh / ($kh * $sh);
+        $deltaE = sqrt(pow($dl, 2) + pow($dc, 2) + pow($dh, 2) + $rt * $dc * $dh);
 
         return $deltaE;
     }
 
-    public static function equals(ColorInterface $color, ColorInterface $compareColor, $tolerance = null, $ignoreAlpha = false)
+    private static function cieLabToHue($a, $b)
     {
 
 
+        $bias = 0;
+        if ($a >= 0 && $b == 0)
+            return 0;
 
-        return true;
+        if ($a < 0 && $b == 0)
+            return 180;
+
+        if ($a == 0 && $b > 0)
+            return 90;
+
+        if ($a == 0 && $b < 0)
+            return 270;
+
+        if ($a > 0 && $b > 0)
+            $bias = 0;
+
+        if ($a < 0)
+            $bias = 180;
+
+        if ($a > 0 && $b < 0)
+            $bias = 360;
+
+        return (rad2deg(atan($b / $a)) + $bias);
+    }
+
+    public static function equals(ColorInterface $color, ColorInterface $compareColor, $tolerance = null)
+    {
+
+        $tolerance = $tolerance ?: 0;
+        $deltaE = self::getDifference($color, $compareColor);
+
+        echo("$deltaE <= $tolerance: ".($deltaE <= $tolerance ? 'Yes' : 'No').'<br>');
+
+        return $deltaE <= $tolerance;
     }
 
     public static function getHtml(ColorInterface $color, $width = null, $height = null)

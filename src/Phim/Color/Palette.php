@@ -45,18 +45,27 @@ class Palette
         });
     }
 
-    public static function filterDuplicates(PaletteInterface $palette, $tolerance = null, $ignoreAlpha = false)
+    public static function filterDuplicates(PaletteInterface $palette, $tolerance = null)
     {
 
-        $colors = $palette->getColors();
-        return self::filter($palette, function(ColorInterface $color) use ($colors, $palette, $tolerance, $ignoreAlpha) {
+        $distinctColors = [];
+        foreach ($palette as $color) {
 
-            foreach ($colors as $paletteColor)
-                if ($color !== $paletteColor && Color::equals($color, $paletteColor, $tolerance, $ignoreAlpha))
-                    return false;
+            $exists = false;
+            foreach ($distinctColors as $dColor) {
 
-            return true;
-        });
+                if (Color::equals($color, $dColor, $tolerance)) {
+
+                    $exists = true;
+                    break;
+                }
+            }
+
+            if (!$exists)
+                $distinctColors[] = $color;
+        }
+
+        return new Color\Palette\SimplePalette($distinctColors);
     }
 
     public static function getHtml(PaletteInterface $palette, $columns = null)

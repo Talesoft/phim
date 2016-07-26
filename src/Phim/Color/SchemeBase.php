@@ -10,6 +10,11 @@ abstract class SchemeBase extends SimplePalette
 {
     use SchemeTrait;
 
+
+    /**
+     * SchemeBase constructor.
+     * @param ColorInterface|string|int $baseColor
+     */
     public function __construct($baseColor)
     {
 
