@@ -1774,7 +1774,7 @@ class Color
             $color,
             $inversed,
             intval($height / 4),
-            $color->getLab(),
+            $color->getLab()->getRgb(),
             Color::getHexString($color->getRgb()),
             self::getHueRange($hue)."->".round($hue, 2),
             $name ? "<br>$name" : ''

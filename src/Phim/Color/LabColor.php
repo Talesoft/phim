@@ -72,26 +72,15 @@ class LabColor implements LabColorInterface
         $x = $this->a / 500 + $y;
         $z = $y - $this->b / 200;
 
-        if ($y ^ 3 > 0.008856)
-            $y = $y ^ 3;
-        else
-            $y = ($y - 16 / 116) / 7.787;
+        $y2 = pow($y, 3);
+        $x2 = pow($x, 3);
+        $z2 = pow($z, 3);
 
-        if ($x ^ 3 > 0.008856)
-            $x = $x ^ 3;
-        else
-            $x = ($x - 16 / 116) / 7.787;
+        $y = $y2 > 0.008856 ? $y2 : ($y - 16 / 116) / 7.787;
+        $x = $x2 > 0.008856 ? $x2 : ($x - 16 / 116) / 7.787;
+        $z = $z2 > 0.008856 ? $z2 : ($z - 16 / 116) / 7.787;
 
-        if ($z ^ 3 > 0.008856)
-            $z = $z ^ 3;
-        else
-            $z = ($z - 16 / 116) / 7.787;
-
-        $x = 95.047 * $x;     //ref_X =  95.047     Observer= 2°, Illuminant= D65
-        $y = 100.000 * $y;     //ref_Y = 100.000
-        $z = 108.883 * $z;     //ref_Z = 108.883
-
-        return new XyzColor($x, $y, $z);
+        return new XyzColor($x * XyzColor::REF_X, $y * XyzColor::REF_Y, $z * XyzColor::REF_Z);
     }
 
     public function getLab()

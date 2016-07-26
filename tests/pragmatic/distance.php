@@ -9,7 +9,7 @@ $names = array_replace([
     'fullyellow' => '#ff0',
     'fullcyan' => '#0ff',
     'fullmagenta' => '#f0f'
-], \Phim\color_get_names());
+], [] /*\Phim\color_get_names()*/);
 
 echo '<div style="white-space: nowrap;">';
 foreach ($names as $name => $hex) {
