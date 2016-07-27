@@ -1216,9 +1216,9 @@ class Color
             ['type' => 'float', 'base' => 1]
         ]],
         'xyz' => ['className' => XyzColor::class, 'args' => [
-            ['type' => 'float', 'base' => 100],
-            ['type' => 'float', 'base' => 100],
-            ['type' => 'float', 'base' => 100]
+            ['type' => 'float', 'base' => XyzColor::REF_X],
+            ['type' => 'float', 'base' => XyzColor::REF_Y],
+            ['type' => 'float', 'base' => XyzColor::REF_Z]
         ]],
         'lab' => ['className' => LabColor::class, 'args' => [
             ['type' => 'float', 'base' => 100],
@@ -1228,15 +1228,6 @@ class Color
     ];
 
     private function __construct() {}
-
-    /**
-     * @return array
-     */
-    public static function getFunctions()
-    {
-
-        return self::$functions;
-    }
 
     /**
      * @return array
@@ -1259,19 +1250,6 @@ class Color
         return '0x'.dechex($int);
     }
 
-    public static function getHueRanges()
-    {
-
-        return [
-            self::HUE_RANGE_RED,
-            self::HUE_RANGE_YELLOW,
-            self::HUE_RANGE_GREEN,
-            self::HUE_RANGE_CYAN,
-            self::HUE_RANGE_BLUE,
-            self::HUE_RANGE_MAGENTA
-        ];
-    }
-
     public static function parseName($string)
     {
 
@@ -1283,10 +1261,31 @@ class Color
         return self::parseInt(self::$names[$name]);
     }
 
-    public static function registerName($name, $hexString)
+    public static function registerName($name, ColorInterface $color)
     {
 
-        self::$names[$name] = $hexString;
+        self::$names[$name] = self::getInt($color->getRgb());
+    }
+
+    public static function getHexString(ColorInterface $color, $expand = false)
+    {
+
+        /** @var RgbaColor $rgb */
+        $rgb = $color instanceof AlphaColorInterface
+            ? $color->getRgba()
+            : $color->getRgb();
+
+        $hex = '#';
+        $hex .= str_pad(dechex($rgb->getRed()), 2, '0', STR_PAD_LEFT);
+        $hex .= str_pad(dechex($rgb->getGreen()), 2, '0', STR_PAD_LEFT);
+        $hex .= str_pad(dechex($rgb->getBlue()), 2, '0', STR_PAD_LEFT);
+
+        if ($rgb instanceof AlphaColorInterface)
+            $hex .= str_pad(dechex($rgb->getAlpha() * 255), 2, '0', STR_PAD_LEFT);
+        else if ($hex[1] === $hex[2] && $hex[3] === $hex[4] && $hex[5] === $hex[6] && !$expand)
+            $hex = '#'.$hex[1].$hex[3].$hex[5];
+
+        return $hex;
     }
 
     public static function parseHexString($string)
@@ -1316,6 +1315,29 @@ class Color
         return self::parseInt(hexdec($string));
     }
 
+    public static function getInt(ColorInterface $color)
+    {
+
+        if ($color instanceof AlphaColorInterface) {
+
+            $color = $color->getRgba();
+
+            return (int)(
+                + ($color->getRed() << 24)
+                + ($color->getGreen() << 16)
+                + ($color->getBlue() << 8)
+                + (int)($color->getAlpha() * 255)
+            );
+        }
+
+        $color = $color->getRgb();
+        return (int)(
+            + ($color->getRed() << 16)
+            + ($color->getGreen() << 8)
+            + $color->getBlue()
+        );
+    }
+
     public static function parseInt($int)
     {
 
@@ -1334,27 +1356,13 @@ class Color
         );
     }
 
-    public static function getInt(ColorInterface $color)
+    /**
+     * @return array
+     */
+    public static function getFunctions()
     {
 
-        if ($color instanceof AlphaColorInterface) {
-
-            $color = $color->getRgba();
-
-            return (int)(
-              + ($color->getRed() << 24)
-              + ($color->getGreen() << 16)
-              + ($color->getBlue() << 8)
-              + (int)($color->getAlpha() * 255)
-            );
-        }
-
-        $color = $color->getRgb();
-        return (int)(
-            + ($color->getRed() << 16)
-            + ($color->getGreen() << 8)
-            + $color->getBlue()
-        );
+        return self::$functions;
     }
 
     public static function parseFunctionString($string)
@@ -1389,27 +1397,6 @@ class Color
         return new $className(...$args);
     }
 
-    public static function getHexString(ColorInterface $color, $expand = false)
-    {
-
-        /** @var RgbaColor $rgb */
-        $rgb = $color instanceof AlphaColorInterface
-            ? $color->getRgba()
-            : $color->getRgb();
-
-        $hex = '#';
-        $hex .= str_pad(dechex($rgb->getRed()), 2, '0', STR_PAD_LEFT);
-        $hex .= str_pad(dechex($rgb->getGreen()), 2, '0', STR_PAD_LEFT);
-        $hex .= str_pad(dechex($rgb->getBlue()), 2, '0', STR_PAD_LEFT);
-
-        if ($rgb instanceof AlphaColorInterface)
-            $hex .= str_pad(dechex($rgb->getAlpha() * 255), 2, '0', STR_PAD_LEFT);
-        else if ($hex[1] === $hex[2] && $hex[3] === $hex[4] && $hex[5] === $hex[6] && !$expand)
-            $hex = '#'.$hex[1].$hex[3].$hex[5];
-
-        return $hex;
-    }
-
     /**
      * @param $value
      *
@@ -1439,23 +1426,6 @@ class Color
         return null;
     }
 
-    public function create($type, array $args)
-    {
-
-        if (!isset(self::$functions[$type]))
-            throw new \InvalidArgumentException(
-                "Passed color type $type is not registered. Please register it with ::registerFunction first"
-            );
-        
-        $type = self::$functions[$type];
-        
-        foreach ($type['args'] as $arg) {
-            
-            $argType = $arg['type'];
-            $argBase = $arg['base'];
-        }
-    }
-
     public static function getMax(ColorInterface $color)
     {
 
@@ -1475,6 +1445,19 @@ class Color
 
         $rgb = $color->getRgb();
         return (int)($rgb->getRed() + $rgb->getGreen() + $rgb->getBlue()) / 3;
+    }
+
+    public static function getHueRanges()
+    {
+
+        return [
+            self::HUE_RANGE_RED,
+            self::HUE_RANGE_YELLOW,
+            self::HUE_RANGE_GREEN,
+            self::HUE_RANGE_CYAN,
+            self::HUE_RANGE_BLUE,
+            self::HUE_RANGE_MAGENTA
+        ];
     }
 
     public static function getHueRange($hue)
@@ -1761,8 +1744,6 @@ class Color
 
         $tolerance = $tolerance ?: 0;
         $deltaE = self::getDifference($color, $compareColor);
-
-        echo("$deltaE <= $tolerance: ".($deltaE <= $tolerance ? 'Yes' : 'No').'<br>');
 
         return $deltaE <= $tolerance;
     }

@@ -45,16 +45,18 @@ class Palette
         });
     }
 
-    public static function filterDuplicates(PaletteInterface $palette, $tolerance = null)
+    public static function filterSimilarColors(PaletteInterface $palette, $requiredDifference = null)
     {
 
+        $requiredDifference = $requiredDifference ?: 8;
+        
         $distinctColors = [];
         foreach ($palette as $color) {
 
             $exists = false;
             foreach ($distinctColors as $dColor) {
 
-                if (Color::equals($color, $dColor, $tolerance)) {
+                if (Color::equals($color, $dColor, $requiredDifference)) {
 
                     $exists = true;
                     break;
@@ -68,12 +70,12 @@ class Palette
         return new Color\Palette\SimplePalette($distinctColors);
     }
 
-    public static function getHtml(PaletteInterface $palette, $columns = null)
+    public static function getHtml(PaletteInterface $palette, $columns = null, $width = null, $height = null)
     {
 
         $html = '';
         foreach ($palette as $i => $color) {
-            $html .= Color::getHtml($color);
+            $html .= Color::getHtml($color, $width, $height);
 
             if ($columns !== null && ($i + 1) % $columns === 0)
                 $html .= '<br>';

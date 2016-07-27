@@ -1,5 +1,6 @@
 <?php
 
+use Phim\Color;
 use Phim\Color\Palette;
 use Phim\Color\Palette\ShadePalette;
 use Phim\Color\Palette\SimplePalette;
@@ -8,6 +9,26 @@ use Phim\Color\Scheme\TetradicScheme;
 use function Phim\color_get;
 
 include '../../vendor/autoload.php';
+
+$colors = [Color::RED, Color::BLUE, Color::GREEN, Color::YELLOW];
+
+$palette = new SimplePalette();
+
+foreach ($colors as $color) {
+
+    //Add the tetradic scheme for each color
+    $palette = Palette::merge($palette, new TetradicScheme($color));
+}
+
+//Only take blue-ish colors
+$palette = Palette::filterByHueRange($palette, Color::HUE_RANGE_BLUE);
+
+//Avoid similar colors
+$palette = Palette::filterSimilarColors($palette, 8);
+
+//Print a nice HTML representation of the palette for debugging
+echo Palette::getHtml($palette, 4);
+exit;
 
 
 $hueRange = isset($_GET['hue']) ? $_GET['hue'] : 'red';
@@ -32,14 +53,14 @@ foreach ($colorNames as $color) {
 }
 
 $filtered = Palette::filterByHueRange($palette, $hueRange);
-$deduplicated = Palette::filterDuplicates($filtered, 20);
+$deduplicated = Palette::filterSimilarColors($filtered, 15);
 
 ?>
 <table width="100%">
     <tr>
         <th>All</th>
         <th>Only <strong><?=$hueRange?></strong> colors</th>
-        <th>Without duplicates (Tolerance: 6)</th>
+        <th>Without duplicates (Tolerance: 15, meaning that they have a color difference of at least 15)</th>
     </tr>
     <tr>
         <td valign="top" align="center"><?=Palette::getHtml($palette, 4)?></td>
