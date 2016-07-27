@@ -4,5 +4,5 @@ namespace Phim\Color;
 
 trait HsvaColorTrait
 {
-    use HsvColorTrait, AlphaColorTrait;
+    use AlphaColorTrait;
 }

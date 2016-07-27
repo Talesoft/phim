@@ -6,7 +6,6 @@ use Phim\Util\MathUtil;
 
 trait HslColorTrait
 {
-    use HsColorTrait;
 
     protected $lightness = 0;
 

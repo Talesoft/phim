@@ -6,7 +6,6 @@ use Phim\Util\MathUtil;
 
 trait HsvColorTrait
 {
-    use HsColorTrait;
 
     protected $value = 0;
 
