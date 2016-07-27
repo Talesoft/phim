@@ -25,6 +25,8 @@ Ignore everything that doesn't start with `Color` in Phim right now.
 Phim can handle many different color formats
 
 ```php
+use Phim\Color;
+
 //By name
 Color::get('red'); //RgbColor(255,0,0)
 Color::get(Color::MAROON); //RgbColor(128, 0, 0)
@@ -512,3 +514,4 @@ If you like my work, it helped you in some way, eased up work for you or anythin
 - http://www.tigercolor.com/color-lab/color-theory/color-theory-intro.htm
 - https://gist.github.com/mjackson/5311256
 - https://raw.githubusercontent.com/RnbwNoise/ImageAffineMatrix/master/ImageAffineMatrix.php
+- https://github.com/Qix-/color-convert/blob/master/conversions.js
