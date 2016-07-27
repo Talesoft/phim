@@ -61,41 +61,6 @@ $rgb = new RgbColor(0, 100, 0);
 $hsla = new HslaColor(120, .5, .1, 1.0);
 ```
 
-## Using a color in HTML
-
-The colors mostly convert to their best CSS representation automatically when casted to a string.
-
-```php
-echo Color::get('red'); //'rgb(255, 0, 0)'
-echo Color::get('hsl(120, .5, .2)'); //'hsl(120, 50%, 20%)'
-```
-
-Given that some browsers don't support `hsl()` CSS colors, it's best to always convert to RGB or RGBA before casting to a string.
-
-```php
-echo Color::get('red')->getRgba(); //rgba(255, 0, 0, 1)
-```
-
-It's not automatically done to give you the ability to also use the `hsl()` writing style. We also don't know, if CSS will implement further color constructors in the future.
-
-Notice that functions always convert to their respective class automatically, so doing things like
-
-```php
-<div style="width: 100%; background: <?=Color::get('red')->withAlphaSupport()->withAlpha($alpha)?>;"></div>
-```
-
-is absolutely valid, since you can assume the result will be an `RgbaColor` instance.
-
-It can get even shorter by using
-
-```php
-<div style="width: 100%; background: <?=Color::fade(Color::get('red'), $alpha)?>;"></div>
-```
-
-Named colors will always return a `RgbColor` instance. Using `withAlphaSupport()` will always return the respective alpha-version of a color.
-
-Also notice that Xyz and Lab don't have Alpha-versions and will just return an `RgbaColor`-instance of the same color.
-
 ## Color conversion
 
 Every color can be converted to every other color space instantly.
@@ -109,16 +74,51 @@ $color->getLab()->getL();
 ```
 
 
-Supported color spaces are:
+Here's a list of the supported color spaces with their respective value methods
 
-- RGB (`getRgb()`)
+- RGB (`getRgb(): RgbColor`)
+    - `getRed()`
+    - `getGreen()`
+    - `getBlue()`
+    - `withAlphaSupport(): RgbaColor`
 - RGBA (`getRgba()`)
+    - `getRed()`
+    - `getGreen()`
+    - `getBlue()`
+    - `getAlpha()`
+    - `withoutAlphaSupport(): RgbColor`
 - HSL (`getHsl()`)
+    - `getHue()`
+    - `getSaturation()`
+    - `getLightness()`
+    - `withAlphaSupport(): HslaColor`
 - HSLA (`getHsla()`)
+    - `getHue()`
+    - `getSaturation()`
+    - `getLightness()`
+    - `getAlpha()`
+    - `withoutAlphaSupport(): HslColor`
 - HSV (`getHsv()`)
+    - `getHue()`
+    - `getSaturation()`
+    - `getValue()`
+    - `withAlphaSupport(): HsvaColor`
 - HSVA (`getHsva()`)
+    - `getHue()`
+    - `getSaturation()`
+    - `getValue()`
+    - `getAlpha()`
+    - `withoutAlphaSupport(): HsvColor`
 - CIE XYZ (`getXyz()`)
+    - `getX()`
+    - `getY()`
+    - `getZ()`
+    - `withAlphaSupport(): RgbaColor`
 - CIE L\*a\*b\* (`getLab()`)
+    - `getL()`
+    - `getA()`
+    - `getB()`
+    - `withAlphaSupport(): RgbaColor`
 
 The system is designed so that you _don't need to know_ in which color space you're getting your current color in. If you want to do modifications on a color, just convert it to the color space you need prior to that.
 
@@ -209,11 +209,11 @@ Through the implementation of CIE XYZ, CIE L\*a\*b\* and the CIEDE2000 standard 
 ```php
 $red = Color::get('red'); //rgb(255, 0, 0)
 
-Color::getDifference(Color::get('red'), Color::get('blue')); //52.878674140461
+Color::getDifference($red, Color::get('blue')); //52.878674140461
 
-Color::getDifference(Color::get('red'), Color::get('maroon')); //25.857031489394
+Color::getDifference($red, Color::get('maroon')); //25.857031489394
 
-Color::getDifference(Color::get('red'), Color::get('rgb(250, 0, 0)')); //1.0466353226581
+Color::getDifference($red, Color::get('rgb(250, 0, 0)')); //1.0466353226581
 ```
 
 To compare colors with a tolerance, you can use the `equals`-method
@@ -255,7 +255,7 @@ $palette = new SimplePalette([
 $palette[] = 'rgb(120, 35, 56)';
 
 $palette[0]; //RgbColor(255, 0, 0)
-$palette[5]; //RgbColor(120, 35, 56)
+$palette[6]; //RgbColor(120, 35, 56)
 ```
 
 
@@ -459,6 +459,42 @@ Palette::getHtml($palette, 4);
 
 This will yield the colors `blue` and `navy`. Reducing the required range
 on `filterSimilarColors` will yield more and different blue colors.
+
+## Using a color in HTML
+
+The colors mostly convert to their best CSS representation automatically when casted to a string.
+
+```php
+echo Color::get('red'); //'rgb(255, 0, 0)'
+echo Color::get('hsl(120, .5, .2)'); //'hsl(120, 50%, 20%)'
+```
+
+Given that some browsers don't support `hsl()` CSS colors, it's best to always convert to RGB or RGBA before casting to a string.
+
+```php
+echo Color::get('red')->getRgba(); //rgba(255, 0, 0, 1)
+```
+
+It's not automatically done to give you the ability to also use the `hsl()` writing style. We also don't know, if CSS will implement further color constructors in the future.
+
+Notice that functions always convert to their respective class automatically, so doing things like
+
+```php
+<div style="width: 100%; background: <?=Color::get('red')->withAlphaSupport()->withAlpha($alpha)?>;"></div>
+```
+
+is absolutely valid, since you can assume the result will be an `RgbaColor` instance.
+
+It can get even shorter by using
+
+```php
+<div style="width: 100%; background: <?=Color::fade(Color::get('red'), $alpha)?>;"></div>
+```
+
+Named colors will always return a `RgbColor` instance. Using `withAlphaSupport()` will always return the respective alpha-version of a color.
+
+Also notice that Xyz and Lab don't have Alpha-versions and will just return an `RgbaColor`-instance of the same color.
+
 
 # Examples, Code, Contribution, Support
 
