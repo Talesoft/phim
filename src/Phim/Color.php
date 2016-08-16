@@ -1394,7 +1394,8 @@ class Color
             return MathUtil::convertValue($value, $arg['type'], $arg['base'], isset($arg['rotate']) && $arg['rotate']);
         }, $args, $argDefs);
 
-        return new $className(...$args);
+        $reflect  = new \ReflectionClass($className);
+        return $reflect->newInstanceArgs($args);
     }
 
     /**
