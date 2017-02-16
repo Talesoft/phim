@@ -2,33 +2,35 @@
 
 namespace Phim;
 
-use Phim\Point\PointDataInterface;
+use Phim\Canvas\LayerInterface;
 
-interface CanvasInterface
+interface CanvasInterface extends SizeInterface
 {
-
-    //Property management
-    public function getBackgroundColor();
-    public function setBackgroundColor(ColorInterface $color);
-    public function getSize();
-    public function setSize(PointDataInterface $size);
-
-    //Drawing management
-    public function getDrawables();
-    public function getTransformations();
-    public function getFilters();
-
-    public function draw(DrawableInterface $drawable);
-    public function erase(DrawableInterface $drawable);
-    public function transform(TransformationInterface $transformation);
-    public function filter(FilterInterface $filter);
-
-    //Layer management
+    
+    /**
+     *
+     * @return LayerInterface[]
+     */
     public function getLayers();
+
+    /**
+     * @param $name
+     *
+     * @return bool
+     */
     public function hasLayer($name);
+
+    /**
+     * @param $name
+     *
+     * @return LayerInterface
+     */
     public function getLayer($name);
-    public function setLayer($name, CanvasInterface $layer);
-    public function getFirstLayer();
-    public function getLastLayer();
+
+    /**
+     * @param $name
+     *
+     * @return LayerInterface
+     */
     public function createLayer($name);
 }

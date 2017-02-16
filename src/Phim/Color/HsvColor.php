@@ -16,19 +16,19 @@ class HsvColor extends HsColorBase implements HsvColorInterface
         $this->value = MathUtil::capValue($value, 0.0, 1.0);
     }
 
-    public function withAlphaSupport()
+    public function toAlpha()
     {
 
-        return $this->getHsva();
+        return $this->toHsva();
     }
 
-    public function withoutAlphaSupport()
+    public function toOpaque()
     {
 
-        return $this->getHsv();
+        return $this->toHsv();
     }
 
-    public function getRgb()
+    public function toRgb()
     {
 
         $h = $this->hue / 360;
@@ -55,13 +55,13 @@ class HsvColor extends HsColorBase implements HsvColorInterface
         return new RgbColor($r * 255, $g * 255, $b * 255);
     }
 
-    public function getRgba()
+    public function toRgba()
     {
 
-        return $this->getRgb()->withAlphaSupport();
+        return $this->toRgb()->toAlpha();
     }
 
-    public function getHsl()
+    public function toHsl()
     {
 
         $h = $this->hue;
@@ -75,34 +75,34 @@ class HsvColor extends HsColorBase implements HsvColorInterface
         );
     }
 
-    public function getHsla()
+    public function toHsla()
     {
 
-        return $this->getHsl()->withAlphaSupport();
+        return $this->toHsl()->toAlpha();
     }
 
-    public function getHsv()
+    public function toHsv()
     {
 
         return new HsvColor($this->hue, $this->saturation, $this->value);
     }
 
-    public function getHsva()
+    public function toHsva()
     {
 
         return new HsvaColor($this->hue, $this->saturation, $this->value, 1);
     }
 
-    public function getXyz()
+    public function toXyz()
     {
 
-        return $this->getRgb()->getXyz();
+        return $this->toRgb()->toXyz();
     }
 
-    public function getLab()
+    public function toLab()
     {
 
-        return $this->getRgb()->getLab();
+        return $this->toRgb()->toLab();
     }
 
     public function __toString()

@@ -22,11 +22,11 @@ trait HslColorTrait
      * @param int $lightness
      * @return $this
      */
-    public function withLightness($lightness)
+    public function setLightness($lightness)
     {
 
-        $color = clone $this;
-        $color->lightness = MathUtil::capValue($lightness, 0.0, 1.0);
-        return $color;
+        $this->lightness = MathUtil::capValue($lightness, 0.0, 1.0);
+        
+        return $this;
     }
 }

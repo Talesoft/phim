@@ -20,12 +20,12 @@ echo '<div style="white-space: nowrap;">';
 foreach ($names as $name => $hex) {
 
     $color = color_get($hex);
-    echo \Phim\color_get_html($color);
+    echo \Phim\color_to_html($color);
     $mc = new \Phim\Color\Scheme\MonochromaticScheme($color, 8, .05);
     foreach ($mc as $compareColor) {
 
         echo '<div style="display: inline-block; vertical-align: top; text-align: center;">';
-        echo \Phim\color_get_html($compareColor);
+        echo \Phim\color_to_html($compareColor);
         echo '<br>';
         echo '<span style="padding: 10px;">'.\Phim\Color::getDifference($color, $compareColor).'</span>';
         echo '</div>';
@@ -40,12 +40,12 @@ echo '<div style="white-space: nowrap;">';
 foreach ($names as $name => $hex) {
 
     $color = color_get($hex);
-    echo \Phim\color_get_html($color);
+    echo \Phim\color_to_html($color);
     $mc = new \Phim\Color\Scheme\HueRotationScheme($color, 20, 5);
     foreach ($mc as $compareColor) {
 
         echo '<div style="display: inline-block; vertical-align: top; text-align: center;">';
-        echo \Phim\color_get_html($compareColor);
+        echo \Phim\color_to_html($compareColor);
         echo '<br>';
         echo '<span style="padding: 10px;">'.\Phim\Color::getDifference($color, $compareColor).'</span>';
         echo '</div>';
@@ -60,7 +60,7 @@ echo '<div style="white-space: nowrap;">';
 foreach ($names as $name => $hex) {
 
     $color = color_get($hex);
-    echo \Phim\color_get_html($color);
+    echo \Phim\color_to_html($color);
     foreach (\Phim\color_get_names() as $compareColor) {
 
         $deltaE = \Phim\Color::getDifference($color, color_get($compareColor));
@@ -68,7 +68,7 @@ foreach ($names as $name => $hex) {
         if ($deltaE < $t) {
 
             echo '<div style="display: inline-block; vertical-align: top; text-align: center;">';
-            echo Phim\Color::getHtml(color_get($compareColor));
+            echo Phim\Color::toHtml(color_get($compareColor));
             echo '<br>';
             echo '<span style="padding: 10px;">'.$deltaE.'</span>';
             echo '</div>';

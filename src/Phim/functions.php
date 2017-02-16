@@ -28,9 +28,9 @@ function color_get_names()
     return Color::getNames();
 }
 
-function color_get_name($color) {
+function color_to_name($color) {
 
-    return Color::getName(color_get($color));
+    return Color::toName(color_get($color));
 }
 
 function color_parse_name($string) {
@@ -43,9 +43,9 @@ function color_register_name($name, $color) {
     Color::registerName($name, color_get($color));
 }
 
-function color_get_hex_string($color, $expand = false) {
+function color_to_hex_string($color, $expand = false) {
 
-    return Color::getHexString(color_get($color), $expand);
+    return Color::toHexString(color_get($color), $expand);
 }
 
 function color_parse_hex_string($string) {
@@ -58,9 +58,9 @@ function color_parse_int($int) {
     return Color::parseInt($int);
 }
 
-function color_get_int($color) {
+function color_to_int($color) {
 
-    return Color::getInt(color_get($color));
+    return Color::toInt(color_get($color));
 }
 
 /**
@@ -165,7 +165,7 @@ function color_greyscale($color) {
 
 function color_complement($color, $degrees = null) {
 
-    return Color::complement(color_get($color), $degrees = null);
+    return Color::complement(color_get($color), $degrees);
 }
 
 function color_fade($color, $ratio) {
@@ -183,10 +183,10 @@ function color_equals($color, $compareColor, $tolerance = null) {
     return Color::equals(color_get($color), color_get($compareColor), $tolerance);
 }
 
-function color_get_html($color, $width = null, $height = null)
+function color_to_html($color, $width = null, $height = null)
 {
 
-    return Color::getHtml(color_get($color), $width, $height);
+    return Color::toHtml(color_get($color), $width, $height);
 }
 
 
@@ -213,7 +213,7 @@ function color_palette_filter_similar_colors(PaletteInterface $palette, $toleran
 function color_palette_get_html(PaletteInterface $palette, $columns = null, $width = null, $height = null)
 {
 
-    return Palette::getHtml($palette, $columns, $width, $height);
+    return Palette::toHtml($palette, $columns, $width, $height);
 }
 
 /** Color\Scheme functions **/

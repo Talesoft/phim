@@ -1,101 +1,51 @@
 <?php
 
-
+use Phim\Canvas;
+use Phim\Color;
 use Phim\Engine\GdEngine;
+use Phim\Factory;
+use Phim\Format\PngFormat;
+use Phim\Geometry\Line;
+use Phim\Geometry\Rectangle;
+use Phim\Shape\Geometric\LineShape;
+use Phim\Shape\Geometric\RectangleShape;
+use Phim\Style;
 
-$phim = new GdEngine();
+include __DIR__.'/../vendor/autoload.php';
+
+$ph = new Factory();
 
 //Create basic image and draw a circle on it and save it to a PNG file
-//Using: Implicit layer management, Engine shortcuts
-$canvas = $phim->create($phim->size(200, 200), $phim->color('#000'));
-$canvas->draw(
-    $phim->circle(
-        $phim->point(100, 100),
-        100,
-        $phim->fillBrush('#f00')
+
+//Factory Style
+$canvas = $ph->create($ph->size(200, 200));
+$background = $canvas->createLayer('background');
+$background->add(
+    $ph->rect(
+        $ph->point(10, 10), 
+        $ph->size(100, 50), 
+        $ph->style(['fill_color' => 'red'])
+    )
+)->add(
+    $ph->line(
+        $ph->point(10, 10),
+        $ph->point(190, 190),
+        $ph->style(['stroke_color' => 'blue', 'stroke_width' => 4])
     )
 );
 
-//Or in OO style
-$canvas = new Canvas(new Size(200, 200), Color::fromString('#000'));
-$canvas->draw(
-    new Circle(
-        new Point(100, 100),
-        100,
-        new FillBrush('#f00')
-    )
-);
+//OO-Style
+$ooCanvas = new Canvas(200, 200);
+$background = $ooCanvas->createLayer('background');
+$background->add(new RectangleShape(
+    new Rectangle(10, 10, 100, 50),
+    new Style(['fill_color' => 'red'])
+))->add(new LineShape(
+    new Line(10, 10, 190, 190),
+    new Style(['stroke_color' => 'blue', 'stroke_width' => 4])
+));
 
 
-//THESE METHODS BELOW ARE THE ONLY PARTS WHERE STUFF ACTUALLY GETS HANDLED THROUGH GD AND IMAGICK
-//Everything else is virtual!
-
-//Format detection based on extension (by default)
-$engine->save($canvas, $path);
-//Explicit conversion in two ways
-$engine->save($canvas, $path, 'png');
-$engine->save($canvas, $path, FileFormat::PNG);
-//Save with compression options etc.
-$engine->save($canvas, $path, 'png', new PngSaveOptions(['compression_level' => 9]));
-
-//Get raw output
-$output = $engine->render($canvas);
-
-//Pass to client directly
-$engine->render($canvas, true);
-
-
-
-
-
-
-//Layer management
-
-$backgroundLayer = $canvas->getBackgroundLayer(); //Which is also the layer you draw on with implicit layering
-
-$canvas->layer('example')
-    ->draw($phim->square($canvas->getCenter(), 100, $phim->strokeBrush('yellow')))
-    ->mask($canvas->mask()->draw($phim->circle($canvas->getCenter, 50, $phim->fillBrush('#fff'))));
-
-$canvas->layer('other-example')->draw(/*...*/);
-
-$canvas->layer('example')->draw(/*...*/);
-
-//save/render
-
-
-//Apply filters and transformations
-
-$layer->transform($phim->transform()->rotate(24)->translate($phim->point(2, 2)));
-
-$layer->filter($phim->colorize()->withHue(234))->filter(new NegationFilter())->filter(new ContrastFilter(.5));
-
-
-//Extend with own brushes and filters
-
-class CustomBrush implements \Phim\BrushInterface
-{
-
-    public function draw(EngineInterface $engine, LayerContextInterface $layerContext, \Phim\GeometryInterface $geometry)
-    {
-
-        if ($engine->isGd()) {
-
-            if ($geo instanceof CircleInterface) {
-
-                //Draw circle
-            } else if ($geo instanceof RectangleInterface) {
-
-                //Draw rectangle
-            }
-            //Notice that only BASIC shapes actually need to be handled, since everything else can be represented with a polygon
-            //(Everything could, but performance...)
-        }
-    }
-
-    public function getDrawMethods()
-    {
-
-        return [GdEngine::class => 'drawGd', ImagickEngine::class => 'drawImagick'];
-    }
-}
+$engine = new GdEngine();
+header('Content-Type: image/png');
+echo $engine->render($canvas, new PngFormat);

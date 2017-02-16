@@ -13,7 +13,7 @@ $names = array_replace([
 
 foreach ($names as $name => $hex) {
 
-    echo \Phim\color_get_html($hex);
+    echo \Phim\color_to_html($hex);
     echo $name.' => '.\Phim\color_get_hue_range($hex);
     echo '<br>';
 }

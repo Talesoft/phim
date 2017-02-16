@@ -2,9 +2,21 @@
 
 namespace Phim;
 
+/**
+ * Interface ShapeInterface
+ *
+ * @package Phim
+ */
 interface ShapeInterface
 {
 
-    public function getGeometry();
-    public function getBrush();
+    /**
+     * @return PathInterface
+     */
+    public function getPath();
+
+    /**
+     * @return StyleInterface
+     */
+    public function getStyle();
 }

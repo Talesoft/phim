@@ -13,6 +13,7 @@ use Phim\Color\LabColor;
 use Phim\Color\RgbaColor;
 use Phim\Color\RgbColor;
 use Phim\Color\XyzColor;
+use Phim\Color\XyzColorInterface;
 use Phim\Exception\Runtime\NonExistentFunctionNameException;
 use Phim\Exception\RuntimeException;
 use Phim\Util\MathUtil;
@@ -1216,9 +1217,9 @@ class Color
             ['type' => 'float', 'base' => 1]
         ]],
         'xyz' => ['className' => XyzColor::class, 'args' => [
-            ['type' => 'float', 'base' => XyzColor::REF_X],
-            ['type' => 'float', 'base' => XyzColor::REF_Y],
-            ['type' => 'float', 'base' => XyzColor::REF_Z]
+            ['type' => 'float', 'base' => XyzColorInterface::REF_X],
+            ['type' => 'float', 'base' => XyzColorInterface::REF_Y],
+            ['type' => 'float', 'base' => XyzColorInterface::REF_Z]
         ]],
         'lab' => ['className' => LabColor::class, 'args' => [
             ['type' => 'float', 'base' => 100],
@@ -1238,10 +1239,10 @@ class Color
         return self::$names;
     }
 
-    public static function getName(ColorInterface $color)
+    public static function toName(ColorInterface $color)
     {
 
-        $int = self::getInt($color->getRgb());
+        $int = self::toInt($color->toRgb());
         $name = array_search($int, self::$names, true);
 
         if ($name)
@@ -1264,16 +1265,16 @@ class Color
     public static function registerName($name, ColorInterface $color)
     {
 
-        self::$names[$name] = self::getInt($color->getRgb());
+        self::$names[$name] = self::toInt($color->toRgb());
     }
 
-    public static function getHexString(ColorInterface $color, $expand = false)
+    public static function toHexString(ColorInterface $color, $expand = false)
     {
 
         /** @var RgbaColor $rgb */
         $rgb = $color instanceof AlphaColorInterface
-            ? $color->getRgba()
-            : $color->getRgb();
+            ? $color->toRgba()
+            : $color->toRgb();
 
         $hex = '#';
         $hex .= str_pad(dechex($rgb->getRed()), 2, '0', STR_PAD_LEFT);
@@ -1315,12 +1316,12 @@ class Color
         return self::parseInt(hexdec($string));
     }
 
-    public static function getInt(ColorInterface $color)
+    public static function toInt(ColorInterface $color)
     {
 
         if ($color instanceof AlphaColorInterface) {
 
-            $color = $color->getRgba();
+            $color = $color->toRgba();
 
             return (int)(
                 + ($color->getRed() << 24)
@@ -1330,7 +1331,7 @@ class Color
             );
         }
 
-        $color = $color->getRgb();
+        $color = $color->toRgb();
         return (int)(
             + ($color->getRed() << 16)
             + ($color->getGreen() << 8)
@@ -1399,7 +1400,7 @@ class Color
     }
 
     /**
-     * @param $value
+     * @param mixed $value
      *
      * @return ColorInterface
      */
@@ -1430,21 +1431,21 @@ class Color
     public static function getMax(ColorInterface $color)
     {
 
-        $rgb = $color->getRgb();
+        $rgb = $color->toRgb();
         return max($rgb->getRed(), $rgb->getGreen(), $rgb->getBlue());
     }
 
     public static function getMin(ColorInterface $color)
     {
 
-        $rgb = $color->getRgb();
+        $rgb = $color->toRgb();
         return min($rgb->getRed(), $rgb->getGreen(), $rgb->getBlue());
     }
 
     public static function getAverage(ColorInterface $color)
     {
 
-        $rgb = $color->getRgb();
+        $rgb = $color->toRgb();
         return (int)($rgb->getRed() + $rgb->getGreen() + $rgb->getBlue()) / 3;
     }
 
@@ -1491,13 +1492,13 @@ class Color
     public static function getColorHueRange(ColorInterface $color)
     {
 
-        return self::getHueRange($color->getHsl()->getHue());
+        return self::getHueRange($color->toHsl()->getHue());
     }
 
     public static function isColorHueRange(ColorInterface $color, $range)
     {
 
-        return self::isHueRange($color->getHsl()->getHue(), $range);
+        return self::isHueRange($color->toHsl()->getHue(), $range);
     }
 
     public static function mix(ColorInterface $color, ColorInterface $mixColor)
@@ -1505,8 +1506,8 @@ class Color
 
         if ($color instanceof AlphaColorInterface) {
 
-            $color = $color->getRgba();
-            $mixColor = $mixColor->getRgba();
+            $color = $color->toRgba();
+            $mixColor = $mixColor->toRgba();
 
             return new RgbaColor(
                 ($color->getRed() + $mixColor->getRed()) / 2,
@@ -1516,8 +1517,8 @@ class Color
             );
         }
 
-        $color = $color->getRgb();
-        $mixColor = $mixColor->getRgb();
+        $color = $color->toRgb();
+        $mixColor = $mixColor->toRgb();
 
         return new RgbColor(
             ($color->getRed() + $mixColor->getRed()) / 2,
@@ -1531,7 +1532,7 @@ class Color
 
         if ($color instanceof AlphaColorInterface) {
 
-            $color = $color->getRgba();
+            $color = $color->toRgba();
 
             return new RgbaColor(
                 255 - $color->getRed(),
@@ -1541,7 +1542,7 @@ class Color
             );
         }
 
-        $color = $color->getRgb();
+        $color = $color->toRgb();
 
         return new RgbColor(
             255 - $color->getRed(),
@@ -1555,12 +1556,12 @@ class Color
 
         if ($color instanceof AlphaColorInterface) {
 
-            $hsla = $color->getHsla();
-            return $hsla->withLightness($hsla->getLightness() + $ratio);
+            $hsla = $color->toHsla();
+            return $hsla->setLightness($hsla->getLightness() + $ratio);
         }
 
-        $hsl = $color->getHsl();
-        return $hsl->withLightness($hsl->getLightness() + $ratio);
+        $hsl = $color->toHsl();
+        return $hsl->setLightness($hsl->getLightness() + $ratio);
     }
 
     public static function darken(ColorInterface $color, $ratio)
@@ -1568,12 +1569,12 @@ class Color
 
         if ($color instanceof AlphaColorInterface) {
 
-            $hsla = $color->getHsla();
-            return $hsla->withLightness($hsla->getLightness() - $ratio);
+            $hsla = $color->toHsla();
+            return $hsla->setLightness($hsla->getLightness() - $ratio);
         }
 
-        $hsl = $color->getHsl();
-        return $hsl->withLightness($hsl->getLightness() - $ratio);
+        $hsl = $color->toHsl();
+        return $hsl->setLightness($hsl->getLightness() - $ratio);
     }
 
     public static function saturate(ColorInterface $color, $ratio)
@@ -1581,12 +1582,12 @@ class Color
 
         if ($color instanceof AlphaColorInterface) {
 
-            $hsla = $color->getHsla();
-            return $hsla->withSaturation($hsla->getSaturation() + $ratio);
+            $hsla = $color->toHsla();
+            return $hsla->setSaturation($hsla->getSaturation() + $ratio);
         }
 
-        $hsl = $color->getHsl();
-        return $hsl->withSaturation($hsl->getSaturation() + $ratio);
+        $hsl = $color->toHsl();
+        return $hsl->setSaturation($hsl->getSaturation() + $ratio);
     }
 
     public static function desaturate(ColorInterface $color, $ratio)
@@ -1594,21 +1595,21 @@ class Color
 
         if ($color instanceof AlphaColorInterface) {
 
-            $hsla = $color->getHsla();
-            return $hsla->withSaturation($hsla->getSaturation() - $ratio);
+            $hsla = $color->toHsla();
+            return $hsla->setSaturation($hsla->getSaturation() - $ratio);
         }
 
-        $hsl = $color->getHsl();
-        return $hsl->withSaturation($hsl->getSaturation() - $ratio);
+        $hsl = $color->toHsl();
+        return $hsl->setSaturation($hsl->getSaturation() - $ratio);
     }
 
     public static function greyscale(ColorInterface $color)
     {
 
         if ($color instanceof AlphaColorInterface)
-            return $color->getHsla()->withSaturation(0);
+            return $color->toHsla()->setSaturation(0);
 
-        return $color->getHsl()->withSaturation(0);
+        return $color->toHsl()->setSaturation(0);
     }
 
     public static function complement(ColorInterface $color, $degrees = null)
@@ -1618,27 +1619,27 @@ class Color
 
         if ($color instanceof AlphaColorInterface) {
 
-            $hsla = $color->getHsla();
-            return $hsla->withHue($hsla->getHue() + $degrees);
+            $hsla = $color->toHsla();
+            return $hsla->setHue($hsla->getHue() + $degrees);
         }
 
-        $hsl = $color->getHsl();
-        return $hsl->withHue($hsl->getHue() + $degrees);
+        $hsl = $color->toHsl();
+        return $hsl->setHue($hsl->getHue() + $degrees);
     }
 
     public static function fade(ColorInterface $color, $ratio)
     {
 
-        $color = $color->withAlphaSupport();
-        return $color->withAlpha($color->getAlpha() - $ratio);
+        $color = $color->toAlpha();
+        return $color->setAlpha($color->getAlpha() - $ratio);
     }
 
     //http://www.easyrgb.com/index.php?X=DELT&H=05#text5
     public static function getDifference(ColorInterface $color, ColorInterface $compareColor)
     {
 
-        $color = $color->getLab();
-        $compareColor = $compareColor->getLab();
+        $color = $color->toLab();
+        $compareColor = $compareColor->toLab();
 
         $kl = $kc = $kh = 1;
 
@@ -1737,7 +1738,7 @@ class Color
         if ($a > 0 && $b < 0)
             $bias = 360;
 
-        return (rad2deg(atan($b / $a)) + $bias);
+        return rad2deg(atan($b / $a)) + $bias;
     }
 
     public static function equals(ColorInterface $color, ColorInterface $compareColor, $tolerance = null)
@@ -1749,16 +1750,16 @@ class Color
         return $deltaE <= $tolerance;
     }
 
-    public static function getHtml(ColorInterface $color, $width = null, $height = null)
+    public static function toHtml(ColorInterface $color, $width = null, $height = null)
     {
 
         $width = $width ?: 120;
         $height = $height ?: 120;
-        $color = $color->getRgba();
-        $inversed = self::inverse($color)->getRgba();
-        $name = self::getName($color);
+        $color = $color->toRgba();
+        $inversed = self::inverse($color)->toRgba();
+        $name = self::toName($color);
 
-        $hue = $color->getHsl()->getHue();
+        $hue = $color->toHsl()->getHue();
         return sprintf(
             '<div style="display: inline-block; vertical-align: middle; width: %dpx; height: %dpx; '.
             'background: %s; color: %s; font-size: 12px; font-family: Arial, sans-serif; '.
@@ -1768,8 +1769,8 @@ class Color
             $color,
             $inversed,
             intval($height / 4),
-            $color->getLab()->getRgb(),
-            Color::getHexString($color->getRgb()),
+            $color->toLab()->toRgb(),
+            Color::toHexString($color->toRgb()),
             self::getHueRange($hue)."->".round($hue, 2),
             $name ? "<br>$name" : ''
         );

@@ -13,25 +13,25 @@ class HslaColor extends HslColor implements HslaColorInterface
 
         parent::__construct($hue, $saturation, $lightness);;
 
-        $this->alpha = MathUtil::capValue($alpha, 0.0, 1.0);
+        $this->setAlpha($alpha);
     }
 
-    public function getRgba()
+    public function toRgba()
     {
 
-        return parent::getRgba()->withAlpha($this->alpha);
+        return parent::toRgba()->setAlpha($this->alpha);
     }
 
-    public function getHsla()
+    public function toHsla()
     {
 
         return new static($this->hue, $this->saturation, $this->lightness, $this->alpha);
     }
 
-    public function getHsva()
+    public function toHsva()
     {
 
-        return parent::getHsva()->withAlpha($this->alpha);
+        return parent::toHsva()->setAlpha($this->alpha);
     }
 
     public function __toString()

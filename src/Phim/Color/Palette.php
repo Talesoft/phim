@@ -5,8 +5,27 @@ namespace Phim\Color;
 use Phim\Color;
 use Phim\ColorInterface;
 
-class Palette
+class Palette implements PaletteInterface
 {
+    use PaletteTrait;
+
+    /**
+     * constructor.
+     *
+     * @param int                $maxSize
+     * @param \Traversable|array $colors
+     */
+    public function __construct($colors = null, $maxSize = null)
+    {
+
+        $this->setMaxSize($maxSize);
+
+        if ($colors) {
+            foreach ($colors as $color) {
+                $this[] = $color;
+            }
+        }
+    }
 
     public static function merge(PaletteInterface $palette, PaletteInterface $mergePalette, $prepend = false)
     {
@@ -15,7 +34,7 @@ class Palette
         $mergePaletteColors = $mergePalette->getColors();
         $totalCount = count($paletteColors) + count($mergePaletteColors);
         
-        return new Color\Palette\SimplePalette(
+        return new Color\Palette(
             $prepend
                 ? array_merge($mergePaletteColors, $paletteColors)
                 : array_merge($paletteColors, $mergePaletteColors),
@@ -33,7 +52,7 @@ class Palette
                     yield $color;
         };
 
-        return new Color\Palette\SimplePalette(new \CallbackFilterIterator($filter($palette), $filterCallback));
+        return new Color\Palette(new \CallbackFilterIterator($filter($palette), $filterCallback));
     }
 
     public static function filterByHueRange(PaletteInterface $palette, $hueRange)
@@ -67,15 +86,15 @@ class Palette
                 $distinctColors[] = $color;
         }
 
-        return new Color\Palette\SimplePalette($distinctColors);
+        return new Color\Palette($distinctColors);
     }
 
-    public static function getHtml(PaletteInterface $palette, $columns = null, $width = null, $height = null)
+    public static function toHtml(PaletteInterface $palette, $columns = null, $width = null, $height = null)
     {
 
         $html = '';
         foreach ($palette as $i => $color) {
-            $html .= Color::getHtml($color, $width, $height);
+            $html .= Color::toHtml($color, $width, $height);
 
             if ($columns !== null && ($i + 1) % $columns === 0)
                 $html .= '<br>';

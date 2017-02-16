@@ -6,5 +6,5 @@ interface HslColorInterface extends HsColorInterface
 {
 
     public function getLightness();
-    public function withLightness($lightness);
+    public function setLightness($lightness);
 }

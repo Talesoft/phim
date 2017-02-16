@@ -23,12 +23,12 @@ trait HsColorTrait
      * @param int $hue
      * @return $this
      */
-    public function withHue($hue)
+    public function setHue($hue)
     {
 
-        $color = clone $this;
-        $color->hue = MathUtil::rotateValue($hue, 360);
-        return $color;
+        $this->hue = MathUtil::rotateValue($hue, 360);
+
+        return $this;
     }
 
     /**
@@ -44,11 +44,11 @@ trait HsColorTrait
      * @param int $saturation
      * @return $this
      */
-    public function withSaturation($saturation)
+    public function setSaturation($saturation)
     {
 
-        $color = clone $this;
-        $color->saturation = MathUtil::capValue($saturation, 0.0, 1.0);
-        return $color;
+        $this->saturation = MathUtil::capValue($saturation, 0.0, 1.0);
+
+        return $this;
     }
 }

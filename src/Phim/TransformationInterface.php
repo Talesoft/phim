@@ -2,8 +2,6 @@
 
 namespace Phim;
 
-use Phim\Point\PointDataInterface;
-
 interface TransformationInterface
 {
 
@@ -13,13 +11,17 @@ interface TransformationInterface
     public function getD();
     public function getTx();
     public function getTy();
-    public function getArray();
+    
+    public function translate($x, $y);
+    public function scale($x, $y = null);
+    public function rotate($degrees);
+    public function skew($x, $y);
 
     public function invert();
     public function multiply(TransformationInterface $other);
     public function getDeterminant();
 
-    public function transformPoint(PointDataInterface $point);
+    public function transformPoint(PointInterface $point);
 
     public function __toString();
 }

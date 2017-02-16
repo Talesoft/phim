@@ -8,8 +8,8 @@ interface HsColorInterface extends ColorInterface
 {
 
     public function getHue();
-    public function withHue($hue);
+    public function setHue($hue);
 
     public function getSaturation();
-    public function withSaturation($saturation);
+    public function setSaturation($saturation);
 }

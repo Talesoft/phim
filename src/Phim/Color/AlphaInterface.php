@@ -14,5 +14,5 @@ interface AlphaInterface
      * @param float $alpha
      * @return $this
      */
-    public function withAlpha($alpha);
+    public function setAlpha($alpha);
 }

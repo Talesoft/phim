@@ -22,11 +22,11 @@ trait AlphaTrait
      * @param float $alpha
      * @return $this
      */
-    public function withAlpha($alpha)
+    public function setAlpha($alpha)
     {
 
-        $color = clone $this;
-        $color->alpha = MathUtil::capValue($alpha, 0.0, 1.0);
-        return $color;
+        $this->alpha = MathUtil::capValue($alpha, 0.0, 1.0);
+
+        return $this;
     }
 }

@@ -24,12 +24,12 @@ trait LabColorTrait
      * @param int $l
      * @return $this
      */
-    public function withL($l)
+    public function setL($l)
     {
 
-        $color = clone $this;
-        $color->l = MathUtil::capValue($l, 0, 100);
-        return $color;
+        $this->l = MathUtil::capValue($l, 0, 100);
+
+        return $this;
     }
 
     /**
@@ -45,12 +45,12 @@ trait LabColorTrait
      * @param int $a
      * @return $this
      */
-    public function withA($a)
+    public function setA($a)
     {
 
-        $color = clone $this;
-        $color->a = MathUtil::capValue($a, -128, 127);
-        return $color;
+        $this->a = MathUtil::capValue($a, -128, 127);
+
+        return $this;
     }
 
     /**
@@ -66,11 +66,11 @@ trait LabColorTrait
      * @param int $b
      * @return $this
      */
-    public function withB($b)
+    public function setB($b)
     {
 
-        $color = clone $this;
-        $color->b = MathUtil::capValue($b, -128, 127);
-        return $color;
+        $this->b = MathUtil::capValue($b, -128, 127);
+        
+        return $this;
     }
 }

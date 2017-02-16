@@ -12,60 +12,60 @@ class LabColor implements LabColorInterface
     public function __construct($l, $a, $b)
     {
 
-        $this->l = $l; //MathUtil::capValue($l, 0, 100);
-        $this->a = $a; //MathUtil::capValue($a, -128, 127);
-        $this->b = $b; //MathUtil::capValue($b, -128, 127);
+        $this->setL($l);
+        $this->setA($a);
+        $this->setB($b);
     }
 
-    public function withAlphaSupport()
+    public function toAlpha()
     {
 
-        return $this->getRgba();
+        return $this->toRgba();
     }
 
-    public function withoutAlphaSupport()
+    public function toOpaque()
     {
 
-        return $this->getLab();
+        return $this->toLab();
     }
 
-    public function getRgb()
+    public function toRgb()
     {
 
-        return $this->getXyz()->getRgb();
+        return $this->toXyz()->toRgb();
     }
 
-    public function getRgba()
+    public function toRgba()
     {
 
-        return $this->getRgb()->withAlphaSupport();
+        return $this->toRgb()->toAlpha();
     }
 
-    public function getHsl()
+    public function toHsl()
     {
 
-        return $this->getRgb()->getHsl();
+        return $this->toRgb()->toHsl();
     }
 
-    public function getHsla()
+    public function toHsla()
     {
 
-        return $this->getHsl()->withAlphaSupport();
+        return $this->toHsl()->toAlpha();
     }
 
-    public function getHsv()
+    public function toHsv()
     {
 
-        return $this->getRgb()->getHsv();
+        return $this->toRgb()->toHsv();
     }
 
-    public function getHsva()
+    public function toHsva()
     {
 
-        return $this->getHsv()->withAlphaSupport();
+        return $this->toHsv()->toAlpha();
     }
 
-    public function getXyz()
+    public function toXyz()
     {
 
         $y = ($this->l + 16) / 116;
@@ -83,7 +83,7 @@ class LabColor implements LabColorInterface
         return new XyzColor($x * XyzColor::REF_X, $y * XyzColor::REF_Y, $z * XyzColor::REF_Z);
     }
 
-    public function getLab()
+    public function toLab()
     {
 
         return new LabColor($this->l, $this->a, $this->b);

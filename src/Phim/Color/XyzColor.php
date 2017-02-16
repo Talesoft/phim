@@ -8,33 +8,27 @@ class XyzColor implements XyzColorInterface
 {
     use XyzColorTrait;
 
-    //Observer= 2°, Illuminant= D65
-    const REF_X = 95.047;
-    const REF_Y = 100.0;
-    const REF_Z = 108.883;
-
-
     public function __construct($x, $y, $z)
     {
 
-        $this->x = MathUtil::capValue($x, 0, self::REF_X);
-        $this->y = MathUtil::capValue($y, 0, self::REF_Y);
-        $this->z = MathUtil::capValue($z, 0, self::REF_Z);
+        $this->setX($x);
+        $this->setY($y);
+        $this->setZ($z);
     }
 
-    public function withAlphaSupport()
+    public function toAlpha()
     {
 
-        return $this->getRgba();
+        return $this->toRgba();
     }
 
-    public function withoutAlphaSupport()
+    public function toOpaque()
     {
 
-        return $this->getXyz();
+        return $this->toXyz();
     }
 
-    public function getRgb()
+    public function toRgb()
     {
 
         $x = $this->x / 100; //X from 0 to self::REF_X
@@ -58,43 +52,43 @@ class XyzColor implements XyzColorInterface
         );
     }
 
-    public function getRgba()
+    public function toRgba()
     {
 
-        return $this->getRgb()->withAlphaSupport();
+        return $this->toRgb()->toAlpha();
     }
 
-    public function getHsl()
+    public function toHsl()
     {
 
-        return $this->getRgb()->getHsl();
+        return $this->toRgb()->toHsl();
     }
 
-    public function getHsla()
+    public function toHsla()
     {
 
-        return $this->getHsl()->withAlphaSupport();
+        return $this->toHsl()->toAlpha();
     }
 
-    public function getHsv()
+    public function toHsv()
     {
 
-        return $this->getRgb()->getHsv();
+        return $this->toRgb()->toHsv();
     }
 
-    public function getHsva()
+    public function toHsva()
     {
 
-        return $this->getHsv()->withAlphaSupport();
+        return $this->toHsv()->toAlpha();
     }
 
-    public function getXyz()
+    public function toXyz()
     {
 
         return new self($this->x, $this->y, $this->z);
     }
 
-    public function getLab()
+    public function toLab()
     {
 
         $x = $this->x / self::REF_X;

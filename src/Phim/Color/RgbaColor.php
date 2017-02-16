@@ -2,8 +2,6 @@
 
 namespace Phim\Color;
 
-use Phim\Util\MathUtil;
-
 class RgbaColor extends RgbColor implements RgbaColorInterface
 {
     use RgbaColorTrait;
@@ -13,25 +11,25 @@ class RgbaColor extends RgbColor implements RgbaColorInterface
 
         parent::__construct($red, $green, $blue);
 
-        $this->alpha = MathUtil::capValue($alpha, 0.0, 1.0);
+        $this->setAlpha($alpha);
     }
 
-    public function getRgba()
+    public function toRgba()
     {
 
         return new RgbaColor($this->red, $this->green, $this->blue, $this->alpha);
     }
 
-    public function getHsla()
+    public function toHsla()
     {
 
-        return parent::getHsla()->withAlpha($this->alpha);
+        return parent::toHsla()->setAlpha($this->alpha);
     }
 
-    public function getHsva()
+    public function toHsva()
     {
 
-        return parent::getHsva()->withAlpha($this->alpha);
+        return parent::toHsva()->setAlpha($this->alpha);
     }
 
     public function __toString()

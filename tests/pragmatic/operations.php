@@ -1,7 +1,7 @@
 <?php
 
 use Phim\Color;
-use function Phim\color_get_html;
+use function Phim\color_to_html;
 use function Phim\color_get_hue_ranges;
 use function Phim\color_mix;
 
@@ -33,9 +33,9 @@ $mixes = [
     </tr>
     <?php foreach ($mixes as $mix): ?>
         <tr>
-            <td><?=color_get_html($mix[0])?></td>
-            <td><?=color_get_html($mix[1])?></td>
-            <td><?=color_get_html(color_mix($mix[0], $mix[1]))?></td>
+            <td><?=color_to_html($mix[0])?></td>
+            <td><?=color_to_html($mix[1])?></td>
+            <td><?=color_to_html(color_mix($mix[0], $mix[1]))?></td>
         </tr>
     <?php endforeach; ?>
 </table>
@@ -48,8 +48,8 @@ $mixes = [
     </tr>
     <?php foreach (color_get_hue_ranges() as $color): ?>
         <tr>
-            <td><?=color_get_html($color)?></td>
-            <td><?=color_get_html(\Phim\color_inverse($color))?></td>
+            <td><?=color_to_html($color)?></td>
+            <td><?=color_to_html(\Phim\color_inverse($color))?></td>
         </tr>
     <?php endforeach; ?>
 </table>
@@ -64,10 +64,10 @@ $mixes = [
     </tr>
     <?php foreach (color_get_hue_ranges() as $color): ?>
         <tr>
-            <td><?=color_get_html($color)?></td>
-            <td><?=color_get_html(\Phim\color_complement($color))?></td>
-            <td><?=color_get_html(\Phim\color_complement($color, 90))?></td>
-            <td><?=color_get_html(\Phim\color_complement($color, 270))?></td>
+            <td><?=color_to_html($color)?></td>
+            <td><?=color_to_html(\Phim\color_complement($color))?></td>
+            <td><?=color_to_html(\Phim\color_complement($color, 90))?></td>
+            <td><?=color_to_html(\Phim\color_complement($color, 270))?></td>
         </tr>
     <?php endforeach; ?>
 </table>
@@ -80,8 +80,8 @@ $mixes = [
     </tr>
     <?php foreach (color_get_hue_ranges() as $color): ?>
         <tr>
-            <td><?=color_get_html($color)?></td>
-            <td><?=color_get_html(\Phim\color_lighten($color, .2))?></td>
+            <td><?=color_to_html($color)?></td>
+            <td><?=color_to_html(\Phim\color_lighten($color, .2))?></td>
         </tr>
     <?php endforeach; ?>
 </table>
@@ -94,8 +94,8 @@ $mixes = [
     </tr>
     <?php foreach (color_get_hue_ranges() as $color): ?>
         <tr>
-            <td><?=color_get_html($color)?></td>
-            <td><?=color_get_html(\Phim\color_darken($color, .2))?></td>
+            <td><?=color_to_html($color)?></td>
+            <td><?=color_to_html(\Phim\color_darken($color, .2))?></td>
         </tr>
     <?php endforeach; ?>
 </table>
@@ -108,8 +108,8 @@ $mixes = [
     </tr>
     <?php foreach (array_map(function($c) { return \Phim\color_desaturate($c, .8); }, color_get_hue_ranges()) as $color): ?>
         <tr>
-            <td><?=color_get_html($color)?></td>
-            <td><?=color_get_html(\Phim\color_saturate($color, .4))?></td>
+            <td><?=color_to_html($color)?></td>
+            <td><?=color_to_html(\Phim\color_saturate($color, .4))?></td>
         </tr>
     <?php endforeach; ?>
 </table>
@@ -122,8 +122,8 @@ $mixes = [
     </tr>
     <?php foreach (color_get_hue_ranges() as $color): ?>
         <tr>
-            <td><?=color_get_html($color)?></td>
-            <td><?=color_get_html(\Phim\color_desaturate($color, .6))?></td>
+            <td><?=color_to_html($color)?></td>
+            <td><?=color_to_html(\Phim\color_desaturate($color, .6))?></td>
         </tr>
     <?php endforeach; ?>
 </table>
@@ -136,8 +136,8 @@ $mixes = [
     </tr>
     <?php foreach (color_get_hue_ranges() as $color): ?>
         <tr>
-            <td><?=color_get_html($color)?></td>
-            <td><?=color_get_html(\Phim\color_greyscale($color))?></td>
+            <td><?=color_to_html($color)?></td>
+            <td><?=color_to_html(\Phim\color_greyscale($color))?></td>
         </tr>
     <?php endforeach; ?>
 </table>
@@ -150,8 +150,8 @@ $mixes = [
     </tr>
     <?php foreach (color_get_hue_ranges() as $color): ?>
         <tr>
-            <td><?=color_get_html($color)?></td>
-            <td><?=color_get_html(\Phim\color_fade($color, .4))?></td>
+            <td><?=color_to_html($color)?></td>
+            <td><?=color_to_html(\Phim\color_fade($color, .4))?></td>
         </tr>
     <?php endforeach; ?>
 </table>

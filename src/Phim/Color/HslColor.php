@@ -13,19 +13,19 @@ class HslColor extends HsColorBase implements HslColorInterface
 
         parent::__construct($hue, $saturation);
 
-        $this->lightness = MathUtil::capValue($lightness, 0.0, 1.0);
+        $this->setLightness($lightness);
     }
 
-    public function withAlphaSupport()
+    public function toAlpha()
     {
 
-        return $this->getHsla();
+        return $this->toHsla();
     }
 
-    public function withoutAlphaSupport()
+    public function toOpaque()
     {
 
-        return $this->getHsl();
+        return $this->toHsl();
     }
 
     private function getRgbFromHue($p, $q, $t)
@@ -49,7 +49,7 @@ class HslColor extends HsColorBase implements HslColorInterface
         return $p;
     }
 
-    public function getRgb()
+    public function toRgb()
     {
 
         $r = $g = $b = 0;
@@ -73,25 +73,25 @@ class HslColor extends HsColorBase implements HslColorInterface
         return new RgbColor($r * 255, $g * 255, $b * 255);
     }
 
-    public function getRgba()
+    public function toRgba()
     {
 
-        return $this->getRgb()->withAlphaSupport();
+        return $this->toRgb()->toAlpha();
     }
 
-    public function getHsl()
+    public function toHsl()
     {
 
         return new HslColor($this->hue, $this->saturation, $this->lightness);
     }
 
-    public function getHsla()
+    public function toHsla()
     {
 
         return new HslaColor($this->hue, $this->saturation, $this->lightness, 1);
     }
 
-    public function getHsv()
+    public function toHsv()
     {
         $l = $this->lightness;
         $s = $this->saturation * ($l < .5 ? $l : 1 - $l);
@@ -103,22 +103,22 @@ class HslColor extends HsColorBase implements HslColorInterface
         );
     }
 
-    public function getHsva()
+    public function toHsva()
     {
 
-        return $this->getHsv()->withAlphaSupport();
+        return $this->toHsv()->toAlpha();
     }
 
-    public function getXyz()
+    public function toXyz()
     {
 
-        return $this->getRgb()->getXyz();
+        return $this->toRgb()->toXyz();
     }
 
-    public function getLab()
+    public function toLab()
     {
 
-        return $this->getRgb()->getLab();
+        return $this->toRgb()->toLab();
     }
 
 

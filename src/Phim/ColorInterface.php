@@ -16,28 +16,28 @@ interface ColorInterface
 {
 
     /** @return AlphaInterface */
-    public function withAlphaSupport();
+    public function toAlpha();
     /** @return ColorInterface */
-    public function withoutAlphaSupport();
+    public function toOpaque();
 
     /** @return RgbColorInterface */
-    public function getRgb();
+    public function toRgb();
     /** @return RgbaColorInterface */
-    public function getRgba();
+    public function toRgba();
     /** @return HslColorInterface */
-    public function getHsl();
+    public function toHsl();
     /** @return HslaColorInterface */
-    public function getHsla();
+    public function toHsla();
     /** @return HsvColorInterface */
-    public function getHsv();
+    public function toHsv();
     /** @return HsvaColorInterface */
-    public function getHsva();
+    public function toHsva();
 
     /** @return XyzColorInterface */
-    public function getXyz();
+    public function toXyz();
 
     /** @return LabColorInterface */
-    public function getLab();
+    public function toLab();
 
     public function __toString();
 }

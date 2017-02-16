@@ -8,11 +8,11 @@ interface RgbColorInterface extends ColorInterface
 {
 
     public function getRed();
-    public function withRed($red);
+    public function setRed($red);
 
     public function getBlue();
-    public function withBlue($blue);
+    public function setBlue($blue);
 
     public function getGreen();
-    public function withGreen($green);
+    public function setGreen($green);
 }

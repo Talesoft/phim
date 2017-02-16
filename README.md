@@ -500,7 +500,7 @@ Also notice that Xyz and Lab don't have Alpha-versions and will just return an `
 
 # Examples, Code, Contribution, Support
 
-If you have questions, problems with the code or you want to contribue, either consult the [examples](https://github.com/Talesoft/phim/tree/master/tests/pragmatic), the [code](https://github.com/Talesoft/phim/tree/master/src/Phim), write an [issue](https://github.com/Talesoft/phim/issues) or [send me an E-Mail](mailto:torben@talesoft.codes).
+If you have questions, problems with the code or you want to contribue, either consult the [examples](https://github.com/Talesoft/phim/tree/ma                              ster/tests/pragmatic), the [code](https://github.com/Talesoft/phim/tree/master/src/Phim), write an [issue](https://github.com/Talesoft/phim/issues) or [send me an E-Mail](mailto:torben@talesoft.codes).
 You can also contribute via pull requests, just send them in.
 
 For a list of all available color names [click here](https://github.com/Talesoft/phim/blob/master/data/colors). 
@@ -510,7 +510,7 @@ If you like my work, it helped you in some way, eased up work for you or anythin
 # Credits
 
 - http://wikipedia.com
-- http://www.easyrgb.com
+- http://www.easyrgb.com                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
 - http://www.tigercolor.com/color-lab/color-theory/color-theory-intro.htm
 - https://gist.github.com/mjackson/5311256
 - https://raw.githubusercontent.com/RnbwNoise/ImageAffineMatrix/master/ImageAffineMatrix.php

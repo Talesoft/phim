@@ -9,7 +9,30 @@ use Phim\Exception\RuntimeException;
 trait PaletteTrait
 {
 
-    private $colors;
+    private $maxSize = null;
+    private $colors = [];
+
+    /**
+     * @return int|null
+     */
+    public function getMaxSize()
+    {
+
+        return $this->maxSize;
+    }
+
+    /**
+     * @param int|null $maxSize
+     *
+     * @return PaletteTrait
+     */
+    public function setMaxSize($maxSize)
+    {
+
+        $this->maxSize = $maxSize;
+
+        return $this;
+    }
 
     /**
      * @return ColorInterface[]
@@ -47,6 +70,13 @@ trait PaletteTrait
 
     public function offsetSet($offset, $color)
     {
+        if ($offset === null)
+            $offset = $this->count();
+
+        if ($this->maxSize && $offset > $this->maxSize - 1)
+            throw new \OutOfBoundsException(
+                "Tried to set offset $offset in a palette that fits only {$this->size} values"
+            );
 
         $color = Color::get($color);
         if (!($color instanceof ColorInterface))
@@ -54,10 +84,7 @@ trait PaletteTrait
                 "The color you passed to PaletteTrait->offsetSet() is not valid"
             );
 
-        if ($offset === null)
-            $this->colors[] = $color;
-        else
-            $this->colors[$offset] = $color;
+        $this->colors[$offset] = $color;
     }
 
     public function offsetUnset($offset)

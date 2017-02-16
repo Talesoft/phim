@@ -15,11 +15,11 @@ trait ColorizableTrait
         return $this->color;
     }
 
-    public function withColor(ColorInterface $color)
+    public function setColor(ColorInterface $color)
     {
 
-        $object = clone $this;
-        $object->color = clone $color;
-        return $object;
+        $this->color = clone $color;
+
+        return $this;
     }
 }

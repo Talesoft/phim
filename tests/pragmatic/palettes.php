@@ -27,7 +27,7 @@ $palette = Palette::filterByHueRange($palette, Color::HUE_RANGE_BLUE);
 $palette = Palette::filterSimilarColors($palette, 8);
 
 //Print a nice HTML representation of the palette for debugging
-echo Palette::getHtml($palette, 4);
+echo Palette::toHtml($palette, 4);
 exit;
 
 
@@ -63,9 +63,9 @@ $deduplicated = Palette::filterSimilarColors($filtered, 15);
         <th>Without duplicates (Tolerance: 15, meaning that they have a color difference of at least 15)</th>
     </tr>
     <tr>
-        <td valign="top" align="center"><?=Palette::getHtml($palette, 4)?></td>
-        <td valign="top" align="center"><?=Palette::getHtml($filtered, 4)?></td>
-        <td valign="top" align="center"><?=Palette::getHtml($deduplicated, 4)?></td>
+        <td valign="top" align="center"><?=Palette::toHtml($palette, 4)?></td>
+        <td valign="top" align="center"><?=Palette::toHtml($filtered, 4)?></td>
+        <td valign="top" align="center"><?=Palette::toHtml($deduplicated, 4)?></td>
     </tr>
 </table>
 

@@ -86,43 +86,36 @@ class Transformation implements TransformationInterface
         return $this->ty;
     }
 
-    public function getArray()
+    public function translate($x, $y)
     {
 
-        return [$this->a, $this->b, $this->c, $this->d, $this->tx, $this->ty];
+        $this->tx += $x;
+        $this->ty += $y;
+
+        return $this;
     }
 
-    public function translate(PointDataInterface $by)
+    public function scale($x, $y = null)
     {
 
-        $m = clone $this;
-        $m->tx += $by->getX();
-        $m->ty += $by->getY();
-
-        return $m;
-    }
-
-    public function scale($xFactor, $yFactor = null)
-    {
-
-        return $this->multiply(new self($xFactor, 0, 0, $yFactor !== null ? $yFactor : $xFactor, 0, 0));
+        return $this->multiply(new self($x, 0, 0, $y !== null ? $y : $x, 0, 0));
     }
 
     public function rotate($degrees)
     {
 
-        $a = rad2deg($degrees);
+        $a = deg2rad($degrees);
         $cosA = cos($a);
         $sinA = sin($a);
 
         return $this->multiply(new self($cosA, $sinA, -$sinA, $cosA, 0, 0));
     }
 
-    public function skew($xDegrees, $yDegrees = null)
+    public function skew($x, $y = null)
     {
 
         return $this->multiply(new self(
-            1, tan(rad2deg($xDegrees)), tan(rad2deg($yDegrees !== null ? $yDegrees : $xDegrees)),
+            1, tan(deg2rad($x)), tan(deg2rad($y !== null ? $y : $x)),
             1, 0, 0
         ));
     }
@@ -150,17 +143,17 @@ class Transformation implements TransformationInterface
     public function multiply(TransformationInterface $other)
     {
 
-        return new self(
-            $this->a * $other->getA() + $this->c * $other->getB(),
-            $this->b * $other->getA() + $this->d * $other->getB(),
-            $this->a * $other->getC() + $this->c * $other->getD(),
-            $this->b * $other->getC() + $this->d * $other->getD(),
-            $this->a * $other->getTx() + $this->c * $other->getTy() + $this->tx,
-            $this->b * $other->getTx() + $this->d * $other->getTy() + $this->ty
-        );
+        $this->a = $this->a * $other->getA() + $this->c * $other->getB();
+        $this->b = $this->b * $other->getA() + $this->d * $other->getB();
+        $this->c = $this->a * $other->getC() + $this->c * $other->getD();
+        $this->d = $this->b * $other->getC() + $this->d * $other->getD();
+        $this->tx = $this->a * $other->getTx() + $this->c * $other->getTy() + $this->tx;
+        $this->ty = $this->b * $other->getTx() + $this->d * $other->getTy() + $this->ty;
+        
+        return $this;
     }
 
-    public function transformPoint(PointDataInterface $point)
+    public function transformPoint(PointInterface $point)
     {
 
         $x = $point->getX();

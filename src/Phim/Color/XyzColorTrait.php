@@ -22,14 +22,15 @@ trait XyzColorTrait
 
     /**
      * @param int $x
+     *
      * @return $this
      */
-    public function withX($x)
+    public function setX($x)
     {
 
-        $color = clone $this;
-        $color->x = MathUtil::capValue($x, 0, 100);
-        return $color;
+        $this->x = MathUtil::capValue($x, 0, XyzColorInterface::REF_X);
+
+        return $this;
     }
 
     /**
@@ -43,14 +44,15 @@ trait XyzColorTrait
 
     /**
      * @param int $y
+     *
      * @return $this
      */
-    public function withY($y)
+    public function setY($y)
     {
 
-        $color = clone $this;
-        $color->y = MathUtil::capValue($y, 0, 100);
-        return $color;
+        $this->y = MathUtil::capValue($y, 0, XyzColorInterface::REF_Y);
+
+        return $this;
     }
 
     /**
@@ -64,13 +66,14 @@ trait XyzColorTrait
 
     /**
      * @param int $z
+     *
      * @return $this
      */
-    public function withZ($z)
+    public function setZ($z)
     {
 
-        $color = clone $this;
-        $color->z = MathUtil::capValue($z, 0, 100);
-        return $color;
+        $this->z = MathUtil::capValue($z, 0, XyzColorInterface::REF_Z);
+
+        return $this;
     }
 }

@@ -24,12 +24,12 @@ trait RgbColorTrait
      * @param int $red
      * @return $this
      */
-    public function withRed($red)
+    public function setRed($red)
     {
 
-        $color = clone $this;
-        $color->red = MathUtil::capValue($red, 0, 255);
-        return $color;
+        $this->red = MathUtil::capValue($red, 0, 255);
+
+        return $this;
     }
 
     /**
@@ -45,12 +45,12 @@ trait RgbColorTrait
      * @param int $green
      * @return $this
      */
-    public function withGreen($green)
+    public function setGreen($green)
     {
 
-        $color = clone $this;
-        $color->green = MathUtil::capValue($green, 0, 255);
-        return $color;
+        $this->green = MathUtil::capValue($green, 0, 255);
+
+        return $this;
     }
 
     /**
@@ -66,11 +66,11 @@ trait RgbColorTrait
      * @param int $blue
      * @return $this
      */
-    public function withBlue($blue)
+    public function setBlue($blue)
     {
 
-        $color = clone $this;
-        $color->blue = MathUtil::capValue($blue, 0, 255);
-        return $color;
+        $this->blue = MathUtil::capValue($blue, 0, 255);
+
+        return $this;
     }
 }

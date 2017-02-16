@@ -4,17 +4,20 @@ namespace Phim\Geometry;
 
 use Phim\GeometryBase;
 use Phim\Point\PointDataInterface;
+use Phim\PointInterface;
 use Phim\Size;
+use Phim\SizeInterface;
 
-class Rectangle extends GeometryBase implements RectangleInterface
+class Rectangle implements RectangleInterface
 {
     use RectangleTrait;
         
-    public function __construct(PointDataInterface $position, PointDataInterface $size)
+    public function __construct($x, $y, $width, $height)
     {
-        
-        parent::__construct($position);
-        
-        $this->size = new Size($size->getX(), $size->getY());
+
+        $this->setX($x);
+        $this->setY($y);
+        $this->setWidth($width);
+        $this->setHeight($height);
     }
 }

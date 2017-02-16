@@ -22,11 +22,11 @@ trait HsvColorTrait
      * @param int $value
      * @return $this
      */
-    public function withValue($value)
+    public function setValue($value)
     {
 
-        $color = clone $this;
-        $color->value = MathUtil::capValue($value, 0.0, 1.0);
-        return $color;
+        $this->value = MathUtil::capValue($value, 0.0, 1.0);
+        
+        return $this;
     }
 }

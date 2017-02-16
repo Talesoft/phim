@@ -11,36 +11,36 @@ class RgbColor implements RgbColorInterface
     public function __construct($red, $green, $blue)
     {
 
-        $this->red = MathUtil::capValue($red, 0, 255);
-        $this->green = MathUtil::capValue($green, 0, 255);
-        $this->blue = MathUtil::capValue($blue, 0, 255);
+        $this->setRed($red);
+        $this->setGreen($green);
+        $this->setBlue($blue);
     }
 
-    public function withAlphaSupport()
+    public function toAlpha()
     {
 
-        return $this->getRgba();
+        return $this->toRgba();
     }
 
-    public function withoutAlphaSupport()
+    public function toOpaque()
     {
 
-        return $this->getRgb();
+        return $this->toRgb();
     }
 
-    public function getRgb()
+    public function toRgb()
     {
 
         return new RgbColor($this->red, $this->green, $this->blue);
     }
 
-    public function getRgba()
+    public function toRgba()
     {
 
         return new RgbaColor($this->red, $this->green, $this->blue, 1);
     }
 
-    public function getHsl()
+    public function toHsl()
     {
 
         $r = $this->red / 255;
@@ -69,13 +69,13 @@ class RgbColor implements RgbColorInterface
         return new HslColor($h * 360, $s, $l);
     }
 
-    public function getHsla()
+    public function toHsla()
     {
 
-        return $this->getHsl()->withAlphaSupport();
+        return $this->toHsl()->toAlpha();
     }
 
-    public function getHsv()
+    public function toHsv()
     {
 
         $r = $this->red / 255;
@@ -104,13 +104,13 @@ class RgbColor implements RgbColorInterface
         return new HsvColor($h * 360, $s, $v);
     }
 
-    public function getHsva()
+    public function toHsva()
     {
 
-        return $this->getHsv()->withAlphaSupport();
+        return $this->toHsv()->toAlpha();
     }
 
-    public function getXyz()
+    public function toXyz()
     {
 
         $r = ($this->red / 255);    //R from 0 to 255
@@ -131,10 +131,10 @@ class RgbColor implements RgbColorInterface
         return new XyzColor($x * 100, $y * 100, $z * 100);
     }
 
-    public function getLab()
+    public function toLab()
     {
 
-        return $this->getXyz()->getLab();
+        return $this->toXyz()->toLab();
     }
 
     public function __toString()
