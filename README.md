@@ -1,10 +1,29 @@
 
 # Phim
-#### Colorize your world.
----
-Phim is a very functional color manipulation library.
+#### PHP Image Manipulation
 
-It's designed to become a full-fledged image-manipulation library, but right now it's a color manipulation library only. Maybe one of the mightiest out there.
+---
+
+## What is Phim?
+
+Phim is an image manipulation library for PHP. It includes a powerful color manipulation library
+and image processing abstraction for several adapters, including GD and Imagick.
+
+This library is still in development. If you're interested in helping out, write an e-mail to <torben@talesoft.codes>. 
+
+---
+
+## What is finished?
+
+[ ] Color Manipulation
+    [ ] RGB
+    [ ] RGBA
+    [ ] HSL
+    [ ] HSLA
+    [ ] HSV
+    [ ] HSVA
+    [ ] CIEDE XYZ
+    [ ] CIEDE L\*a\*b\*
 
 **Phim** is short for **PHP Image Manipulation**. Very nifty, I know, thanks.
 
