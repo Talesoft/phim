@@ -8,6 +8,10 @@ use Phim\EngineInterface;
 use Phim\Format\PngFormat;
 use Phim\FormatInterface;
 use Phim\Path\AnchorInterface;
+use Phim\PathInterface;
+use Phim\Point;
+use Phim\PointInterface;
+use Phim\StyleInterface;
 
 class GdEngine implements EngineInterface
 {
@@ -31,6 +35,40 @@ class GdEngine implements EngineInterface
         
         $color = $color->toRgba();
         return imagecolorallocatealpha($im, $color->getRed(), $color->getGreen(), $color->getBlue(), (int)((1 - $color->getAlpha()) * 127));
+    }
+
+    /**
+     * @param PathInterface  $path
+     * @param StyleInterface $style
+     *
+     * @return AnchorInterface[]
+     *
+     */
+    private function transformPathAnchors(PathInterface $path, StyleInterface $style)
+    {
+
+        $anchors = $path->getAnchors();
+        $origin = $style->getTransformOrigin();
+        $transformations = $style->getTransformations();
+
+        if ($origin) {
+
+            $bounds = $path->getBounds();
+
+            //Map relative values to absolute values
+            $origin = new Point($bounds->getWidth() * $origin->getX(), $bounds->getHeight() * $origin->getY());
+        }
+
+        return array_map(function (AnchorInterface $anchor) use ($transformations, $origin) {
+
+            //Transform the anchor
+            foreach ($transformations as $transformation) {
+
+                $anchor = $transformation->transformAnchor($anchor, $origin);
+            }
+
+            return $anchor;
+        }, $anchors);
     }
 
     public function render(CanvasInterface $canvas, FormatInterface $format)
@@ -58,13 +96,13 @@ class GdEngine implements EngineInterface
                 imagesetthickness($im, $style->getStrokeWidth());
                 
                 $path = $shape->getPath();
+                $anchors = $this->transformPathAnchors($path, $style);
                 
-                //Convert anchors to simple polygon points for starters
+                //Convert anchors to simple polygon points for GD for starters
                 $points = [];
-                $count = count($path->getAnchors());
-                foreach ($path->getAnchors() as $anchor) {
+                $count = count($anchors);
+                foreach ($anchors as $anchor) {
 
-                    //TODO: Apply transformations here
                     //TODO: Apply positionFilters here
                     $points[] = $anchor->getX();
                     $points[] = $anchor->getY();
@@ -84,7 +122,7 @@ class GdEngine implements EngineInterface
                     //As imagepolygon doesn't draw open polygons and imageopenpolygon is too new, we iterate the anchors and draw lines
                     /** @var AnchorInterface $context */
                     $context = null;
-                    foreach ($path->getAnchors() as $anchor) {
+                    foreach ($anchors as $anchor) {
 
                         if ($context) {
 

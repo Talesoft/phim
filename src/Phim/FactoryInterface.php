@@ -52,7 +52,7 @@ interface FactoryInterface
      *
      * @return StyleInterface
      */
-    public function style(array $options);
+    public function style(array $options = null);
 
     /**
      * @param array               $points

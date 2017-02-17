@@ -27,4 +27,6 @@ interface RectangleInterface extends GeometryInterface, SizeInterface
     public function setRightBottom(PointInterface $rightBottom);
     public function getLeftBottom();
     public function setLeftBottom(PointInterface $leftBottom);
+
+    public function getCenter();
 }

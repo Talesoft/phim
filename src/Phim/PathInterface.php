@@ -2,6 +2,7 @@
 
 namespace Phim;
 
+use Phim\Geometry\RectangleInterface;
 use Phim\Path\AnchorInterface;
 
 /**
@@ -30,4 +31,9 @@ interface PathInterface
      * @return $this
      */
     public function removeAnchor(AnchorInterface $anchor);
+
+    /**
+     * @return RectangleInterface
+     */
+    public function getBounds();
 }

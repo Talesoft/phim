@@ -34,7 +34,7 @@ trait FactoryTrait
         //TODO: implement
     }
     
-    public function style(array $options)
+    public function style(array $options = null)
     {
         
         return new Style($options);

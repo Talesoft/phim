@@ -130,6 +130,12 @@ trait RectangleTrait
         return $this;
     }
 
+    public function getCenter()
+    {
+
+        return new Point($this->getX() + $this->getWidth() / 2, $this->getY() + $this->getHeight() / 2);
+    }
+
     public function toPath()
     {
 

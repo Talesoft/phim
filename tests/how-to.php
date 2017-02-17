@@ -10,8 +10,11 @@ use Phim\Geometry\Rectangle;
 use Phim\Shape\Geometric\LineShape;
 use Phim\Shape\Geometric\RectangleShape;
 use Phim\Style;
+use Phim\Transformation;
 
 include __DIR__.'/../vendor/autoload.php';
+
+$rot = $_GET['rot'] ? (int)$_GET['rot'] : 0;
 
 $ph = new Factory();
 
@@ -19,20 +22,24 @@ $ph = new Factory();
 
 //Factory Style
 $canvas = $ph->create($ph->size(200, 200));
-$background = $canvas->createLayer('background');
-$background->add(
-    $ph->rect(
-        $ph->point(10, 10), 
-        $ph->size(100, 50), 
-        $ph->style(['fill_color' => 'red'])
+
+$canvas->createLayer('rect')->add(
+    $rect = $ph->rect(
+        $ph->point(50, 50),
+        $ph->size(100, 100),
+        $ph->style(['origin' => '.5, .5'])->setFillColor(Color::get(Color::RED))
     )
-)->add(
+);
+
+$canvas->createLayer('line')->add(
     $ph->line(
         $ph->point(10, 10),
         $ph->point(190, 190),
-        $ph->style(['stroke_color' => 'blue', 'stroke_width' => 4])
+        $ph->style(['stroke' => 'blue', 'stroke_width' => 4])
     )
 );
+
+$rect->getStyle()->addTransformation(Transformation::createIdentity()->rotate($rot));
 
 //OO-Style
 $ooCanvas = new Canvas(200, 200);

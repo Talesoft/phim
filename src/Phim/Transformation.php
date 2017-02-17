@@ -3,23 +3,60 @@
 namespace Phim;
 
 use Phim\Exception\Runtime\ZeroDivisionException;
+use Phim\Path\Anchor;
+use Phim\Path\AnchorInterface;
 use Phim\Point;
 use Phim\Point\PointDataInterface;
 
+/**
+ * Class Transformation
+ *
+ * @package Phim
+ */
 class Transformation implements TransformationInterface
 {
 
+    /**
+     * @var float
+     */
     private $a;
+
+    /**
+     * @var float
+     */
     private $b;
+
+    /**
+     * @var float
+     */
     private $c;
+
+    /**
+     * @var float
+     */
     private $d;
+
+    /**
+     * @var float
+     */
     private $tx;
+
+    /**
+     * @var float
+     */
     private $ty;
 
     /**
      * | A  C  Tx |
      * | B  D  Ty |
      * | 0  0  1  |
+     *
+     * @param float $a
+     * @param float $b
+     * @param float $c
+     * @param float $d
+     * @param float $tx
+     * @param float $ty
      */
     public function __construct($a, $b, $c, $d, $tx, $ty)
     {
@@ -33,7 +70,7 @@ class Transformation implements TransformationInterface
     }
 
     /**
-     * @return mixed
+     * @return float
      */
     public function getA()
     {
@@ -42,7 +79,7 @@ class Transformation implements TransformationInterface
     }
 
     /**
-     * @return mixed
+     * @return float
      */
     public function getB()
     {
@@ -51,7 +88,7 @@ class Transformation implements TransformationInterface
     }
 
     /**
-     * @return mixed
+     * @return float
      */
     public function getC()
     {
@@ -60,7 +97,7 @@ class Transformation implements TransformationInterface
     }
 
     /**
-     * @return mixed
+     * @return float
      */
     public function getD()
     {
@@ -69,7 +106,7 @@ class Transformation implements TransformationInterface
     }
 
     /**
-     * @return mixed
+     * @return float
      */
     public function getTx()
     {
@@ -78,7 +115,7 @@ class Transformation implements TransformationInterface
     }
 
     /**
-     * @return mixed
+     * @return float
      */
     public function getTy()
     {
@@ -86,6 +123,13 @@ class Transformation implements TransformationInterface
         return $this->ty;
     }
 
+
+    /**
+     * @param $x
+     * @param $y
+     *
+     * @return $this
+     */
     public function translate($x, $y)
     {
 
@@ -95,12 +139,23 @@ class Transformation implements TransformationInterface
         return $this;
     }
 
+    /**
+     * @param      $x
+     * @param null $y
+     *
+     * @return $this
+     */
     public function scale($x, $y = null)
     {
 
         return $this->multiply(new self($x, 0, 0, $y !== null ? $y : $x, 0, 0));
     }
 
+    /**
+     * @param $degrees
+     *
+     * @return $this
+     */
     public function rotate($degrees)
     {
 
@@ -111,15 +166,28 @@ class Transformation implements TransformationInterface
         return $this->multiply(new self($cosA, $sinA, -$sinA, $cosA, 0, 0));
     }
 
+    /**
+     * @param      $x
+     * @param null $y
+     *
+     * @return $this
+     */
     public function skew($x, $y = null)
     {
 
         return $this->multiply(new self(
-            1, tan(deg2rad($x)), tan(deg2rad($y !== null ? $y : $x)),
-            1, 0, 0
+            1,
+            tan(deg2rad($y)),
+            tan(deg2rad($x !== null ? $x : $y)),
+            1,
+            0,
+            0
         ));
     }
 
+    /**
+     * @return $this
+     */
     public function invert()
     {
 
@@ -140,6 +208,11 @@ class Transformation implements TransformationInterface
         );
     }
 
+    /**
+     * @param TransformationInterface $other
+     *
+     * @return $this
+     */
     public function multiply(TransformationInterface $other)
     {
 
@@ -149,37 +222,81 @@ class Transformation implements TransformationInterface
         $this->d = $this->b * $other->getC() + $this->d * $other->getD();
         $this->tx = $this->a * $other->getTx() + $this->c * $other->getTy() + $this->tx;
         $this->ty = $this->b * $other->getTx() + $this->d * $other->getTy() + $this->ty;
-        
+
         return $this;
     }
 
-    public function transformPoint(PointInterface $point)
+    /**
+     * @param PointInterface $point
+     *
+     * @param PointInterface $origin
+     *
+     * @return PointInterface
+     */
+    public function transformPoint(PointInterface $point, PointInterface $origin = null)
     {
 
         $x = $point->getX();
         $y = $point->getY();
 
-        return new Point(
-            $this->a * $x + $this->c * $y + $this->tx,
-            $this->b * $x + $this->d * $y + $this->ty
-        );
+        if ($origin) {
+
+            $x += $origin->getX();
+            $y += $origin->getY();
+        }
+
+        $x = $this->a * $x + $this->c * $y + $this->tx;
+        $y = $this->b * $x + $this->d * $y + $this->ty;
+
+        if ($origin) {
+
+            $x -= $origin->getX();
+            $y -= $origin->getY();
+        }
+
+        return new Point($x, $y);
     }
 
+    /**
+     * @param AnchorInterface $anchor
+     *
+     * @param PointInterface  $origin
+     *
+     * @return AnchorInterface
+     */
+    public function transformAnchor(AnchorInterface $anchor, PointInterface $origin = null)
+    {
+
+        return Anchor::fromPoint($this->transformPoint($anchor, $origin), array_map(function (PointInterface $point) use ($origin) {
+
+            return $this->transformPoint($point, $origin);
+        }, $anchor->getControlPoints()));
+    }
+
+    /**
+     * @return float
+     */
     public function getDeterminant()
     {
 
         return ($this->a * $this->d) - ($this->b * $this->c);
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
 
         return "matrix({$this->a},{$this->b},{$this->c},{$this->d},{$this->tx},{$this->ty})";
     }
 
+    /**
+     * @return TransformationInterface
+     */
     public static function createIdentity()
     {
 
-        return new static(1, 0, 0, 0, 1, 0);
+        return new static(1, 0, 0, 1, 0, 0);
     }
 }

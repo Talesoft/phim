@@ -7,6 +7,11 @@ namespace Phim;
  *
  * @package Phim
  */
+/**
+ * Interface StyleInterface
+ *
+ * @package Phim
+ */
 interface StyleInterface
 {
 
@@ -45,4 +50,54 @@ interface StyleInterface
      * @return mixed
      */
     public function setFillColor(ColorInterface $color);
+
+    /**
+     * @return TransformationInterface[]
+     */
+    public function getTransformations();
+
+    /**
+     * @param TransformationInterface $transformation
+     *
+     * @return $this
+     */
+    public function addTransformation(TransformationInterface $transformation);
+
+    /**
+     * @param TransformationInterface $transformation
+     *
+     * @return $this
+     */
+    public function removeTransformation(TransformationInterface $transformation);
+
+    /**
+     * @return PointInterface
+     */
+    public function getTransformOrigin();
+
+    /**
+     * @param PointInterface $origin
+     *
+     * @return $this
+     */
+    public function setTransformOrigin(PointInterface $origin);
+
+    /**
+     * @return FilterInterface[]
+     */
+    public function getFilters();
+
+    /**
+     * @param FilterInterface $filter
+     *
+     * @return $this
+     */
+    public function addFilter(FilterInterface $filter);
+
+    /**
+     * @param FilterInterface $filter
+     *
+     * @return $this
+     */
+    public function removeFilter(FilterInterface $filter);
 }

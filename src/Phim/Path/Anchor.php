@@ -3,6 +3,7 @@
 namespace Phim\Path;
 
 use Phim\PointInterface;
+use Phim\TransformationInterface;
 
 class Anchor implements AnchorInterface
 {
