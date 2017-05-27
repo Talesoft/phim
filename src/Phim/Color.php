@@ -1319,41 +1319,22 @@ class Color
     public static function toInt(ColorInterface $color)
     {
 
-        if ($color instanceof AlphaColorInterface) {
-
-            $color = $color->toRgba();
-
-            return (int)(
-                + ($color->getRed() << 24)
-                + ($color->getGreen() << 16)
-                + ($color->getBlue() << 8)
-                + (int)($color->getAlpha() * 255)
-            );
-        }
-
-        $color = $color->toRgb();
-        return (int)(
-            + ($color->getRed() << 16)
-            + ($color->getGreen() << 8)
-            + $color->getBlue()
-        );
+        return unpack('N', pack('C*', 
+            $color->getRed(), 
+            $color->getGreen(), 
+            $color->getBlue(), 
+            $color instanceof AlphaColorInterface ? (int)($color->getAlpha() * 255) : 1
+        ))[1];
     }
 
     public static function parseInt($int)
     {
 
-        if ($int > 0xffffff)
-            return new RgbaColor(
-                (int)(255 & ($int >> 24)),
-                (int)(255 & ($int >> 16)),
-                (int)(255 & ($int >> 8)),
-                (int)((255 & $int) / 255)
-            );
-
-        return new RgbColor(
+        return new RgbaColor(
+            (int)(255 & ($int >> 24)),
             (int)(255 & ($int >> 16)),
             (int)(255 & ($int >> 8)),
-            (int)(255 & ($int))
+            (int)((255 & $int) / 255)
         );
     }
 
