@@ -3,6 +3,8 @@
 namespace Phim\Test;
 
 use Phim\Color;
+use Phim\Color\RgbaColor;
+use Phim\Color\RgbColor;
 use PHPUnit\Framework\TestCase;
 
 class ColorTest extends TestCase
@@ -35,5 +37,25 @@ class ColorTest extends TestCase
         self::assertEquals(.4, $c->getSaturation());
         self::assertEquals(.9, $c->getLightness());
         self::assertEquals(.223, $c->getAlpha());
+    }
+
+    public function testIntegerConversion()
+    {
+
+        for ($r = 0; $r < 255; $r += 50) {
+            for ($g = 0; $g < 255; $g += 50) {
+                for ($b = 0; $b < 255; $b += 50) {
+                    for ($a = 0; $a < 1.0; $a += .1) {
+
+                        $c = new Color\RgbaColor($r, $g, $b, $a);
+                        $c = Color::parseInt(Color::toInt($c));
+                        self::assertEquals($r, $c->getRed());
+                        self::assertEquals($g, $c->getGreen());
+                        self::assertEquals($b, $c->getBlue());
+                        self::assertEquals($a, $c->getAlpha(), '', .01);
+                    }
+                }
+            }
+        }
     }
 }
