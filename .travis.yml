@@ -5,7 +5,6 @@ git:
   depth: 5
 
 php:
-    - 5.6
     - 7.0
 
 before_script:
