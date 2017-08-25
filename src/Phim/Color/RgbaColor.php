@@ -39,6 +39,7 @@ class RgbaColor extends RgbColor implements RgbaColorInterface
         $g = intval($this->green);
         $b = intval($this->blue);
         $alph = round($this->alpha, 2);
-        return "rgba({$r},{$g},{$b},{$alph})";
+
+        return sprintf("rgba(%d,%d,%d,%s)", $r, $g, $b, number_format($alph, 2, '.', null));
     }
 }
