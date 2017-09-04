@@ -37,6 +37,11 @@ class ColorTest extends TestCase
         self::assertEquals(.4, $c->getSaturation());
         self::assertEquals(.9, $c->getLightness());
         self::assertEquals(.223, $c->getAlpha());
+
+        setlocale(LC_NUMERIC, 'sk_SK');
+
+        $c = Color::get('rgb(10, 56, 100)')->toRgba()->setAlpha(.5);
+        self::assertEquals('rgba(10,56,100,0.50)', (string) $c);
     }
 
     public function testIntegerConversion()
