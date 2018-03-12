@@ -1311,6 +1311,12 @@ class Color
                     hexdec($string[2].$string[2]),
                     hexdec($string[3].$string[3]) / 255
                 );
+            case 6:
+                return new RgbColor(
+                    hexdec($string[0].$string[1]),
+                    hexdec($string[2].$string[3]),
+                    hexdec($string[4].$string[5])
+                );
         }
 
         return self::parseInt(hexdec($string));
