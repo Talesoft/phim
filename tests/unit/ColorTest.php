@@ -32,6 +32,11 @@ class ColorTest extends TestCase
         self::assertEquals(51, $c->getGreen());
         self::assertEquals(120, $c->getBlue());
 
+        $c = Color::get('#6BBAA7')->toRgb();
+        self::assertEquals(107, $c->getRed());
+        self::assertEquals(186, $c->getGreen());
+        self::assertEquals(167, $c->getBlue());
+
         $c = Color::get('hsla(0.872664626rad, .4, 90%, 22.3%)')->toHsla();
         self::assertEquals(50, $c->getHue());
         self::assertEquals(.4, $c->getSaturation());
