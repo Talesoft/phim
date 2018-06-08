@@ -1697,7 +1697,6 @@ class Color
     private static function cieLabToHue($a, $b)
     {
 
-
         $bias = 0;
         if ($a >= 0 && $b === 0)
             return 0;
@@ -1705,7 +1704,7 @@ class Color
         if ($a < 0 && $b === 0)
             return 180;
 
-        if ($a === 0 && $b > 0)
+        if ($a === 0 && $b >= 0)
             return 90;
 
         if ($a === 0 && $b < 0)
