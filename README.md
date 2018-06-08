@@ -269,13 +269,13 @@ Color::getColorHueRange(Color::get('rgba(80, 0, 0)')); //Color::HUE_RANGE_RED
 //Gets the hexadecimal representation of a color.
 //Notice that it will turn an Alpha-color into a 4-channel hexadecimal string, because it can also parse them.
 //If you want to use the hex value in CSS or HTML, use `toRgb()` on the color before to strip the alpha channel
-Color::getHexString($color);
+Color::toHexString($color);
 
 //Gets the integer representation of a color (including support for alpha channel)
-Color::getInt($color);
+Color::toInt($color);
 
 //Get the name of a color. Many colors don't have names, it will return a hex-representation in this case
-Color::getName($color);
+Color::toName($color);
 ```
 
 ---
