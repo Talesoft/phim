@@ -1694,20 +1694,20 @@ class Color
         return sqrt(($dl ** 2) + ($dc ** 2) + ($dh ** 2) + $rt * $dc * $dh);
     }
 
-    private static function cieLabToHue($a, $b)
+    private static function cieLabToHue(float $a, float $b)
     {
-
+        
         $bias = 0;
-        if ($a >= 0 && $b === 0)
+        if ($a >= 0 && $b === 0.0)
             return 0;
 
-        if ($a < 0 && $b === 0)
+        if ($a < 0 && $b === 0.0)
             return 180;
 
-        if ($a === 0 && $b >= 0)
+        if ($a === 0.0 && $b >= 0)
             return 90;
 
-        if ($a === 0 && $b < 0)
+        if ($a === 0.0 && $b < 0)
             return 270;
 
         if ($a > 0 && $b > 0)
