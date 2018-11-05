@@ -1618,13 +1618,15 @@ class Color
     }
 
     //http://www.easyrgb.com/index.php?X=DELT&H=05#text5
-    public static function getDifference(ColorInterface $color, ColorInterface $compareColor)
+    public static function getDifference(ColorInterface $color, ColorInterface $compareColor, $weights = [1,1,1])
     {
 
         $color = $color->toLab();
         $compareColor = $compareColor->toLab();
 
-        $kl = $kc = $kh = 1;
+        $kl = $weights[0];
+        $kc = $weights[1];
+        $kh = $weights[2];
 
         $l1 = $color->getL();
         $a1 = $color->getA();
