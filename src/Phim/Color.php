@@ -14,7 +14,7 @@ use Phim\Color\RgbaColor;
 use Phim\Color\RgbColor;
 use Phim\Color\XyzColor;
 use Phim\Color\XyzColorInterface;
-use Phim\Exception\Runtime\NonExistentFunctionNameException;
+use Phim\Exception\Color\NonExistentFunctionNameException;
 use Phim\Exception\RuntimeException;
 use Phim\Util\MathUtil;
 
