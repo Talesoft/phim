@@ -1,6 +1,6 @@
 <?php
 
-namespace Phim\Exception\Runtime;
+namespace Phim\Exception\Color;
 
 use Phim\Exception\RuntimeException;
 
